@@ -38,10 +38,26 @@ const DisplayAllPeople = ({ persons, deletePerson }) => {
   )
 }
 
+const Notification = ({ message, showNotification }) => {
+  if (message === null) {
+    return null
+  }
+  if (showNotification !== false) {
+    return (
+      <div className='successNotification'>
+        {message}
+      </div>
+    )
+  }
+  
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [showNotification, setShowNotification] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
 
 useEffect(() => {
   axios
@@ -67,6 +83,11 @@ useEffect(() => {
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
+        setSuccessMessage(`Added ${returnedPerson.name}`)
+        setShowNotification(true)
+        setTimeout(() => {
+          setShowNotification(false)
+        }, 5000)
       })
     }
     else {
@@ -77,6 +98,11 @@ useEffect(() => {
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
           setNewName('')
+          setSuccessMessage(`Changed ${returnedPerson.name}'s number to ${returnedPerson.number}`)
+          setShowNotification(true)
+          setTimeout(() => {
+            setShowNotification(false)
+          }, 5000)
         })
       }
     }
@@ -104,6 +130,7 @@ useEffect(() => {
 
   return (
     <div>
+      <Notification message={successMessage} showNotification={showNotification} />
       <h2>Phonebook</h2>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} 
       handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
