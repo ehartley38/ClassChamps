@@ -3,12 +3,13 @@ const mongoose = require('mongoose')
 const mongoUrl = config.MONGODB_URI
 const logger = require ('../utils/logger')
 
-logger.info(`Connecting to ${mongoUrl}`)
-
+//logger.info(`Connecting to ${mongoUrl}`)
+/*
 mongoose.connect(mongoUrl)
     .then(result => { logger.info('Connected to MongoDB') })
     .catch((error) => { logger.error(`Error connecting to MongoDB: ${error.message}`) })
-
+*/
+    
 const blogSchema = new mongoose.Schema({
   title: String,
   author: String,
