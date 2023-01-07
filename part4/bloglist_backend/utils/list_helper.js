@@ -1,3 +1,5 @@
+const Blog = require("../models/blog");
+
 const dummy = (blogs) => {
     return 1
   }
@@ -21,6 +23,8 @@ const favoriteBlog = (blogs) => {
     })
     return blogs[topIndex]
 }
+
+
 
   
   module.exports = {
