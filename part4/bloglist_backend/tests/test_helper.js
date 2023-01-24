@@ -52,6 +52,17 @@ const initialBlogs = [
   }
 ]
 
+const initialUsers = [
+  {
+    _id: "63cedd5f859536a7a4822b9f",
+    username: "test user",
+    name: "Bob",
+    passwordHash: "$2b$10$CGGlqs5ubFnzQ1KK/ChBaeZSmnQAPJN6mau6BdMiGRI4dB3zXCNHC",
+    blogs: [],
+    __v: 0
+  }
+]
+
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
