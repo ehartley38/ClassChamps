@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +12,8 @@ const App = () => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newURL, setNewURL] = useState('')
+  const [successNotification, setSuccessNotification] = useState(null)
+  const [errorNotification, setErrorNotification] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -45,10 +48,9 @@ const App = () => {
       setPassword('')
     } catch (exception) {
       // Set error message popup here
+      setErrorNotification('Wrong username or password')
+      setTimeout(() => {setErrorNotification(null)}, 5000)
 
-      console.log('Wrong credentials');
-      //setErrorMessage('Wrong credentials')
-      //setTimeout(() => {setErrorMessage(null)}, 5000)
     }
   }
 
@@ -69,6 +71,9 @@ const App = () => {
         setNewTitle('')
         setNewURL('')
       })
+    
+    setSuccessNotification(`A new blog: ${blogObject.title} by ${blogObject.author} has been added`)
+    setTimeout(() => {setSuccessNotification(null)}, 5000)
   }
 
   const loginForm = () => (
@@ -125,6 +130,7 @@ const App = () => {
   if (user === null) {
     return (
       <div>
+        <Notification message={errorNotification} className={"error"} />
         <h2>Log in to application</h2>
         {loginForm()} 
       </div>
@@ -133,7 +139,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
+      <Notification message={successNotification} className={"success"} />
+      <h2>Blogs</h2>
       <h3>{user.username} has logged in</h3>
 
       <button onClick={logoutUser}>Logout</button> 
