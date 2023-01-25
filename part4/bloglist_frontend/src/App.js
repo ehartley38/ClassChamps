@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -12,7 +12,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
   const [successNotification, setSuccessNotification] = useState(null)
   const [errorNotification, setErrorNotification] = useState(null)
 
@@ -55,20 +54,28 @@ const App = () => {
     }
   }
 
+  // This addBlog is called in the BlogForm component so that the blog object can 
+  // be passed without needing to import the blogService into the BlogForm
   const addBlog = (blogObject) => {
+    // See 5b props.children and proptypes if youre confused
+    blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        /*
-        setNewAuthor('')
-        setNewTitle('')
-        setNewURL('')*/
       })
     
     setSuccessNotification(`A new blog: ${blogObject.title} by ${blogObject.author} has been added`)
     setTimeout(() => {setSuccessNotification(null)}, 5000)
   }
+
+  const blogFormRef = useRef()
+
+  const blogForm = () => (
+    <Togglable buttonLabel="New blog" ref={blogFormRef}>
+      <BlogForm createBlog={addBlog} user={user} />
+    </Togglable>
+  )
 
   if (user === null) {
     return (
@@ -88,9 +95,7 @@ const App = () => {
 
       <button onClick={logoutUser}>Logout</button> 
 
-      <Togglable buttonLabel="New blog">
-        <BlogForm createBlog={addBlog} user={user} />
-      </Togglable>
+      {blogForm()}
 
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
