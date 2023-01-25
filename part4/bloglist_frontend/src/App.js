@@ -16,7 +16,8 @@ const App = () => {
   const [errorNotification, setErrorNotification] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll()
+      .then(blogs =>
       setBlogs(blogs)
     )
   }, [])
@@ -98,7 +99,7 @@ const App = () => {
       {blogForm()}
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={blog.user} />
       )}
 
 
