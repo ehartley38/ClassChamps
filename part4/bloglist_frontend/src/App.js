@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll()
       .then(blogs =>
-      setBlogs(blogs)
+      setBlogs(sortByLikes(blogs))
     )
   }, [])
 
@@ -34,6 +34,11 @@ const App = () => {
   const logoutUser = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
+  }
+
+  // Sort the array from highest to lowest number of likes
+  const sortByLikes = (array) => {
+    return array.sort((a, b) => (a.likes < b.likes) ? 1 : -1)
   }
 
   const handleLogin = async (event) => {
@@ -63,7 +68,8 @@ const App = () => {
     blogService
       .create(blogObject)
       .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
+        const newBlogs = blogs.concat(returnedBlog)
+        setBlogs(sortByLikes(newBlogs))
       })
     
     setSuccessNotification(`A new blog: ${blogObject.title} by ${blogObject.author} has been added`)
@@ -81,7 +87,7 @@ const App = () => {
           }
           return b
         })
-        setBlogs(updatedBlogs)
+        setBlogs(sortByLikes(updatedBlogs))
       })
   }
 
