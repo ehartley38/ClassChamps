@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, newLike }) => {
   const [displayBlog, setDisplayBlog] = useState(false)
 
   const hideWhenVisible = { display: displayBlog ? 'none' : '' }
@@ -18,8 +18,11 @@ const Blog = ({ blog }) => {
     marginBottom: 5
   }
 
-  const addLike = (event) => {
-
+  const addLike = () => {
+    //event.preventDefault()
+    // Build the object we want to increase likes by here
+    const newObject = {...blog, likes: blog.likes + 1} 
+    newLike(newObject)
   }
 
   return (
@@ -35,7 +38,7 @@ const Blog = ({ blog }) => {
           </div>
           <div>
             Likes: {blog.likes}
-            <button onClick={addLike()}>Like</button>
+            <button onClick={addLike}>Like</button>
           </div>
           <div>
             Blog username here

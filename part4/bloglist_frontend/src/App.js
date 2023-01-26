@@ -70,6 +70,21 @@ const App = () => {
     setTimeout(() => {setSuccessNotification(null)}, 5000)
   }
 
+  // This addLike is called in the Blog component
+  const addLike = (blogObject) => {
+    blogService
+      .edit(blogObject)
+      .then(returnedBlog => {
+        const updatedBlogs = blogs.map(b => {
+          if (b.id === returnedBlog.id) {
+            return returnedBlog
+          }
+          return b
+        })
+        setBlogs(updatedBlogs)
+      })
+  }
+
   const blogFormRef = useRef()
 
   const blogForm = () => (
@@ -99,7 +114,7 @@ const App = () => {
       {blogForm()}
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={blog.user} />
+        <Blog key={blog.id} blog={blog} newLike={addLike} />
       )}
 
 
