@@ -91,6 +91,18 @@ const App = () => {
       })
   }
 
+  const deleteBlog = (blogObject) => {
+    if (window.confirm(`Remove ${blogObject.title} by ${blogObject.author}?`)) {
+      blogService
+      .deleteBlog(blogObject)
+      .then(returnedBlog => {
+        const updatedBlogs = blogs.filter(b => b.id !== blogObject.id)
+        setBlogs(sortByLikes(updatedBlogs))
+      })
+    }
+
+  }
+
   const blogFormRef = useRef()
 
   const blogForm = () => (
@@ -120,7 +132,7 @@ const App = () => {
       {blogForm()}
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} newLike={addLike} />
+        <Blog key={blog.id} blog={blog} newLike={addLike} blogDelete={deleteBlog} />
       )}
 
 

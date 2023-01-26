@@ -1,7 +1,7 @@
 import { useState } from "react"
 
-const Blog = ({ blog, newLike }) => {
-  const [displayBlog, setDisplayBlog] = useState(false)
+const Blog = ({ blog, newLike, blogDelete }) => {
+  const [displayBlog, setDisplayBlog] = useState(true)
 
   const hideWhenVisible = { display: displayBlog ? 'none' : '' }
   const showWhenVisible = { display: displayBlog ? '' : 'none' }
@@ -19,10 +19,12 @@ const Blog = ({ blog, newLike }) => {
   }
 
   const addLike = () => {
-    //event.preventDefault()
-    // Build the object we want to increase likes by here
     const newObject = {...blog, likes: blog.likes + 1} 
     newLike(newObject)
+  }
+
+  const deleteBlog = () => {
+    blogDelete(blog)
   }
 
   return (
@@ -42,6 +44,9 @@ const Blog = ({ blog, newLike }) => {
           </div>
           <div>
             Blog username here
+          </div>
+          <div>
+            <button onClick={deleteBlog}>Remove</button>
           </div>
         </div>
       </div>
