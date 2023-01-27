@@ -1,7 +1,13 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-const Blog = ({ blog, newLike, blogDelete }) => {
+const Blog = ({ blog, newLike, blogDelete, user }) => {
   const [displayBlog, setDisplayBlog] = useState(true)
+  const [isUserBlog, setIsUserBlog] = useState(false)
+  
+  useEffect(() => {
+    setIsUserBlog(user.username === blog.user.username)
+  }, [user, blog])
+
 
   const hideWhenVisible = { display: displayBlog ? 'none' : '' }
   const showWhenVisible = { display: displayBlog ? '' : 'none' }
@@ -23,9 +29,6 @@ const Blog = ({ blog, newLike, blogDelete }) => {
     newLike(newObject)
   }
 
-  const deleteBlog = () => {
-    blogDelete(blog)
-  }
 
   return (
     <div style={blogStyle}>
@@ -45,9 +48,11 @@ const Blog = ({ blog, newLike, blogDelete }) => {
           <div>
             Blog username here
           </div>
-          <div>
-            <button onClick={deleteBlog}>Remove</button>
-          </div>
+          {isUserBlog ? (
+            <div>
+              <button onClick={() => blogDelete(blog)}>Remove</button>
+            </div>
+          ) : null}
         </div>
       </div>
       <div style={showWhenVisible}>
