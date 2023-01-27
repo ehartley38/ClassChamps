@@ -46,7 +46,7 @@ const Blog = ({ blog, newLike, blogDelete, user }) => {
             <button onClick={addLike}>Like</button>
           </div>
           <div>
-            Blog username here
+            {blog.user.username}
           </div>
           {isUserBlog ? (
             <div>
