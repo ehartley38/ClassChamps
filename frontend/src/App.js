@@ -1,23 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
+import { SignUp } from './components/SignUp'
+import { UserContext } from "./providers/UserProvider";
+
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
   const [errorNotification, setErrorNotification] = useState(null)
 
- 
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-    }
-  }, [])
+  const [user, setUser] = useContext(UserContext)
 
   const logoutUser = () => {
     window.localStorage.removeItem('loggedAppUser')
@@ -28,27 +22,25 @@ const App = () => {
     event.preventDefault()
 
     try {
-      const user = await loginService.login({ username, password })
+      const loginUser = await loginService.login({ username, password })
 
-      window.localStorage.setItem('loggedAppUser', JSON.stringify(user))
-      setUser(user)
+      window.localStorage.setItem('loggedAppUser', JSON.stringify(loginUser))
+      setUser(loginUser)
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      // Set error message popup here
-      setErrorNotification('Wrong username or password')
-      setTimeout(() => {setErrorNotification(null)}, 5000)
+    } catch (err) {
+      console.log(err);
 
     }
   }
 
-
-  if (user === null) {
+  if (!user) {
     return (
       <div>
         <Notification message={errorNotification} className={"error"} />
         <h2>Log in to application</h2>
-        <LoginForm handleLogin={handleLogin} username={username} password={password} setUsername={setUsername} setPassword={setPassword} /> 
+        <LoginForm handleLogin={handleLogin} username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
+        <SignUp />
       </div>
     )
   }
@@ -57,11 +49,7 @@ const App = () => {
     <div>
       <h2>Dashboard</h2>
       <h3>{user.username} has logged in</h3>
-
-      <button onClick={logoutUser}>Logout</button> 
-
-    
-
+      <button onClick={logoutUser}>Logout</button>
     </div>
   )
 }
