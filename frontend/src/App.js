@@ -1,44 +1,27 @@
-import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
+import { useState, useEffect } from 'react'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
-import BlogForm from './components/BlogForm'
-import Togglable from './components/Togglable'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [successNotification, setSuccessNotification] = useState(null)
   const [errorNotification, setErrorNotification] = useState(null)
 
-  useEffect(() => {
-    blogService.getAll()
-      .then(blogs =>
-      setBlogs(sortByLikes(blogs))
-    )
-  }, [])
+ 
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      blogService.setToken(user.token)
     }
   }, [])
 
   const logoutUser = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
-  }
-
-  // Sort the array from highest to lowest number of likes
-  const sortByLikes = (array) => {
-    return array.sort((a, b) => (a.likes < b.likes) ? 1 : -1)
   }
 
   const handleLogin = async (event) => {
@@ -48,7 +31,6 @@ const App = () => {
       const user = await loginService.login({ username, password })
 
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -60,56 +42,6 @@ const App = () => {
     }
   }
 
-  // This addBlog is called in the BlogForm component so that the blog object can 
-  // be passed without needing to import the blogService into the BlogForm
-  const addBlog = (blogObject) => {
-    // See 5b props.children and proptypes if youre confused
-    blogFormRef.current.toggleVisibility()
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        const newBlogs = blogs.concat(returnedBlog)
-        setBlogs(sortByLikes(newBlogs))
-      })
-    
-    setSuccessNotification(`A new blog: ${blogObject.title} by ${blogObject.author} has been added`)
-    setTimeout(() => {setSuccessNotification(null)}, 5000)
-  }
-
-  // This addLike is called in the Blog component
-  const addLike = (blogObject) => {
-    blogService
-      .edit(blogObject)
-      .then(returnedBlog => {
-        const updatedBlogs = blogs.map(b => {
-          if (b.id === returnedBlog.id) {
-            return returnedBlog
-          }
-          return b
-        })
-        setBlogs(sortByLikes(updatedBlogs))
-      })
-  }
-
-  const deleteBlog = (blogObject) => {
-    if (window.confirm(`Remove ${blogObject.title} by ${blogObject.author}?`)) {
-      blogService
-      .deleteBlog(blogObject)
-      .then(returnedBlog => {
-        const updatedBlogs = blogs.filter(b => b.id !== blogObject.id)
-        setBlogs(sortByLikes(updatedBlogs))
-      })
-    }
-
-  }
-
-  const blogFormRef = useRef()
-
-  const blogForm = () => (
-    <Togglable buttonLabel="New blog" ref={blogFormRef}>
-      <BlogForm createBlog={addBlog} user={user} />
-    </Togglable>
-  )
 
   if (user === null) {
     return (
@@ -123,18 +55,12 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={successNotification} className={"success"} />
-      <h2>Blogs</h2>
+      <h2>Dashboard</h2>
       <h3>{user.username} has logged in</h3>
 
       <button onClick={logoutUser}>Logout</button> 
 
-      {blogForm()}
-
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} newLike={addLike} blogDelete={deleteBlog} user={user} />
-      )}
-
+    
 
     </div>
   )
