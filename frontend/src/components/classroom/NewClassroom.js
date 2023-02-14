@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { UserContext } from "../../providers/UserProvider";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,6 @@ export const NewClassroom = () => {
     const user = useContext(UserContext)
     let navigate = useNavigate()
 
-
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -18,11 +17,8 @@ export const NewClassroom = () => {
             // Add the classroom
             const returnedClassroom = await classroomService.create({
                 roomName: roomName
-            })
+            })            
 
-            // Add the classroom ID to the teachers classrooms array
-
-            
             setRoomName('')
             navigate('/classrooms')
         } catch (err) {

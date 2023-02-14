@@ -12,7 +12,13 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     default: 'student'
-  }
+  },
+  classrooms: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Classroom'
+    }
+  ]
 })
 
 userSchema.plugin(uniqueValidator)
