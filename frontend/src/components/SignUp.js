@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import  signUpService from '../services/signUp'
+import  usersService from '../services/users'
 import { UserContext } from "../providers/UserProvider";
 
 
@@ -30,7 +30,7 @@ export const SignUp = () => {
         }
 
         try {
-            const user = await signUpService.signUp({
+            const user = await usersService.signUp({
                 username, password, name
             })
 

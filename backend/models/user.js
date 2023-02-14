@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema({
   },
   name: String,
   passwordHash: String,
+  role: {
+    type: String,
+    default: 'student'
+  }
 })
 
 userSchema.plugin(uniqueValidator)
