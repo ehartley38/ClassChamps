@@ -19,7 +19,6 @@ export const StudentDashboard = () => {
     }
 
     useEffect(() => {
-        console.log(user);
         fetchUserDetails()
     }, [])
 
