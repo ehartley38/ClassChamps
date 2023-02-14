@@ -31,7 +31,7 @@ const errorHandler = (error, request, response, next) => {
     next(error)
 }
 
-
+/*
 const userExtractor = async (request, response, next) => {
     const authorization = request.get('authorization')  
     if (authorization && authorization.startsWith('Bearer ')) {
@@ -50,6 +50,20 @@ const userExtractor = async (request, response, next) => {
 
     next()
 }
+*/
+
+const authenticateToken = async (request, response, next) => {
+    const authHeader = request.headers['authorization']
+    const token = authHeader.replace('bearer ', '')
+
+    if (token === null) return response.status(401).json({ error: 'token invalid' })
+
+    jwt.verify(token, config.SECRET, (err, user) => {
+        if (err) return response.status(403).json({ error: 'token cannot be verified' })
+        request.user = user
+        next()
+    })
+}
 
 
 
@@ -57,5 +71,5 @@ module.exports = {
     requestLogger,
     unknownEndpoint,
     errorHandler,
-    userExtractor
+    authenticateToken
 }

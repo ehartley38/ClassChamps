@@ -8,9 +8,10 @@ export const StudentDashboard = () => {
     const [user, setUser] = useContext(UserContext)
     const [userDetails, setUserDetails] = useState(null)
 
+    
     const fetchUserDetails = async () => {
         try {
-            const details = await usersService.getUserDetails(user.id)
+            const details = await usersService.getUserDetails(user)
             setUserDetails(details)
         } catch (err) {
             console.log(err);
@@ -27,11 +28,12 @@ export const StudentDashboard = () => {
             <TeacherDashboard userDetails={userDetails}/>
         )
     }
+    
 
     return (
         <div>
             <h1>Student Dashboard</h1>
-            {userDetails && `Welcome ${userDetails.username}`}
+            Welcome {userDetails && userDetails.username}
             <SignOut />
         </div>
     )

@@ -33,6 +33,7 @@ app.use('/api/login', loginRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
-app.use(middleware.userExtractor)
+//app.use(middleware.userExtractor)
+app.use(middleware.authenticateToken)
 
 module.exports = app

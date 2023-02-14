@@ -12,11 +12,12 @@ const signUp = async credentials => {
   return response.data
 }
 
-const getUserDetails = async (id) => {
-  const headers = {
-    'Authorization': 'Bearer ' + window.localStorage.getItem('loggedAppUser')
-  }
-  const request = await axios.get((baseUrl + '/' + id), { headers })
+const getUserDetails = async (user) => {
+  const request = await axios.get((baseUrl + '/' + user.id), {
+    headers: {
+      authorization: 'bearer ' + user.token
+    }
+  })
   return request.data
 }
 

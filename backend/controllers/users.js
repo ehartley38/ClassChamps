@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
-const { userExtractor } = require('../utils/middleware')
+const { userExtractor, authenticateToken } = require('../utils/middleware')
 
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
@@ -21,17 +21,32 @@ usersRouter.post('/', async (request, response) => {
 })
 
 usersRouter.get('/', async (request, response) => {
-    const users = await User
+  const users = await User
     //.find({}).populate('blogs', { title: 1, author: 1, url: 1, likes: 1})
     .find({})
 
-    response.json(users)
+  response.json(users)
 })
 
-usersRouter.get('/:id', userExtractor, async (request, response) => {
+usersRouter.get('/:id', authenticateToken, async (request, response) => {
   const id = request.params.id
-  const user = await User.findById(id).exec()
-  response.json(user)
+  if (id === request.user.id) {
+    const user = await User.findById(id).exec()
+    response.json(user)
+  }
+
+}
+)
+
+/*
+usersRouter.get('/:id', ahenticateToken, async (request, response) => {
+  const id = request.params.id
+  if (id === request.user.id) {
+    const user = await User.findById(id).exec()
+    response.json(user)
+  }
+
 })
+*/
 
 module.exports = usersRouter
