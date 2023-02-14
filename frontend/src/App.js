@@ -1,29 +1,40 @@
-import {  useContext } from 'react'
+import { useContext } from 'react'
 import LoginForm from './components/LoginForm'
 import { SignOut } from './components/SignOut';
 import { SignUp } from './components/SignUp'
 import { StudentDashboard } from './components/StudentDashboard';
 import { UserContext } from "./providers/UserProvider";
+import { Routes, Route } from "react-router";
+import { NoMatch } from './components/NoMatch'
+import { Classrooms } from './components/classroom/Classrooms';
+import { NewClassroom } from './components/classroom/NewClassroom';
 
 
 const App = () => {
   const [user, setUser] = useContext(UserContext)
 
 
-  if (!user) {
+  if (user) {
     return (
-      <div>
-        <h2>Log in to application</h2>
-        <LoginForm setUser={setUser} />
-        <SignUp  />
-      </div>
+      <Routes>
+        <Route path="/" element={<StudentDashboard />} />
+        <Route path="/classrooms">
+          <Route index element={<Classrooms />} />
+          <Route path="new" element={<NewClassroom />} />
+        </Route>
+        <Route path="*" element={<NoMatch />} />
+      </Routes>
     )
   }
 
+
+
   return (
-    <div>
-      <StudentDashboard />
-    </div>
+    <Routes>
+      <Route path="/" element={<SignUp />} />
+      <Route path="/login" element={<LoginForm setUser={setUser}/>} />
+      <Route path="*" element={<NoMatch />} />
+    </Routes>
   )
 }
 

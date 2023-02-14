@@ -1,9 +1,12 @@
 import { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 import loginService from '../services/login'
 
 const LoginForm = ({setUser}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
+    let navigate = useNavigate()
 
     const handleLogin = async (e) => {
         e.preventDefault()
@@ -15,6 +18,8 @@ const LoginForm = ({setUser}) => {
           setUser(loginUser)
           setUsername('')
           setPassword('')
+
+          navigate('/')
         } catch (err) {
           console.log(err);
     
@@ -42,8 +47,14 @@ const LoginForm = ({setUser}) => {
                         onChange={({ target }) => setPassword(target.value)}
                     />
                 </div>
-                <button type="submit">login</button>
+                <button type="submit">Sign in</button>
             </form>
+            <div>
+                Dont have an account?
+                <button>
+                    <NavLink to='/'>Click here</NavLink>
+                </button>
+            </div>
         </div>
     )
 

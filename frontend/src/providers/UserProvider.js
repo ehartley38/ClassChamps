@@ -1,4 +1,5 @@
 import React, { useState, createContext, useEffect } from "react";
+import classroomService from '../services/classrooms'
 
 export const UserContext = createContext({ user: null });
 
@@ -11,7 +12,7 @@ const UserProvider = ({ children }) => {
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
             setUser(user)
-            //blogService.setToken(user.token)
+            classroomService.setToken(user.token)
         }
     }, [])
 

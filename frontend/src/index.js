@@ -3,13 +3,17 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 import UserProvider from './providers/UserProvider'
+import { BrowserRouter } from 'react-router-dom'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
     <React.StrictMode>
-        <UserProvider>
-            <App />
-        </UserProvider>
+        <BrowserRouter>
+            <UserProvider>
+                <App />
+            </UserProvider>
+        </BrowserRouter>
     </React.StrictMode>
 )

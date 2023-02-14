@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import  usersService from '../services/users'
 import { UserContext } from "../providers/UserProvider";
+import { NavLink, useNavigate } from "react-router-dom";
 
 
 export const SignUp = () => {
@@ -10,6 +11,8 @@ export const SignUp = () => {
     const [username, setUsername] = useState('')
 
     const [user, setUser] = useContext(UserContext)
+
+    let navigate = useNavigate()
 
     const validatePassword = () => {
         let isValid = true
@@ -34,13 +37,13 @@ export const SignUp = () => {
                 username, password, name
             })
 
-
             window.localStorage.setItem('loggedAppUser', JSON.stringify(user))
-            setUser(user)
             setName('')
             setUsername('')
             setPassword('')
             setConfirmPassword('')
+
+            navigate('/login')
         } catch (err) {
             console.log(err);
         }
@@ -89,7 +92,7 @@ export const SignUp = () => {
                 <div>
                     Already have an account?
                     <button>
-                        Click here
+                        <NavLink to='/login'>Click here</NavLink>
                     </button>
                 </div>
             </div>
