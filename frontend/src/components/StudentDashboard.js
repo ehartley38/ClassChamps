@@ -8,10 +8,11 @@ export const StudentDashboard = () => {
     const [user, setUser] = useContext(UserContext)
     const [userDetails, setUserDetails] = useState(null)
 
-    
+    const jwt = window.localStorage.getItem('loggedAppUser')
+
     const fetchUserDetails = async () => {
         try {
-            const details = await usersService.getUserDetails(user)
+            const details = await usersService.getUserDetails(JSON.parse(jwt))
             setUserDetails(details)
         } catch (err) {
             console.log(err);

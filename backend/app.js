@@ -36,6 +36,5 @@ app.use('/api/classrooms', classroomsRouter)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 app.use(middleware.userExtractor)
-app.use(middleware.authenticateToken)
 
 module.exports = app

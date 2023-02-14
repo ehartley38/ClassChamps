@@ -6,11 +6,12 @@ import { ClassroomPanel } from './ClassroomPanel'
 
 export const Classrooms = () => {
     const [classrooms, setClassrooms] = useState([])
-    const user = useContext(UserContext)
+    const [user, setUser] = useContext(UserContext)
+
 
     useEffect(() => {
-        setClassrooms([])
         const fetchClassrooms = async () => {
+            classroomService.setToken(user.token)
             const classroomArray = await classroomService.getAll();
             setClassrooms(classroomArray);
         };

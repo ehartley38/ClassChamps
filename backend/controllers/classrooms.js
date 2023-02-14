@@ -25,7 +25,6 @@ classroomsRouter.post('/', userExtractor, async (request, response) => {
 
 classroomsRouter.get('/', userExtractor, async (request, response) => {
     const user = request.user
-    console.log(user);
     const classrooms = await Classroom.find({ owners: user._id})
 
     response.json(classrooms)

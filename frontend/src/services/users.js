@@ -13,7 +13,7 @@ const signUp = async credentials => {
 }
 
 const getUserDetails = async (user) => {
-  const request = await axios.get((baseUrl + '/' + user.id), {
+  const request = await axios.get((baseUrl + '/id'), {
     headers: {
       authorization: 'bearer ' + user.token
     }

@@ -13,7 +13,6 @@ import { NewClassroom } from './components/classroom/NewClassroom';
 const App = () => {
   const [user, setUser] = useContext(UserContext)
 
-
   if (user) {
     return (
       <Routes>

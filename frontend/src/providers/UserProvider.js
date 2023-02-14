@@ -7,15 +7,17 @@ const UserProvider = ({ children }) => {
     const [user, setUser] = useState('');
 
     // Need to clean hook up
+    
     useEffect(() => {
-        const loggedUserJSON = window.localStorage.getItem('loggedAppUser')
-        if (loggedUserJSON) {
-            const user = JSON.parse(loggedUserJSON)
+        const jwt = window.localStorage.getItem('loggedAppUser')
+        if (jwt) {
+            const user = JSON.parse(jwt)
             setUser(user)
-            classroomService.setToken(user.token)
         }
-    }, [])
+    },[])
+    
 
+    //console.log(`user is ${user.token}`);
     return (
         <UserContext.Provider value={[user, setUser]}>
             {children}

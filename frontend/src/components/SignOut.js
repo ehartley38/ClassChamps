@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { UserContext } from "../providers/UserProvider"
+import classroomService from '../services/classrooms'
 
 export const SignOut = () => {
     const [user, setUser] = useContext(UserContext)
@@ -9,6 +10,7 @@ export const SignOut = () => {
     const logoutUser = () => {
       window.localStorage.removeItem('loggedAppUser')
       setUser(null)
+      classroomService.setToken(null)
       navigate('/login')
     }
 
