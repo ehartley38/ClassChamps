@@ -30,6 +30,20 @@ classroomsRouter.get('/', userExtractor, async (request, response) => {
     response.json(classrooms)
 })
 
+classroomsRouter.delete('/:id', userExtractor, async (request, response) => {
+    const user = request.user
+
+    const classroom = await Classroom.findById(request.params.id)
+    if (classroom.owners.includes(user._id)) {
+        await Classroom.findByIdAndRemove(request.params.id)
+        user.classrooms.pull(request.params.id)
+        await user.save()
+    }
+
+    response.status(204).end()
+
+})
+
 
 
 module.exports = classroomsRouter

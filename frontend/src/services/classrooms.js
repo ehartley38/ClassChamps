@@ -13,7 +13,6 @@ const getAll = async () => {
     }
 
     const response = await axios.get(baseUrl, config);
-    console.log(response.data);
     return response.data;
 }
 
@@ -26,5 +25,15 @@ const create = async (newObject) => {
     return response.data
 }
 
+const deleteClassroom = async (classroom) => {
+    const config = {
+        headers: { Authorization: token },
+    }
 
-export default { create, setToken, getAll }
+    const classroomURL = baseUrl + '/' + classroom.id
+    
+    await axios.delete(classroomURL, config)
+}
+
+
+export default { create, setToken, getAll, deleteClassroom }

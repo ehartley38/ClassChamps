@@ -20,8 +20,10 @@ export const Classrooms = () => {
     }, []);
 
     const deleteClassroom = async (room) => {
+        await classroomService.deleteClassroom(room)
 
-
+        const updatedClassrooms = classrooms.filter(c => c.id !== room.id)
+        setClassrooms(updatedClassrooms)
     }
 
     return (
@@ -32,7 +34,7 @@ export const Classrooms = () => {
             <div>
                 <h1>Your Classrooms</h1>
                 {classrooms && classrooms.map(classroom =>
-                    <ClassroomPanel key={classroom.id} classroom={classroom} />
+                    <ClassroomPanel key={classroom.id} classroom={classroom} deleteClassroom={deleteClassroom}/>
                     )}
             </div>
         </div>

@@ -1,11 +1,11 @@
 
-export const ClassroomPanel = ({ classroom }) => {
+export const ClassroomPanel = ({ classroom, deleteClassroom }) => {
 
     return (
         <div>
             <h3>{classroom.roomName}</h3>
             <button>Details</button>
-            <button>Delete</button>
+            <button onClick={() => deleteClassroom(classroom)}>Delete</button>
         </div>
     )
 }
