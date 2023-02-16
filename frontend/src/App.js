@@ -8,6 +8,7 @@ import { Routes, Route } from "react-router";
 import { NoMatch } from './components/NoMatch'
 import { Classrooms } from './components/classroom/Classrooms';
 import { NewClassroom } from './components/classroom/NewClassroom';
+import { ClassroomView } from './components/classroom/ClassroomView';
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/classrooms">
           <Route index element={<Classrooms />} />
           <Route path="new" element={<NewClassroom />} />
+          <Route path=":roomName" element={<ClassroomView />} />
         </Route>
         <Route path="*" element={<NoMatch />} />
       </Routes>
