@@ -16,6 +16,16 @@ const getAll = async () => {
     return response.data
 }
 
+const getById = async (jwt, classroomId) => {
+    const response = await axios.get(`${baseUrl}/${classroomId}`, {
+        headers: {
+            authorization: 'bearer ' + jwt.token
+        }
+    })
+
+    return response.data
+}
+
 const create = async (newObject) => {
     const config = {
         headers: { Authorization: token },
@@ -32,7 +42,6 @@ const generateClassCode = async (jwt, classroomObject) => {
             authorization: 'bearer ' + jwt.token
         }
     })
-    console.log(response.data);
     return response.data
 }
 
@@ -47,4 +56,4 @@ const deleteClassroom = async (classroom) => {
     await axios.delete(classroomURL, config)
 }
 
-export default { create, setToken, getAll, deleteClassroom, generateClassCode }
+export default { create, setToken, getAll, deleteClassroom, generateClassCode, getById }
