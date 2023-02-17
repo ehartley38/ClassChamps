@@ -29,7 +29,6 @@ const classroomSchema = new mongoose.Schema({
 
 // Check if roomcode is already taken
 classroomSchema.pre('findOneAndUpdate', async function () {
-    console.log('inside pre middleware');
     if (this.getUpdate().roomCode) {
         const doc = await this.model.findOne({ roomCode: this.getUpdate().roomCode})
         if (doc && doc._id !== this._id) {

@@ -55,7 +55,7 @@ classroomsRouter.put('/:id/generate-code', userExtractor, async (request, respon
             let code = toolFile.generateCode(6)
     
             try {
-                const updatedClassroom = await Classroom.findOneAndUpdate(body.id, { roomCode: code }, { new: true })
+                const updatedClassroom = await Classroom.findOneAndUpdate({_id: body.id}, { roomCode: code }, { new: true })
                 unique = true
                 response.json(updatedClassroom)
             } catch (err) {
