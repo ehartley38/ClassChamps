@@ -12,10 +12,10 @@ const signUp = async credentials => {
   return response.data
 }
 
-const getUserDetails = async (user) => {
+const getUserDetails = async (jwt) => {
   const request = await axios.get((baseUrl + '/id'), {
     headers: {
-      authorization: 'bearer ' + user.token
+      authorization: 'bearer ' + jwt.token
     }
   })
   return request.data

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+//const uniqueValidator = require('mongoose-unique-validator')
 
 const classroomSchema = new mongoose.Schema({
     owners: [
@@ -8,15 +9,36 @@ const classroomSchema = new mongoose.Schema({
         }
     ],
     quizzes: [],
-    roomName: String,
+    roomName: {
+        type: String,
+        required: true
+    },
     students: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
-    ]
+    ],
+    roomCode: {
+        type: String,
+        
+    }
 
 })
+
+
+// Check if roomcode is already taken
+classroomSchema.pre('findOneAndUpdate', async function () {
+    console.log('inside pre middleware');
+    if (this.getUpdate().roomCode) {
+        const doc = await this.model.findOne({ roomCode: this.getUpdate().roomCode})
+        if (doc && doc._id !== this._id) {
+            throw new Error('room code must be unique')
+        }
+    }
+})
+
+
 
 classroomSchema.set('toJSON', {
     transform: (document, returnedObject) => {
