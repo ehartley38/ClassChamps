@@ -22,7 +22,6 @@ usersRouter.post('/', async (request, response) => {
 
 usersRouter.get('/', async (request, response) => {
   const users = await User
-    //.find({}).populate('blogs', { title: 1, author: 1, url: 1, likes: 1})
     .find({})
 
   response.json(users)
@@ -33,22 +32,9 @@ usersRouter.get('/:id', userExtractor, async (request, response) => {
 
   const id = user._id
 
-  const userObject = await User.findById(id).exec()
+  const userObject = await User.findById(id).populate('classrooms').exec()
   response.json(userObject)
-
-
 }
 )
-
-/*
-usersRouter.get('/:id', ahenticateToken, async (request, response) => {
-  const id = request.params.id
-  if (id === request.user.id) {
-    const user = await User.findById(id).exec()
-    response.json(user)
-  }
-
-})
-*/
 
 module.exports = usersRouter

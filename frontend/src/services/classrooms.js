@@ -47,7 +47,7 @@ const generateClassCode = async (jwt, classroomObject) => {
 }
 
 // Add the user to the classroom using the room code
-const findClassroomByCode = async (jwt, roomCode) => {
+const joinClassByRoomCode = async (jwt, roomCode) => {
     const response = await axios.put(
         `${baseUrl}/join`, {roomCode}, {
             headers: {
@@ -55,7 +55,18 @@ const findClassroomByCode = async (jwt, roomCode) => {
             }
         }
     )
-    //return response.data
+    return response.data
+}
+
+const removeStudentFromClassroom = async (jwt, classId, userId) => {
+    const response = await axios.put(
+        `${baseUrl}/${classId}/removeUser/${userId}`, {}, {
+            headers: {
+                authorization: 'bearer ' + jwt.token
+            }
+        }
+    )
+    return response.data;
 }
 
 
@@ -70,4 +81,4 @@ const deleteClassroom = async (classroom) => {
 }
 
 export default { create, setToken, getAll, deleteClassroom, generateClassCode, 
-    getById, findClassroomByCode }
+    getById, joinClassByRoomCode, removeStudentFromClassroom }

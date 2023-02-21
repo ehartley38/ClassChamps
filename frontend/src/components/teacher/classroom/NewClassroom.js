@@ -1,8 +1,8 @@
 import { useContext, useEffect } from "react"
-import { UserContext } from "../../providers/UserProvider";
+import { UserContext } from "../../../providers/UserProvider";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
-import classroomService from '../../services/classrooms'
+import classroomService from '../../../services/classrooms'
 
 
 export const NewClassroom = () => {

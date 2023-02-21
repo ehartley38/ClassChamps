@@ -4,6 +4,7 @@ import  usersService from '../services/users'
 import { SignOut } from './SignOut';
 import { TeacherDashboard } from './TeacherDashbaord';
 import { JoinRoom } from './JoinRoom';
+import { StudentClassroomPanel } from './student/StudentClassroomPanel';
 
 export const StudentDashboard = () => {
     const [user, setUser] = useContext(UserContext)
@@ -31,10 +32,14 @@ export const StudentDashboard = () => {
     }
     
 
-    return (
+    if (userDetails) return (
         <div>
             <h1>Student Dashboard</h1>
-            Welcome {userDetails && userDetails.username}
+            Welcome {userDetails.name}
+            <h3>Your classrooms</h3>
+            {userDetails.classrooms.map(classroom =>
+                <StudentClassroomPanel key={classroom.id} classroom={classroom} />
+                )}
             <JoinRoom />
             <SignOut />
         </div>

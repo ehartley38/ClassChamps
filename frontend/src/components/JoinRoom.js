@@ -10,7 +10,7 @@ export const JoinRoom = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        classroomService.findClassroomByCode(JSON.parse(jwt), joinCode)
+        classroomService.joinClassByRoomCode(JSON.parse(jwt), joinCode)
     }
 
     return (

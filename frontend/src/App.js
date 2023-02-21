@@ -6,9 +6,9 @@ import { StudentDashboard } from './components/StudentDashboard';
 import { UserContext } from "./providers/UserProvider";
 import { Routes, Route } from "react-router";
 import { NoMatch } from './components/NoMatch'
-import { Classrooms } from './components/classroom/Classrooms';
-import { NewClassroom } from './components/classroom/NewClassroom';
-import { ClassroomView } from './components/classroom/ClassroomView';
+import { Classrooms } from './components/teacher/classroom/Classrooms';
+import { NewClassroom } from './components/teacher/classroom/NewClassroom';
+import { ClassroomView } from './components/teacher/classroom/ClassroomView';
 
 
 const App = () => {

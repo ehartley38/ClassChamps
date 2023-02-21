@@ -3,6 +3,7 @@ const classroomsRouter = require('express').Router()
 const Classroom = require('../models/classroom')
 
 let toolFile = require('../utils/tools')
+const User = require('../models/user')
 
 classroomsRouter.post('/', userExtractor, async (request, response) => {
     const body = request.body
@@ -32,7 +33,7 @@ classroomsRouter.get('/', userExtractor, async (request, response) => {
 
 classroomsRouter.get('/:id', async (request, response) => {
     const id = request.params.id
-    const classroom = await Classroom.findById(id).exec()
+    const classroom = await Classroom.findById(id).populate('students').exec()
 
     response.json(classroom)
 })
@@ -57,20 +58,20 @@ classroomsRouter.put('/:id/generate-code', userExtractor, async (request, respon
     const user = request.user
     const body = request.body
     const ownersArray = Object.values(body.owners)
-    
+
     if (ownersArray.includes(user.id)) {
         let unique = false
         while (unique === false) {
             let code = toolFile.generateCode(6)
-    
+
             try {
-                const updatedClassroom = await Classroom.findOneAndUpdate({_id: body.id}, { roomCode: code }, { new: true })
+                const updatedClassroom = await Classroom.findOneAndUpdate({ _id: body.id }, { roomCode: code }, { new: true })
                 unique = true
                 response.json(updatedClassroom)
             } catch (err) {
                 console.log(err);
             }
-    
+
         }
     }
 })
@@ -79,17 +80,17 @@ classroomsRouter.put('/:id/generate-code', userExtractor, async (request, respon
 classroomsRouter.put('/join', userExtractor, async (request, response) => {
     const user = request.user
     const code = request.body.roomCode
-    
+
     try {
         const classroom = await Classroom.findOne({ roomCode: code })
         if (!classroom) {
             //throw new Error('Invalid classroom code')
-            return response.status(404).json({message: "Invalid room code"})
+            return response.status(404).json({ message: "Invalid room code" })
         } else {
             if (classroom.students.includes(user.id)) {
-                return response.status(200).json({message: "User already registered in class"})
+                return response.status(200).json({ message: "User already registered in class" })
             }
-            
+
             classroom.students = classroom.students.concat(user._id)
             user.classrooms = user.classrooms.concat(classroom._id)
             await classroom.save()
@@ -98,9 +99,28 @@ classroomsRouter.put('/join', userExtractor, async (request, response) => {
             response.json(classroom)
         }
     } catch (err) {
-        response.status(500).json({message: "Internal server error"})
+        response.status(500).json({ message: "Internal server error" })
         console.log(err);
     }
+})
+
+// Remove a student from a class
+classroomsRouter.put('/:classId/removeUser/:userId', userExtractor, async (request, response) => {
+    const user = request.user
+    const classId = request.params.classId
+    const userId = request.params.userId
+    const classroom = await Classroom.findById(classId)
+    const student = await User.findById(userId)
+
+    if (classroom.owners.includes(user._id)) {
+        classroom.students.pull(userId)
+        await classroom.save()
+
+        student.classrooms.pull(classId)
+        await student.save()
+    }
+
+    response.status(200).end()
 })
 
 

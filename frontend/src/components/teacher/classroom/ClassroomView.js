@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
-import classroomService from '../../services/classrooms'
+import classroomService from '../../../services/classrooms'
+import { Student } from "./Student"
 
 
 export const ClassroomView = () => {
@@ -45,7 +46,9 @@ export const ClassroomView = () => {
             <button onClick={() => handleGenerate()}>{classroom.roomCode ? ('New code') : ('Generate')}</button>
             <div>
                 <h3>Students</h3>
-                <i>List of students</i>
+                {classroom.students.map(student =>
+                    <Student key={student.id} student={student} classroom={classroom}/>
+                    )}
             </div>
             <div>
                 <h3>Quizzes</h3>

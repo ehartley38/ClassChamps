@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react"
 import { NavLink } from "react-router-dom"
-import { UserContext } from "../../providers/UserProvider"
-import classroomService from '../../services/classrooms'
+import { UserContext } from "../../../providers/UserProvider"
+import classroomService from '../../../services/classrooms'
 import { ClassroomPanel } from './ClassroomPanel'
 
 export const Classrooms = () => {

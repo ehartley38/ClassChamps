@@ -21,4 +21,6 @@ const getUserDetails = async (jwt) => {
   return request.data
 }
 
+
+
 export default { setToken, signUp, getUserDetails }
