@@ -35,6 +35,7 @@ const create = async (newObject) => {
     return response.data
 }
 
+// Call the backend to generate the unique room code
 const generateClassCode = async (jwt, classroomObject) => {
     const response = await axios.put(
         `${baseUrl}/${classroomObject.id}/generate-code`, classroomObject, {
@@ -43,6 +44,18 @@ const generateClassCode = async (jwt, classroomObject) => {
         }
     })
     return response.data
+}
+
+// Add the user to the classroom using the room code
+const findClassroomByCode = async (jwt, roomCode) => {
+    const response = await axios.put(
+        `${baseUrl}/join`, {roomCode}, {
+            headers: {
+                authorization: 'bearer ' + jwt.token
+            }
+        }
+    )
+    //return response.data
 }
 
 
@@ -56,4 +69,5 @@ const deleteClassroom = async (classroom) => {
     await axios.delete(classroomURL, config)
 }
 
-export default { create, setToken, getAll, deleteClassroom, generateClassCode, getById }
+export default { create, setToken, getAll, deleteClassroom, generateClassCode, 
+    getById, findClassroomByCode }

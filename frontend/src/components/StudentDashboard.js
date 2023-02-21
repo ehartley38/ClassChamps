@@ -3,6 +3,7 @@ import { UserContext } from "../providers/UserProvider";
 import  usersService from '../services/users'
 import { SignOut } from './SignOut';
 import { TeacherDashboard } from './TeacherDashbaord';
+import { JoinRoom } from './JoinRoom';
 
 export const StudentDashboard = () => {
     const [user, setUser] = useContext(UserContext)
@@ -34,6 +35,7 @@ export const StudentDashboard = () => {
         <div>
             <h1>Student Dashboard</h1>
             Welcome {userDetails && userDetails.username}
+            <JoinRoom />
             <SignOut />
         </div>
     )

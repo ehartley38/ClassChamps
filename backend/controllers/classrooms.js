@@ -37,6 +37,7 @@ classroomsRouter.get('/:id', async (request, response) => {
     response.json(classroom)
 })
 
+
 classroomsRouter.delete('/:id', userExtractor, async (request, response) => {
     const user = request.user
 
@@ -51,6 +52,7 @@ classroomsRouter.delete('/:id', userExtractor, async (request, response) => {
 
 })
 
+// Generate a room code for a given classroom
 classroomsRouter.put('/:id/generate-code', userExtractor, async (request, response) => {
     const user = request.user
     const body = request.body
@@ -70,6 +72,34 @@ classroomsRouter.put('/:id/generate-code', userExtractor, async (request, respon
             }
     
         }
+    }
+})
+
+// Add the user to the classroom using the room code
+classroomsRouter.put('/join', userExtractor, async (request, response) => {
+    const user = request.user
+    const code = request.body.roomCode
+    
+    try {
+        const classroom = await Classroom.findOne({ roomCode: code })
+        if (!classroom) {
+            //throw new Error('Invalid classroom code')
+            return response.status(404).json({message: "Invalid room code"})
+        } else {
+            if (classroom.students.includes(user.id)) {
+                return response.status(200).json({message: "User already registered in class"})
+            }
+            
+            classroom.students = classroom.students.concat(user._id)
+            user.classrooms = user.classrooms.concat(classroom._id)
+            await classroom.save()
+            await user.save()
+
+            response.json(classroom)
+        }
+    } catch (err) {
+        response.status(500).json({message: "Internal server error"})
+        console.log(err);
     }
 })
 
