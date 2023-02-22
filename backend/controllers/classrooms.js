@@ -66,7 +66,8 @@ classroomsRouter.put('/:id/generate-code', userExtractor, async (request, respon
 
             try {
                 const updatedClassroom = await Classroom.findOneAndUpdate({ _id: body.id }, { roomCode: code }, { new: true })
-                unique = true
+                .populate('students')
+                unique = true   
                 response.json(updatedClassroom)
             } catch (err) {
                 console.log(err);

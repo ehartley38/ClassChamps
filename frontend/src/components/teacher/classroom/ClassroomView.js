@@ -46,8 +46,8 @@ export const ClassroomView = () => {
             <button onClick={() => handleGenerate()}>{classroom.roomCode ? ('New code') : ('Generate')}</button>
             <div>
                 <h3>Students</h3>
-                {classroom.students.map(student =>
-                    <Student key={student.id} student={student} classroom={classroom}/>
+                {classroom.students && classroom.students.map((student) =>
+                    <Student key={student.id} student={student} classroom={classroom} setClassroom={setClassroom} />
                     )}
             </div>
             <div>
