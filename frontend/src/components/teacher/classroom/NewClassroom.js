@@ -20,7 +20,7 @@ export const NewClassroom = () => {
             })            
 
             setRoomName('')
-            navigate('/classrooms')
+            navigate('/teacher/classrooms')
         } catch (err) {
             console.log(err)
         }

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import classroomService from '../services/classrooms'
+import classroomService from '../../services/classrooms'
 
 
 export const JoinRoom = () => {
