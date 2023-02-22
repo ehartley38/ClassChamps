@@ -5,7 +5,7 @@ import  usersService from '../../services/users'
 import { SignOut } from '../SignOut';
 import { TeacherDashboard } from '../teacher/TeacherDashbaord';
 import { JoinRoom } from './JoinRoom';
-import { StudentClassroomPanel } from './StudentClassroomPanel';
+import { StudentClassroomPanel } from './classroom/StudentClassroomPanel';
 
 export const StudentDashboard = () => {
     const [user, setUser] = useContext(UserContext)

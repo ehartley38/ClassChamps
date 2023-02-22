@@ -48,14 +48,19 @@ const generateClassCode = async (jwt, classroomObject) => {
 
 // Add the user to the classroom using the room code
 const joinClassByRoomCode = async (jwt, roomCode) => {
-    const response = await axios.put(
-        `${baseUrl}/join`, {roomCode}, {
-            headers: {
-                authorization: 'bearer ' + jwt.token
+    try {
+        const response = await axios.put(
+            `${baseUrl}/join`, {roomCode}, {
+                headers: {
+                    authorization: 'bearer ' + jwt.token
+                }
             }
-        }
-    )
-    return response.data
+        )
+        return response.data
+    } catch (err) {
+        return err.response.data
+    }
+   
 }
 
 const removeStudentFromClassroom = async (jwt, classId, userId) => {

@@ -10,6 +10,7 @@ import { Classrooms } from './components/teacher/classroom/Classrooms';
 import { NewClassroom } from './components/teacher/classroom/NewClassroom';
 import { ClassroomView } from './components/teacher/classroom/ClassroomView';
 import { TeacherDashboard } from './components/teacher/TeacherDashbaord';
+import { StudentClassroomView } from './components/student/classroom/StudentClassroomView';
 
 
 const App = () => {
@@ -18,7 +19,10 @@ const App = () => {
   if (user) {
     return (
       <Routes>
-        <Route path="/" element={<StudentDashboard />} />
+        <Route path='/'>
+          <Route index element={<StudentDashboard />} />
+          <Route path=":roomName" element={<StudentClassroomView />} />
+        </Route>
         <Route path='/teacher'>
           <Route index element={<TeacherDashboard />} />
           <Route path="classrooms">

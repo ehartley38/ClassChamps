@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import classroomService from '../../services/classrooms'
 
 
@@ -6,11 +7,19 @@ export const JoinRoom = () => {
     const [joinCode, setJoinCode] = useState('')
     const jwt = window.localStorage.getItem('loggedAppUser')
 
+    let navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
-        classroomService.joinClassByRoomCode(JSON.parse(jwt), joinCode)
+        const classroom = await classroomService.joinClassByRoomCode(JSON.parse(jwt), joinCode)
+        if (classroom !== 'Invalid room code') {
+            // Navigate to classroom
+            navigate(`${classroom.roomName}`, { state: { classroom } })
+        }
+
+        // If code is valid, then navigate to the classroom. Else, throw error
     }
 
     return (

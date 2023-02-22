@@ -4,7 +4,7 @@ export const StudentClassroomPanel = ({ classroom }) => {
     let navigate = useNavigate()
 
     const handleDetails = () => {
-        //navigate(`${classroom.roomName}`, { state: { classroom } })
+        navigate(`${classroom.roomName}`, { state: { classroom } })
     }
 
     return (
