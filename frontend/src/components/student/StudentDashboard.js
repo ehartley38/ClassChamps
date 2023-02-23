@@ -13,7 +13,7 @@ export const StudentDashboard = () => {
     let navigate = useNavigate()
 
     useEffect(() => {
-        if(!user) return;
+        if (!user) return;
         const fetchUserDetails = async () => {
             try {
                 const details = await usersService.getUserDetails(user)
@@ -36,12 +36,12 @@ export const StudentDashboard = () => {
             <Typography variant='h1' sx={{ my: 4, textAlign: 'center', color: 'primary.main' }}>Student Dashboard</Typography>
             Welcome {userDetails.name}
             <Typography variant='h3' sx={{ color: 'secondary.main' }} >Your classrooms</Typography>
-            <Box sx={{ display: 'flex', flexDirection:'row', justifyContent: 'left', gap: 4 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', gap: 4 }}>
                 {userDetails.classrooms.map(classroom =>
                     <StudentClassroomPanel key={classroom.id} classroom={classroom} />
                 )}
+                <JoinRoom />
             </Box>
-            <JoinRoom />
             <SignOut />
         </div>
     )
