@@ -1,30 +1,27 @@
-import {  useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../../providers/UserProvider";
-import  usersService from '../../services/users'
+import usersService from '../../services/users'
 import { SignOut } from '../SignOut';
-import { TeacherDashboard } from '../teacher/TeacherDashbaord';
 import { JoinRoom } from './JoinRoom';
 import { StudentClassroomPanel } from './classroom/StudentClassroomPanel';
+import { Box, Typography } from '@mui/material';
 
 export const StudentDashboard = () => {
     const [user, setUser] = useContext(UserContext)
     const [userDetails, setUserDetails] = useState(null)
     let navigate = useNavigate()
 
-    const jwt = window.localStorage.getItem('loggedAppUser')
-
-    
-
     useEffect(() => {
+        if(!user) return;
         const fetchUserDetails = async () => {
             try {
-                const details = await usersService.getUserDetails(JSON.parse(jwt))
+                const details = await usersService.getUserDetails(user)
                 if (details.role === 'teacher') {
                     navigate('/teacher')
-                  } else {
+                } else {
                     setUserDetails(details)
-                  }
+                }
             } catch (err) {
                 console.log(err);
             }
@@ -33,15 +30,17 @@ export const StudentDashboard = () => {
         fetchUserDetails()
     }, [])
 
-    
+
     if (userDetails) return (
         <div>
-            <h1>Student Dashboard</h1>
+            <Typography variant='h1' sx={{ my: 4, textAlign: 'center', color: 'primary.main' }}>Student Dashboard</Typography>
             Welcome {userDetails.name}
-            <h3>Your classrooms</h3>
-            {userDetails.classrooms.map(classroom =>
-                <StudentClassroomPanel key={classroom.id} classroom={classroom} />
+            <Typography variant='h3' sx={{ color: 'secondary.main' }} >Your classrooms</Typography>
+            <Box sx={{ display: 'flex', flexDirection:'row', justifyContent: 'left', gap: 4 }}>
+                {userDetails.classrooms.map(classroom =>
+                    <StudentClassroomPanel key={classroom.id} classroom={classroom} />
                 )}
+            </Box>
             <JoinRoom />
             <SignOut />
         </div>

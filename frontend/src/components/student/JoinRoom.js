@@ -1,19 +1,21 @@
-import { useState } from "react"
+import { useState, useContext, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
+import { UserContext } from "../../providers/UserProvider"
 import classroomService from '../../services/classrooms'
 
 
 export const JoinRoom = () => {
     const [joinCode, setJoinCode] = useState('')
-    const jwt = window.localStorage.getItem('loggedAppUser')
-
+    const [user, setUser] = useContext(UserContext)
+    
+    //const jwt = useMemo(()=>useNavigate(), [useNavigate])
     let navigate = useNavigate()
 
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const classroom = await classroomService.joinClassByRoomCode(JSON.parse(jwt), joinCode)
+        const classroom = await classroomService.joinClassByRoomCode(user, joinCode)
         if (classroom !== 'Invalid room code') {
             // Navigate to classroom
             navigate(`${classroom.roomName}`, { state: { classroom } })
@@ -22,8 +24,22 @@ export const JoinRoom = () => {
         // If code is valid, then navigate to the classroom. Else, throw error
     }
 
+    /*
+    const handleSubmitC = useCallback( async (e)=>{
+        if(!user) return;
+        e.preventDefault()
+
+        const classroom = await classroomService.joinClassByRoomCode(user, joinCode)
+        if (classroom !== 'Invalid room code') {
+            // Navigate to classroom
+            navigate(`${classroom.roomName}`, { state: { classroom } })
+        }
+
+        // If code is valid, then navigate to the classroom. Else, throw error
+    }, [user])*/
+
     return (
-        <div>
+        <>
             <h3>Enter your classroom code here</h3>
             <form onSubmit={handleSubmit}>
                 <input
@@ -33,7 +49,7 @@ export const JoinRoom = () => {
                 />
                 <button type="submit">Join</button>
             </form>
-        </div>
+        </>
 
     )
 }

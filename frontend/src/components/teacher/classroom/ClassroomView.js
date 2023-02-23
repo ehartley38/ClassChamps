@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
+import { UserContext } from "../../../providers/UserProvider"
 import classroomService from '../../../services/classrooms'
 import { Student } from "./Student"
 
@@ -8,13 +9,13 @@ export const ClassroomView = () => {
     const location = useLocation()
     const classroomObject = location.state.classroom
     const [classroom, setClassroom] = useState()
+    const [user, setUser] = useContext(UserContext)
 
-    const jwt = window.localStorage.getItem('loggedAppUser')
 
     useEffect(() => {
         const fetchClassroomData = async () => {
             try {
-                const data = await classroomService.getById(jwt, classroomObject.id)
+                const data = await classroomService.getById(user, classroomObject.id)
                 setClassroom(data)
             } catch (err) {
                 console.log(err);
@@ -26,7 +27,7 @@ export const ClassroomView = () => {
 
     const handleGenerate = async () => {
         try {
-            const updatedClassroom = await classroomService.generateClassCode(JSON.parse(jwt), classroomObject)
+            const updatedClassroom = await classroomService.generateClassCode(user, classroomObject)
             setClassroom(updatedClassroom)
         } catch (err) {
             console.log(err);

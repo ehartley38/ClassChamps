@@ -1,10 +1,13 @@
+import { useContext } from 'react'
+import { UserContext } from '../../../providers/UserProvider'
 import classroomService from '../../../services/classrooms'
 
 export const Student = ({ student, classroom, setClassroom }) => {
-    const jwt = window.localStorage.getItem('loggedAppUser')
+    const [user, setUser] = useContext(UserContext)
+
 
     const handleDelete = async () => {
-        await classroomService.removeStudentFromClassroom(JSON.parse(jwt), classroom.id, student.id)
+        await classroomService.removeStudentFromClassroom(user, classroom.id, student.id)
 
         const updatedClassroom = { ...classroom }
         updatedClassroom.students = classroom.students.filter(s => s.id !== student.id)

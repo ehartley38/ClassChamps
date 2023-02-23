@@ -26,12 +26,12 @@ const getById = async (jwt, classroomId) => {
     return response.data
 }
 
-const create = async (newObject) => {
-    const config = {
-        headers: { Authorization: token },
-    }
-
-    const response = await axios.post(baseUrl, newObject, config)
+const create = async (jwt, newObject) => {
+    const response = await axios.post(baseUrl, newObject, {
+        headers: {
+            authorization: 'bearer ' + jwt.token
+        }
+    })
     return response.data
 }
 

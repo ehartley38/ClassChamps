@@ -1,17 +1,17 @@
 import { NavLink } from "react-router-dom"
 import { SignOut } from "../SignOut"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import  usersService from '../../services/users'
+import { UserContext } from "../../providers/UserProvider"
 
 
 export const TeacherDashboard = () => {
     const [userDetails, setUserDetails] = useState(null)
-    const jwt = window.localStorage.getItem('loggedAppUser')
-
+    const [user, setUser] = useContext(UserContext)
 
     const fetchUserDetails = async () => {
         try {
-            const details = await usersService.getUserDetails(JSON.parse(jwt))
+            const details = await usersService.getUserDetails(user)
             setUserDetails(details)
         } catch (err) {
             console.log(err);

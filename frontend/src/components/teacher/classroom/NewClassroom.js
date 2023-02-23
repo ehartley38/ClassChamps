@@ -7,7 +7,8 @@ import classroomService from '../../../services/classrooms'
 
 export const NewClassroom = () => {
     const [roomName, setRoomName] = useState('')
-    const user = useContext(UserContext)
+    const [user, setUser] = useContext(UserContext)
+
     let navigate = useNavigate()
 
     const handleSubmit = async (e) => {
@@ -15,7 +16,7 @@ export const NewClassroom = () => {
 
         try {
             // Add the classroom
-            const returnedClassroom = await classroomService.create({
+            const returnedClassroom = await classroomService.create(user, {
                 roomName: roomName
             })            
 

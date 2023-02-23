@@ -1,3 +1,4 @@
+import { Box, Button, Paper, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 
 export const StudentClassroomPanel = ({ classroom }) => {
@@ -8,9 +9,13 @@ export const StudentClassroomPanel = ({ classroom }) => {
     }
 
     return (
-        <div>
-            <h3>{classroom.roomName}</h3>
-            <button onClick={() => handleDetails()}>Details</button>
-        </div>
+        <>
+            <Paper elevation={3}>
+                <Typography sx={{ m: 5 }}>{classroom.roomName}</Typography>
+                <Box textAlign='center'>
+                    <Button variant="contained" onClick={() => handleDetails()}>Enter</Button>
+                </Box>
+            </Paper>
+        </>
     )
 }
