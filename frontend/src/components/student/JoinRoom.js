@@ -42,12 +42,12 @@ export const JoinRoom = () => {
     // https://mui.com/material-ui/react-modal/
     return (
         <>
-            <Paper elevation={3} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }} >
+            <Paper elevation={3} sx={{ width: '31%' }}>
+                <Typography sx={{ m: 5 }}>Join</Typography>
                 <Box textAlign='center'>
                     <Button variant="contained" color="success" onClick={() => handleOpen()}>Join Room</Button>
                 </Box>
-            </Paper>
-            <Box textAlign='center' alignItems="center">
+                <Box textAlign='center' alignItems="center">
                 <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
@@ -78,6 +78,7 @@ export const JoinRoom = () => {
                     </Fade>
                 </Modal>
             </Box>
+            </Paper>
         </>
     )
 }

@@ -10,7 +10,7 @@ export const StudentClassroomPanel = ({ classroom }) => {
 
     return (
         <>
-            <Paper elevation={3}>
+            <Paper elevation={3} sx={{ width: '31%' }}>
                 <Typography sx={{ m: 5 }}>{classroom.roomName}</Typography>
                 <Box textAlign='center'>
                     <Button variant="contained" onClick={() => handleDetails()}>Enter</Button>

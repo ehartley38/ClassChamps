@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom"
 import { SignOut } from "../SignOut"
 import { useState, useEffect, useContext } from "react"
-import  usersService from '../../services/users'
+import usersService from '../../services/users'
 import { UserContext } from "../../providers/UserProvider"
+import { Typography } from "@mui/material"
 
 
 export const TeacherDashboard = () => {
@@ -25,8 +26,8 @@ export const TeacherDashboard = () => {
     if (userDetails && userDetails.role === 'teacher') {
         return (
             <div>
-                <h1>TeacherDashboard</h1>
-                <h3> Welcome {userDetails.username} </h3>
+                <Typography variant='h1' sx={{ my: 4, textAlign: 'center', color: 'primary.main' }}>Teacher Dashboard</Typography>
+                Welcome {userDetails.name}
 
                 <button>
                     <NavLink to='classrooms'>Classrooms</NavLink>
