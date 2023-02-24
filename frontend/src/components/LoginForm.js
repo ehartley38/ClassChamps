@@ -17,7 +17,6 @@ const LoginForm = ({  }) => {
         try {
             login(username, password)
 
-            // window.localStorage.setItem('loggedAppUser', JSON.stringify(loginUser))
             setUsername('')
             setPassword('')
 

@@ -20,7 +20,6 @@ const modalStyle = {
 export const JoinRoom = () => {
     const [joinCode, setJoinCode] = useState('')
     const [open, setOpen] = useState(false)
-    //const jwt = useMemo(()=>useNavigate(), [useNavigate])
     const { user, jwt } = useAuth()
     let navigate = useNavigate()
 

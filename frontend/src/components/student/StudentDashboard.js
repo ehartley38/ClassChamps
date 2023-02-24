@@ -1,25 +1,36 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { JoinRoom } from './JoinRoom';
 import { StudentClassroomPanel } from './classroom/StudentClassroomPanel';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import useAuth from '../../providers/useAuth';
+import classroomService from '../../services/classrooms'
+
 
 export const StudentDashboard = () => {
     let navigate = useNavigate()
     const { user, loading, error, jwt } = useAuth()
+    const [classrooms, setClassrooms] = useState([])
 
 
     useEffect(() => {
-        console.log(user);
         if (user && user.role === 'teacher') {
             navigate('/teacher')
+        } else {
+            
         }
+        const fetchClassrooms = async () => {
+            const classroomArray = await classroomService.getAllStudentClassrooms(jwt);
+            setClassrooms(classroomArray);
+        };
+
+        fetchClassrooms();
         
     }, [user])
 
 
     if (user && user.role !== 'teacher') return (
+        
         <div>
             <Typography variant='h1' sx={{ my: 4, textAlign: 'center', color: 'primary.main' }}>Student Dashboard</Typography>
             Welcome {user.name}
@@ -28,7 +39,7 @@ export const StudentDashboard = () => {
                 <Grid container>
                     <Grid item xs={12}>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent:'center', gap: 4 }}>
-                            {user.classrooms.map(classroom =>
+                            {classrooms.map(classroom =>
                                 <StudentClassroomPanel key={classroom.id} classroom={classroom} />
                             )}
                             <JoinRoom />

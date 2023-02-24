@@ -7,12 +7,21 @@ const setToken = newToken => {
     token = `bearer ${newToken}`
 }
 
-const getAll = async () => {
-    const config = {
-        headers: { Authorization: token },
-    }
+const getAll = async (jwt) => {
+    const response = await axios.get(baseUrl, {
+        headers: {
+            authorization: 'bearer ' + jwt.token
+        }
+    })
+    return response.data
+}
 
-    const response = await axios.get(baseUrl, config)
+const getAllStudentClassrooms = async (jwt) => {
+    const response = await axios.get(`${baseUrl}/studentClassrooms`, {
+        headers: {
+            authorization: 'bearer ' + jwt.token
+        }
+    })
     return response.data
 }
 
@@ -75,15 +84,16 @@ const removeStudentFromClassroom = async (jwt, classId, userId) => {
 }
 
 
-const deleteClassroom = async (classroom) => {
-    const config = {
-        headers: { Authorization: token },
-    }
-
+const deleteClassroom = async (jwt, classroom) => {
     const classroomURL = baseUrl + '/' + classroom.id
 
-    await axios.delete(classroomURL, config)
+    const response = await axios.delete(classroomURL, {
+        headers: {
+            authorization: 'bearer ' + jwt.token
+        }
+    })
 }
 
 export default { create, setToken, getAll, deleteClassroom, generateClassCode, 
-    getById, joinClassByRoomCode, removeStudentFromClassroom }
+    getById, joinClassByRoomCode, removeStudentFromClassroom, getAllStudentClassrooms,
+ }

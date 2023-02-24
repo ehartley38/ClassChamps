@@ -1,18 +1,16 @@
 import { useEffect, useState, useContext } from "react"
 import { NavLink } from "react-router-dom"
-import { UserContext } from "../../../providers/UserProvider"
+import useAuth from "../../../providers/useAuth"
 import classroomService from '../../../services/classrooms'
 import { ClassroomPanel } from './ClassroomPanel'
 
 export const Classrooms = () => {
     const [classrooms, setClassrooms] = useState([])
-    const [user, setUser] = useContext(UserContext)
-
+    const { user, jwt } = useAuth()
 
     useEffect(() => {
         const fetchClassrooms = async () => {
-            classroomService.setToken(user.token)
-            const classroomArray = await classroomService.getAll();
+            const classroomArray = await classroomService.getAll(jwt);
             setClassrooms(classroomArray);
         };
 
@@ -20,7 +18,7 @@ export const Classrooms = () => {
     }, []);
 
     const deleteClassroom = async (room) => {
-        await classroomService.deleteClassroom(room)
+        await classroomService.deleteClassroom(jwt, room)
 
         const updatedClassrooms = classrooms.filter(c => c.id !== room.id)
         setClassrooms(updatedClassrooms)

@@ -31,6 +31,13 @@ classroomsRouter.get('/', userExtractor, async (request, response) => {
     response.json(classrooms)
 })
 
+classroomsRouter.get('/studentClassrooms', userExtractor, async (request, response) => {
+    const user = request.user
+    const classrooms = await Classroom.find({ students: user._id })
+
+    response.json(classrooms)
+})
+
 classroomsRouter.get('/:id', async (request, response) => {
     const id = request.params.id
     const classroom = await Classroom.findById(id).populate('students').exec()
