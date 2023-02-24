@@ -13,13 +13,13 @@ import { TeacherDashboard } from './components/teacher/TeacherDashbaord';
 import { StudentClassroomView } from './components/student/classroom/StudentClassroomView';
 import { Container } from "@mui/material"
 import { NavBar } from './components/NavBar';
+import useAuth from './providers/useAuth';
 
 
 const App = () => {
-  const [user, setUser] = useContext(UserContext)
+  const { user, jwt, loading, error } = useAuth()
 
-
-  if (user) {
+  if (jwt) {
     return (
       <>
       <NavBar />
@@ -48,12 +48,13 @@ const App = () => {
     <Container>
       <Routes>
         <Route path="/" element={<SignUp />} />
-        <Route path="/login" element={<LoginForm setUser={setUser} />} />
+        <Route path="/login" element={<LoginForm />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
     </Container>
 
   )
+  
 }
 
 export default App

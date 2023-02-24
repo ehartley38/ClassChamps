@@ -1,17 +1,16 @@
 import { Box, Button } from "@mui/material"
 import { useContext } from "react"
 import { useNavigate } from "react-router-dom"
+import useAuth from "../providers/useAuth"
 import { UserContext } from "../providers/UserProvider"
 import classroomService from '../services/classrooms'
 
 export const SignOut = () => {
-  const [user, setUser] = useContext(UserContext)
   let navigate = useNavigate()
+  const { signOut, jwt } = useAuth()
 
   const logoutUser = () => {
-    window.localStorage.removeItem('loggedAppUser')
-    setUser(null)
-    classroomService.setToken(null)
+    signOut()
     navigate('/login')
   }
 

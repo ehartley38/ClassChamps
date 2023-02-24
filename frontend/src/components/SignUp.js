@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import  usersService from '../services/users'
 import { UserContext } from "../providers/UserProvider";
 import { NavLink, useNavigate } from "react-router-dom";
+import useAuth from "../providers/useAuth";
 
 
 export const SignUp = () => {
@@ -9,8 +10,7 @@ export const SignUp = () => {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [username, setUsername] = useState('')
-
-    const [user, setUser] = useContext(UserContext)
+    const { signUp } = useAuth()
 
     let navigate = useNavigate()
 
@@ -33,11 +33,9 @@ export const SignUp = () => {
         }
 
         try {
-            const user = await usersService.signUp({
-                username, password, name
-            })
+            signUp(username, password, name)
 
-            window.localStorage.setItem('loggedAppUser', JSON.stringify(user))
+            //window.localStorage.setItem('loggedAppUser', JSON.stringify(user))
             setName('')
             setUsername('')
             setPassword('')

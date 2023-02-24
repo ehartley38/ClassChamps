@@ -1,6 +1,7 @@
 import { Backdrop, Box, Button, Fade, Modal, Typography, Paper, TextField, FormControl } from "@mui/material"
 import { useState, useContext } from "react"
 import { useNavigate } from "react-router-dom"
+import useAuth from "../../providers/useAuth"
 import { UserContext } from "../../providers/UserProvider"
 import classroomService from '../../services/classrooms'
 
@@ -18,9 +19,9 @@ const modalStyle = {
 
 export const JoinRoom = () => {
     const [joinCode, setJoinCode] = useState('')
-    const [user, setUser] = useContext(UserContext)
     const [open, setOpen] = useState(false)
     //const jwt = useMemo(()=>useNavigate(), [useNavigate])
+    const { user, jwt } = useAuth()
     let navigate = useNavigate()
 
     const handleOpen = () => setOpen(true)
@@ -29,7 +30,7 @@ export const JoinRoom = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const classroom = await classroomService.joinClassByRoomCode(user, joinCode)
+        const classroom = await classroomService.joinClassByRoomCode(jwt, joinCode)
         if (classroom !== 'Invalid room code') {
             // Navigate to classroom
             navigate(`${classroom.roomName}`, { state: { classroom } })

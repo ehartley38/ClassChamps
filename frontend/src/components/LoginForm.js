@@ -1,31 +1,32 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import useAuth from '../providers/useAuth'
 import loginService from '../services/login'
 
 
-const LoginForm = ({setUser}) => {
+const LoginForm = ({  }) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const { login } = useAuth()
 
     let navigate = useNavigate()
 
     const handleLogin = async (e) => {
         e.preventDefault()
-    
-        try {
-          const loginUser = await loginService.login({ username, password })
-    
-          window.localStorage.setItem('loggedAppUser', JSON.stringify(loginUser))
-          setUser(loginUser)
-          setUsername('')
-          setPassword('')
 
-          navigate('/')
+        try {
+            login(username, password)
+
+            // window.localStorage.setItem('loggedAppUser', JSON.stringify(loginUser))
+            setUsername('')
+            setPassword('')
+
+            navigate('/')
         } catch (err) {
-          console.log(err);
-    
+            console.log(err);
+
         }
-      }
+    }
 
     return (
         <div>
