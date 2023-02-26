@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
 
     // Fetches the user details whenever the jwt changes
     useEffect(() => {
+        console.log('auth');
         const fetchUser = async () => {
             try {
                 const fetchedJwt = window.localStorage.getItem('loggedAppUser')

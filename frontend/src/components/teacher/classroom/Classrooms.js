@@ -10,9 +10,9 @@ export const Classrooms = () => {
 
     useEffect(() => {
         const fetchClassrooms = async () => {
-            const classroomArray = await classroomService.getAll(jwt);
-            setClassrooms(classroomArray);
-        };
+            const classroomArray = await classroomService.getAll(jwt)
+            setClassrooms(classroomArray)
+        }
 
         fetchClassrooms();
     }, []);

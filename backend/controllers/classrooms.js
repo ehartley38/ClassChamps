@@ -24,7 +24,7 @@ classroomsRouter.post('/', userExtractor, async (request, response) => {
     response.json(savedClassroom)
 })
 
-classroomsRouter.get('/', userExtractor, async (request, response) => {
+classroomsRouter.get('/teacherClassrooms', userExtractor, async (request, response) => {
     const user = request.user
     const classrooms = await Classroom.find({ owners: user._id })
 

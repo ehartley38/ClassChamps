@@ -17,9 +17,8 @@ export const StudentDashboard = () => {
 
         if (user && user.role === 'teacher') {
             navigate('/teacher')
-        } else {
-            
-        }
+        } 
+        
         const fetchClassrooms = async () => {
             const classroomArray = await classroomService.getAllStudentClassrooms(jwt);
             setClassrooms(classroomArray);

@@ -8,7 +8,7 @@ const setToken = newToken => {
 }
 
 const getAll = async (jwt) => {
-    const response = await axios.get(baseUrl, {
+    const response = await axios.get(`${baseUrl}/teacherClassrooms`, {
         headers: {
             authorization: 'bearer ' + jwt.token
         }

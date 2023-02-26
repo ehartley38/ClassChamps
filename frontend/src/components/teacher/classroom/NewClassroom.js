@@ -3,11 +3,12 @@ import { UserContext } from "../../../providers/UserProvider";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import classroomService from '../../../services/classrooms'
+import useAuth from "../../../providers/useAuth";
 
 
 export const NewClassroom = () => {
     const [roomName, setRoomName] = useState('')
-    const [user, setUser] = useContext(UserContext)
+    const { user, jwt } = useAuth()
 
     let navigate = useNavigate()
 
@@ -16,9 +17,9 @@ export const NewClassroom = () => {
 
         try {
             // Add the classroom
-            const returnedClassroom = await classroomService.create(user, {
+            const returnedClassroom = await classroomService.create(jwt, {
                 roomName: roomName
-            })            
+            })
 
             setRoomName('')
             navigate('/teacher/classrooms')
