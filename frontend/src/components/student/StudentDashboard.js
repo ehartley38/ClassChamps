@@ -9,11 +9,12 @@ import classroomService from '../../services/classrooms'
 
 export const StudentDashboard = () => {
     let navigate = useNavigate()
-    const { user, loading, error, jwt } = useAuth()
+    const { user, jwt } = useAuth()
     const [classrooms, setClassrooms] = useState([])
 
 
     useEffect(() => {
+
         if (user && user.role === 'teacher') {
             navigate('/teacher')
         } else {

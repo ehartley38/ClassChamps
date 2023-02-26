@@ -10,6 +10,7 @@ export const SignOut = () => {
   const { signOut, jwt } = useAuth()
 
   const logoutUser = () => {
+    console.log('signout');
     signOut()
     navigate('/login')
   }

@@ -5,8 +5,6 @@ import loginService from '../services/login'
 
 const AuthContext = createContext({
     user: undefined,
-    loading: false,
-    error: undefined,
     jwt: undefined,
     login: (username, password) => { },
     signUp: (username, password, name) => { },
@@ -15,72 +13,59 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState();
-    const [error, setError] = useState();
-    const [loading, setLoading] = useState(false);
-    const [loadingInitial, setLoadingInitial] = useState(true);
     const [jwt, setJwt] = useState(undefined)
 
 
+    // Fetches the user details whenever the jwt changes
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const fetchedJwt = window.localStorage.getItem('loggedAppUser')
-                if (fetchedJwt) {
-                    const fetchedUser = await usersService.getUserDetails(JSON.parse(fetchedJwt))
-                    setJwt(JSON.parse(fetchedJwt))
+                if (jwt) {
+                    const fetchedUser = await usersService.getUserDetails(jwt)
                     setUser(fetchedUser)
+                } else if (fetchedJwt && jwt === undefined) {
+                    setJwt(JSON.parse(fetchedJwt))
                 }
             } catch (err) {
                 console.log(err);
-            } finally {
-                setLoadingInitial(false)
             }
-
         }
         fetchUser()
 
-    }, [])
+    }, [jwt])
 
     const login = async (username, password) => {
-        setLoading(true)
-
         try {
             const generatedJwt = await loginService.login({ username, password })
             window.localStorage.setItem('loggedAppUser', JSON.stringify(generatedJwt))
-            setJwt(JSON.stringify(generatedJwt))
-            const fetchedUser = await usersService.getUserDetails(generatedJwt);
-            setUser(fetchedUser);
+
+            // GeneratedJwt returns a Json Object, hence why it is set to the jwt directly without any parsing
+            setJwt(generatedJwt)
         } catch (err) {
             console.log(err);
-        } finally {
-            setLoading(false)
         }
-
     }
 
     const signUp = async (username, password, name) => {
-        setLoading(true)
-
         try {
             const generatedJwt = await usersService.signUp({
                 username, password, name
             })
-            window.localStorage.setItem('loggedAppUser', JSON.stringify(generatedJwt))
         } catch (err) {
             console.log(err);
-        } finally {
-            setLoading(false)
         }
-
-
     }
 
+
     const signOut = () => {
+        console.log('signout');
         window.localStorage.removeItem('loggedAppUser')
         setJwt(undefined)
         setUser(undefined)
     }
 
+    /*
     const memoedValue = useMemo(
         () => ({
             user,
@@ -93,9 +78,16 @@ export const AuthProvider = ({ children }) => {
         }),
         [user, loading, error, jwt]
     );
+    */
 
     return (
-        <AuthContext.Provider value={memoedValue}>
+        <AuthContext.Provider value={{
+            user,
+            login,
+            signUp,
+            signOut,
+            jwt
+        }}>
             {children}
         </AuthContext.Provider>
     );

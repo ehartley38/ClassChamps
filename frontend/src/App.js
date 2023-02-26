@@ -17,12 +17,13 @@ import useAuth from './providers/useAuth';
 
 
 const App = () => {
-  const { user, jwt, loading, error } = useAuth()
+  //const { user, jwt, loading, error } = useAuth()
+  const { user } = useAuth()
 
-  if (jwt) {
+  if (user) {
     return (
       <>
-      <NavBar />
+        <NavBar />
         <Container>
           <Routes>
             <Route path='/'>
@@ -40,7 +41,7 @@ const App = () => {
             <Route path="*" element={<NoMatch />} />
           </Routes>
         </Container>
-      </>  
+      </>
     )
   }
 
@@ -54,7 +55,7 @@ const App = () => {
     </Container>
 
   )
-  
+
 }
 
 export default App

@@ -16,7 +16,6 @@ const LoginForm = ({  }) => {
 
         try {
             login(username, password)
-
             setUsername('')
             setPassword('')
 

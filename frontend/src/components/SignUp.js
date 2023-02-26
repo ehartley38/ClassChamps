@@ -50,6 +50,7 @@ export const SignUp = () => {
     const handleTestButton = (e) => {
         e.preventDefault()
         console.log('Test button');
+        window.localStorage.setItem('Test', 'Ed')
     }
 
     return (
