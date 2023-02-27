@@ -20,7 +20,7 @@ const modalStyle = {
 export const JoinRoom = () => {
     const [joinCode, setJoinCode] = useState('')
     const [open, setOpen] = useState(false)
-    const { user, jwt } = useAuth()
+    const { user, jwt, error } = useAuth()
     let navigate = useNavigate()
 
     const handleOpen = () => setOpen(true)
@@ -65,7 +65,8 @@ export const JoinRoom = () => {
                         <Box sx={modalStyle} textAlign='center'>
                             <Typography variant="h3" sx={{ my: 4, textAlign: 'center', color: 'secondary.main' }}>Enter classroom code </Typography>
                             <form onSubmit={handleSubmit}>
-                                <TextField id="joinCode"
+                                <TextField 
+                                    id="joinCode"
                                     value={joinCode}
                                     variant="outlined"
                                     onChange={({ target }) => setJoinCode(target.value)}

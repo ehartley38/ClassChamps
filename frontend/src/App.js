@@ -14,11 +14,15 @@ import { StudentClassroomView } from './components/student/classroom/StudentClas
 import { Container } from "@mui/material"
 import { NavBar } from './components/NavBar';
 import useAuth from './providers/useAuth';
+import { Loading } from './components/Loading';
 
 
 const App = () => {
-  //const { user, jwt, loading, error } = useAuth()
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
+
+  if (loading) {
+    return <Loading />
+  }
 
   if (user) {
     return (

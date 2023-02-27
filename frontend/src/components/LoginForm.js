@@ -7,7 +7,7 @@ import loginService from '../services/login'
 const LoginForm = ({  }) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const { login } = useAuth()
+    const { login, loading } = useAuth()
 
     let navigate = useNavigate()
 
@@ -47,7 +47,7 @@ const LoginForm = ({  }) => {
                         onChange={({ target }) => setPassword(target.value)}
                     />
                 </div>
-                <button type="submit">Sign in</button>
+                <button disabled={loading} type="submit">Sign in</button>
             </form>
             <div>
                 Dont have an account?

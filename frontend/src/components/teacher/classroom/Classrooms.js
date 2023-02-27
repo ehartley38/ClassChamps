@@ -15,6 +15,7 @@ export const Classrooms = () => {
         }
 
         fetchClassrooms();
+        console.log(user);
     }, []);
 
     const deleteClassroom = async (room) => {
