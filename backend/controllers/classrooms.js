@@ -15,13 +15,18 @@ classroomsRouter.post('/', userExtractor, async (request, response) => {
         roomName: body.roomName
     })
 
-    // Add the classroom document here
-    const savedClassroom = await classroom.save()
-    // And the classroom reference in the user document here
-    user.classrooms = user.classrooms.concat(savedClassroom._id)
-    await user.save()
+    try {
+        // Add the classroom document here
+        const savedClassroom = await classroom.save()
+        // And the classroom reference in the user document here
+        user.classrooms = user.classrooms.concat(savedClassroom._id)
+        await user.save()
 
-    response.json(savedClassroom)
+        response.status(201).json(savedClassroom)
+    } catch (error) {
+        response.status(400).json(error)
+    }
+
 })
 
 classroomsRouter.get('/teacherClassrooms', userExtractor, async (request, response) => {
@@ -49,14 +54,19 @@ classroomsRouter.get('/:id', async (request, response) => {
 classroomsRouter.delete('/:id', userExtractor, async (request, response) => {
     const user = request.user
 
-    const classroom = await Classroom.findById(request.params.id)
-    if (classroom.owners.includes(user._id)) {
-        await Classroom.findByIdAndRemove(request.params.id)
-        user.classrooms.pull(request.params.id)
-        await user.save()
+    try {
+        const classroom = await Classroom.findById(request.params.id)
+        if (classroom.owners.includes(user._id)) {
+            await Classroom.findByIdAndRemove(request.params.id)
+            user.classrooms.pull(request.params.id)
+            await user.save()
+        }
+
+        response.status(204).end()
+    } catch (err) {
+        response.status(400).end()
     }
 
-    response.status(204).end()
 
 })
 
@@ -73,8 +83,8 @@ classroomsRouter.put('/:id/generate-code', userExtractor, async (request, respon
 
             try {
                 const updatedClassroom = await Classroom.findOneAndUpdate({ _id: body.id }, { roomCode: code }, { new: true })
-                .populate('students')
-                unique = true   
+                    .populate('students')
+                unique = true
                 response.json(updatedClassroom)
             } catch (err) {
                 console.log(err);
