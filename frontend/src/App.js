@@ -1,9 +1,6 @@
-import { useContext } from 'react'
 import LoginForm from './components/LoginForm'
-import { SignOut } from './components/SignOut';
 import { SignUp } from './components/SignUp'
 import { StudentDashboard } from './components/student/StudentDashboard';
-import { UserContext } from "./providers/UserProvider";
 import { Routes, Route } from "react-router";
 import { NoMatch } from './components/NoMatch'
 import { Classrooms } from './components/teacher/classroom/Classrooms';
@@ -15,6 +12,8 @@ import { Container } from "@mui/material"
 import { NavBar } from './components/NavBar';
 import useAuth from './providers/useAuth';
 import { Loading } from './components/Loading';
+import { Homework } from './components/teacher/homework/Homework';
+import { CreateHomework } from './components/teacher/homework/CreateHomework';
 
 
 const App = () => {
@@ -40,6 +39,10 @@ const App = () => {
                 <Route index element={<Classrooms />} />
                 <Route path="new" element={<NewClassroom />} />
                 <Route path=":roomName" element={<ClassroomView />} />
+              </Route>
+              <Route path="homework">
+                <Route index element={<Homework />} />
+                <Route path="create" element={<CreateHomework />} />
               </Route>
             </Route>
             <Route path="*" element={<NoMatch />} />
