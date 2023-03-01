@@ -3,15 +3,9 @@ import { useState } from "react"
 
 
 // https://mui.com/material-ui/react-select/
-export const SelectHomeworkType = () => {
-    const [homeworkType, setHomeworkType] = useState('');
+export const SelectHomeworkType = ({ setHomeworkType, homeworkType }) => {
 
-    const handleChange = (event) => {
-        setHomeworkType(event.target.value);
-    }
-
-
-
+    
     return (
         <>
             <Box sx={{ minWidth: 120, pt: 5 }}>
@@ -20,9 +14,9 @@ export const SelectHomeworkType = () => {
                     <Select
                         labelId="homework-type"
                         id="homework-type"
-                        value={homeworkType}
                         label="homework-type"
-                        onChange={handleChange}
+                        value={homeworkType}
+                        onChange={({ target }) => setHomeworkType(target.value)}
                     >
                         <MenuItem value={'Bingo'}>Bingo</MenuItem>
                         <MenuItem value={'MultiChoice'}>Multi-Choice Quiz</MenuItem>

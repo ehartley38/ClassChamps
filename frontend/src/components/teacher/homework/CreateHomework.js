@@ -6,22 +6,10 @@ import { SelectHomeworkType } from "./SelectHomeworkType";
 
 const steps = ['Select Homework Type', 'Create Questions', 'Final tweaks'];
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <SelectHomeworkType />;
-    case 1:
-      return <AddQuestions />;
-    case 2:
-      return <FinalConfigurations />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
 // https://github.com/mui/material-ui/tree/v5.11.10/docs/data/material/getting-started/templates/checkout
 export const CreateHomework = () => {
-
     const [activeStep, setActiveStep] = useState(0);
+    const [homeworkType, setHomeworkType] = useState('');
 
     const handleNext = () => {
       setActiveStep(activeStep + 1);
@@ -30,6 +18,19 @@ export const CreateHomework = () => {
     const handleBack = () => {
       setActiveStep(activeStep - 1);
     }
+
+    const getStepContent = (step) => {
+  switch (step) {
+    case 0:
+      return <SelectHomeworkType setHomeworkType={setHomeworkType} homeworkType={homeworkType} />;
+    case 1:
+      return <AddQuestions homeworkType={homeworkType} />;
+    case 2:
+      return <FinalConfigurations />;
+    default:
+      throw new Error('Unknown step');
+  }
+}
   
     return (
         <>

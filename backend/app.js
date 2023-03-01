@@ -9,6 +9,9 @@ const logger = require('./utils/logger')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const classroomsRouter = require('./controllers/classrooms')
+const bingoQuestionsRouter = require('./controllers/bingoQuestions')
+const quizzesRouter = require('./controllers/quizzes')
+
 
 const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
@@ -32,6 +35,8 @@ app.use(middleware.requestLogger)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/classrooms', classroomsRouter)
+app.use('./api/bingoQuestions', bingoQuestionsRouter)
+app.use('/api/quizzes', quizzesRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

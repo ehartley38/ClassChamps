@@ -1,7 +1,10 @@
-export const AddQuestions = () => {
-    return(
+export const AddQuestions = ({ homeworkType }) => {
+
+
+    
+    return (
         <>
-            <h1>Add questions</h1>
+            <h1>Add {homeworkType} questions</h1>
         </>
     )
 }
