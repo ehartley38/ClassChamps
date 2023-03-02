@@ -10,6 +10,11 @@ const steps = ['Select Homework Type', 'Create Questions', 'Final tweaks'];
 export const CreateHomework = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [homeworkType, setHomeworkType] = useState('');
+    const [questionList, setQuestionList] = useState([{
+      question: "",
+      answer: "",
+      hint: ""
+  }])
 
     const handleNext = () => {
       setActiveStep(activeStep + 1);
@@ -24,7 +29,7 @@ export const CreateHomework = () => {
     case 0:
       return <SelectHomeworkType setHomeworkType={setHomeworkType} homeworkType={homeworkType} />;
     case 1:
-      return <AddQuestions homeworkType={homeworkType} />;
+      return <AddQuestions homeworkType={homeworkType} questionList={questionList} setQuestionList={setQuestionList} />;
     case 2:
       return <FinalConfigurations />;
     default:

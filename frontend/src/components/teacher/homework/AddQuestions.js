@@ -1,13 +1,30 @@
-import { Box, TextField, Grid, Button } from "@mui/material"
+import { Box, TextField, Grid, Button, ListItem, ListItemButton, ListItemText, List } from "@mui/material"
 import { useState } from "react"
+import { FixedSizeList } from 'react-window'
+import { BingoQuestionPanel } from "./BingoQuestionPanel"
+//import { BingoQuestionPanel } from "./BingoQuestionPanel"
 
-export const AddQuestions = ({ homeworkType }) => {
-    const [questions, setQuestions] = useState([])
+
+export const AddQuestions = ({ homeworkType, questionList, setQuestionList }) => {
+
+    const [question, setQuestion] = useState('')
+    const [answer, setAnswer] = useState('')
+    const [hint, setHint] = useState('')
 
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log('submit');
+
+        setQuestionList([...questionList, {
+            question: question,
+            answer: answer,
+            hint: hint
+        }])
+
+        setQuestion('')
+        setAnswer('')
+        setHint('')
+
     }
 
     return (
@@ -20,20 +37,20 @@ export const AddQuestions = ({ homeworkType }) => {
                             margin="normal"
                             required
                             fullWidth
-                            name="question"
-                            label="Question"
                             id="question"
-                            autoComplete="Question"
+                            label="Question"
+                            value={question}
+                            onChange={({ target }) => setQuestion(target.value)}
                         >
                         </TextField>
                         <TextField
                             margin="normal"
                             required
                             fullWidth
-                            name="answer"
                             label="Answer"
                             id="answer"
-                            autoComplete="Answer"
+                            value={answer}
+                            onChange={({ target }) => setAnswer(target.value)}
                         >
 
                         </TextField>
@@ -41,9 +58,10 @@ export const AddQuestions = ({ homeworkType }) => {
                             margin="normal"
                             fullWidth
                             name="hints"
-                            label="Hints"
+                            label="Hint"
                             id="hints"
-                            autoComplete="Hints"
+                            value={hint}
+                            onChange={({ target }) => setHint(target.value)}
                         >
 
                         </TextField>
@@ -56,7 +74,14 @@ export const AddQuestions = ({ homeworkType }) => {
                     </form>
 
                 </Grid>
+                <Grid item xs={4}>
+                    {questionList && questionList.map((q,i) =>
+                        <BingoQuestionPanel key={i} question={q} />
+                    )}
+                </Grid>
+
             </Grid>
         </>
     )
 }
+
