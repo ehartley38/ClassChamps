@@ -5,7 +5,7 @@ import { BingoQuestionPanel } from "./BingoQuestionPanel"
 //import { BingoQuestionPanel } from "./BingoQuestionPanel"
 
 
-export const AddQuestions = ({ homeworkType, questionList, setQuestionList }) => {
+export const AddQuestions = ({ quizType, questionList, setQuestionList }) => {
 
     const [question, setQuestion] = useState('')
     const [answer, setAnswer] = useState('')
@@ -27,9 +27,11 @@ export const AddQuestions = ({ homeworkType, questionList, setQuestionList }) =>
 
     }
 
+    
+
     return (
         <>
-            <h1>Add {homeworkType} questions</h1>
+            <h1>Add {quizType} questions</h1>
             <Grid container spacing={2}>
                 <Grid item xs={8}>
                     <form onSubmit={handleSubmit}>
