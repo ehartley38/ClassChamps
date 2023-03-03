@@ -66,11 +66,10 @@ bingoQuestionsRouter.post('/addAllQuestions', userExtractor, async (request, res
             quiz.questions.push(savedBingoQuestion._id)
             await quiz.save()   
         }
-        response.status(201)
+        response.status(201).json({ message: 'All questions added' })
 
     } catch (err) {
-        console.log(err);
-        response.status(500).json({ error: 'Server error' });
+        response.status(400).json(err);
     }
 
 })

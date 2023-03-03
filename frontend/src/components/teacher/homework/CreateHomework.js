@@ -19,7 +19,7 @@ export const CreateHomework = () => {
 
   const { jwt } = useAuth()
 
-  let navigate = useNavigate()
+  const navigate = useNavigate()
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -66,9 +66,12 @@ export const CreateHomework = () => {
         hint: question.hint,
       }))
 
-      await bingoQuestionsService.createAll(jwt, questionObjects)
-
-      //navigate('/teacher/homework')
+      try {
+        const response = await bingoQuestionsService.createAll(jwt, questionObjects)
+        navigate(`/teacher/homework`)
+      } catch (err) {
+        console.log(err);
+      }
 
     } catch (err) {
       console.log(err);
