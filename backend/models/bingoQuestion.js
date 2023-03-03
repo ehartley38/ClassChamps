@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const bingoQuestionSchema = new mongoose.Schema({
-    creator:[
+    creator: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
@@ -21,11 +21,9 @@ const bingoQuestionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    hints: [
-        {
-            type: String
-        }
-    ]
+    hint: {
+        type: String
+    }
 })
 
 bingoQuestionSchema.set('toJSON', {

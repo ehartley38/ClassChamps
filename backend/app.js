@@ -35,7 +35,7 @@ app.use(middleware.requestLogger)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/classrooms', classroomsRouter)
-app.use('./api/bingoQuestions', bingoQuestionsRouter)
+app.use('/api/bingoQuestions', bingoQuestionsRouter)
 app.use('/api/quizzes', quizzesRouter)
 
 app.use(middleware.unknownEndpoint)

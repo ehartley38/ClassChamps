@@ -7,29 +7,21 @@ const QuizSchema = new mongoose.Schema({
             ref: 'User'
         }
     ],
+    quizName: {type: String},
     questions: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'BingoQuestion'
+            ref: 'BingoQuestion',
         }
     ],
-    optional: {
-        type: Boolean,
-        default: false
-    },
-    createDate: {
-        type: Date
-    },
-    dueDate: {
-        type: Date
-    },
     quizType: {
         type: String,
         enum: {
-            values: ['bingo', 'multiChoice'],
+            values: ['Bingo', 'MultiChoice'],
         }
     }
 })
+
 
 QuizSchema.set('toJSON', {
     transform: (document, returnedObject) => {

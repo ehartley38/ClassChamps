@@ -6,6 +6,7 @@ import { SelectHomeworkType } from "./SelectHomeworkType";
 import quizzesService from '../../../services/quizzes'
 import bingoQuestionsService from '../../../services/bingoQuestions'
 import useAuth from "../../../providers/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const steps = ['Select Homework Type', 'Create Questions', 'Final tweaks'];
 
@@ -18,6 +19,8 @@ export const CreateHomework = () => {
 
   const { jwt } = useAuth()
 
+  let navigate = useNavigate()
+
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   }
@@ -26,6 +29,7 @@ export const CreateHomework = () => {
     setActiveStep(activeStep - 1);
   }
 
+
   const getStepContent = (step) => {
     switch (step) {
       case 0:
@@ -33,7 +37,10 @@ export const CreateHomework = () => {
       case 1:
         return <AddQuestions quizType={quizType} questionList={questionList} setQuestionList={setQuestionList} />;
       case 2:
-        return <FinalConfigurations quizName={quizName} setQuizName={setQuizName} />;
+        return <FinalConfigurations quizName={quizName} setQuizName={setQuizName} />
+
+
+
       default:
         throw new Error('Unknown step');
     }
@@ -44,7 +51,6 @@ export const CreateHomework = () => {
 
     const quizObject = {
       quizName: quizName,
-      questions: [],
       quizType: quizType
     }
 
@@ -53,20 +59,21 @@ export const CreateHomework = () => {
       const returnedQuiz = await quizzesService.create(jwt, quizObject)
 
       // Then loop through questionList and create each question document
-      questionList.forEach(async (question) => {
-        const questionObject = {
-          parentQuiz: returnedQuiz.id,
-          question: question.question,
-          answer: question.answer,
-          hint: question.hint,
-        }
+      const questionObjects = questionList.map((question) => ({
+        parentQuiz: returnedQuiz.id,
+        question: question.question,
+        answer: question.answer,
+        hint: question.hint,
+      }))
 
-        await bingoQuestionsService.create(jwt, questionObject)
-      })
+      await bingoQuestionsService.createAll(jwt, questionObjects)
+
+      //navigate('/teacher/homework')
 
     } catch (err) {
       console.log(err);
     }
+
   }
 
   return (

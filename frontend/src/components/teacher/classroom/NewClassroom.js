@@ -1,5 +1,3 @@
-import { useContext, useEffect } from "react"
-import { UserContext } from "../../../providers/UserProvider";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import classroomService from '../../../services/classrooms'
@@ -8,7 +6,7 @@ import useAuth from "../../../providers/useAuth";
 
 export const NewClassroom = () => {
     const [roomName, setRoomName] = useState('')
-    const { user, jwt } = useAuth()
+    const { jwt } = useAuth()
 
     let navigate = useNavigate()
 
