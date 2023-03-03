@@ -61,7 +61,7 @@ classroomsRouter.delete('/:id', userExtractor, async (request, response) => {
             user.classrooms.pull(request.params.id)
             await user.save()
         }
-
+        // Need to properly sort out error handling here for invalid users
         response.status(204).end()
     } catch (err) {
         response.status(400).end()
