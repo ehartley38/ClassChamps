@@ -4,6 +4,8 @@ import App from './App'
 import useAuth, { AuthProvider } from './providers/useAuth'
 import { BrowserRouter } from 'react-router-dom'
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 const theme = createTheme({
     palette: {
@@ -37,7 +39,9 @@ root.render(
             <AuthProvider>
                 <CssBaseline />
                 <ThemeProvider theme={theme}>
-                    <App />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <App />
+                    </LocalizationProvider>
                 </ThemeProvider>
             </AuthProvider>
         </BrowserRouter>

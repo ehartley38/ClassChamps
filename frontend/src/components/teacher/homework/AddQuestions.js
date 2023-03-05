@@ -1,15 +1,8 @@
 import { Box, TextField, Grid, Button, ListItem, ListItemButton, ListItemText, List, IconButton } from "@mui/material"
 import { useState } from "react"
 import { FixedSizeList } from 'react-window'
-import { BingoQuestionPanel } from "./BingoQuestionPanel"
-//import { BingoQuestionPanel } from "./BingoQuestionPanel"
 
 export const Row = ({ index, style, questionList, handleClick }) => (
-    /*
-    <div style={style}>
-        {questionList && questionList[index] && questionList[index].question}
-    </div>
-    */
 
     <ListItem style={style} key={index}>
         <ListItemButton onClick={() => handleClick(questionList[index], index)}>
