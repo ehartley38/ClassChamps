@@ -31,7 +31,7 @@ assignmentRouter.post('/', userExtractor, async (request, response) => {
 assignmentRouter.get('/classroom/:classroomId', userExtractor, async (request,response) => {
     const user = request.user
     const classroomId = request.params.classroomId
-    const assignments = await Assignment.find({ classroomId: classroomId })
+    const assignments = await Assignment.find({ classroomId: classroomId }).populate('quizId', 'quizType')
 
     response.json(assignments)
 })

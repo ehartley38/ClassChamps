@@ -14,6 +14,7 @@ import useAuth from './providers/useAuth';
 import { Loading } from './components/Loading';
 import { Homework } from './components/teacher/homework/Homework';
 import { CreateHomework } from './components/teacher/homework/CreateHomework';
+import { HomeworkRouter } from './components/student/homework/HomeworkRouter';
 
 
 const App = () => {
@@ -31,7 +32,10 @@ const App = () => {
           <Routes>
             <Route path='/'>
               <Route index element={<StudentDashboard />} />
-              <Route path=":roomName" element={<StudentClassroomView />} />
+              <Route path=":roomName" >
+                <Route index element={<StudentClassroomView />} />
+                <Route path="homework/:assignmentId" element={<HomeworkRouter />} />
+              </Route>
             </Route>
             <Route path='/teacher'>
               <Route index element={<TeacherDashboard />} />

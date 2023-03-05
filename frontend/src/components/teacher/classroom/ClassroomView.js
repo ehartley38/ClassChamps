@@ -72,7 +72,6 @@ export const ClassroomView = () => {
     const handleCancel = () => {
         setAssignHomework(false)
         setSelectedIndex()
-        setSelectedIndex()
         setDueDate('')
         setAssignmentName('')
     }
@@ -93,10 +92,13 @@ export const ClassroomView = () => {
 
         try {
             const response = await assignmentService.create(jwt, newAssignment)
-            setActiveHomework([...activeHomework, newAssignment])
+            setActiveHomework([...activeHomework, response])
         } catch (err) {
             console.log(err);
         } finally {
+            setSelectedIndex()
+            setDueDate('')
+            setAssignmentName('')
             setAssignHomework(false)
         }
 
@@ -147,7 +149,7 @@ export const ClassroomView = () => {
                 </Grid>
                 <Grid item xs={4}>
                     <h3>Active homework</h3>
-                    {activeHomework && activeHomework.map((assignment) => 
+                    {activeHomework && activeHomework.map((assignment) =>
                         <HomeworkPanel key={assignment.id} assignment={assignment} />
                     )}
                 </Grid>
