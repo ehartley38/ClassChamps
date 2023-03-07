@@ -7,7 +7,7 @@ export const HomeworkRouter = ({  }) => {
     const assignment = location.state.assignment
 
     if (assignment.quizId.quizType === 'Bingo') return (
-        <PlayBingo />
+        <PlayBingo assignment={assignment} />
     )
 
     return (

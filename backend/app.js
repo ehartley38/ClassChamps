@@ -12,7 +12,7 @@ const classroomsRouter = require('./controllers/classrooms')
 const bingoQuestionsRouter = require('./controllers/bingoQuestions')
 const quizzesRouter = require('./controllers/quizzes')
 const assignmentRouter = require('./controllers/assignments')
-
+const bingoSessionsRouter = require('./controllers/bingoSessions')
 
 const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
@@ -39,6 +39,7 @@ app.use('/api/classrooms', classroomsRouter)
 app.use('/api/bingoQuestions', bingoQuestionsRouter)
 app.use('/api/quizzes', quizzesRouter)
 app.use('/api/assignments', assignmentRouter)
+app.use('/api/bingoSessions', bingoSessionsRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

@@ -2,6 +2,7 @@ const { userExtractor } = require('../utils/middleware')
 const quizzesRouter = require('express').Router()
 const Quiz = require('../models/quiz')
 const BingoQuestion = require('../models/bingoQuestion')
+const Assignment = require('../models/assignment')
 
 
 quizzesRouter.post('/', userExtractor, async (request, response) => {
@@ -51,6 +52,9 @@ quizzesRouter.delete('/:id', userExtractor, async (request, response) => {
             // Remove the quiz id reference in user.quizzes
             user.quizzes.pull(quizId)
             await user.save()
+
+            // Delete any assignments which use this quiz
+            await Assignment.deleteMany({ quizId: quizId })
 
             // Remove all questions where the parentQuiz contains  the quiz id
             if (quiz.quizType === 'Bingo') {

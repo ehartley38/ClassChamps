@@ -27,4 +27,16 @@ const createAll = async (jwt, questionArray) => {
 
 }
 
-export default { create, createAll }
+// Get all bingo questions for a given quiz
+const getAllByQuiz = async (jwt, quizId) => {
+
+    const response = await axios.get(`${baseUrl}/getAllByQuiz/${quizId}`, {
+        headers: {
+            authorization: 'bearer ' + jwt.token
+        }
+    })
+
+    return response.data
+}
+
+export default { create, createAll, getAllByQuiz }

@@ -64,12 +64,33 @@ bingoQuestionsRouter.post('/addAllQuestions', userExtractor, async (request, res
 
             // Push the question to its parent quiz questions array
             quiz.questions.push(savedBingoQuestion._id)
-            await quiz.save()   
+            await quiz.save()
         }
         response.status(201).json({ message: 'All questions added' })
 
     } catch (err) {
         response.status(400).json(err);
+    }
+
+})
+
+bingoQuestionsRouter.get('/getAllByQuiz/:quizId', userExtractor, async (request, response) => {
+    const quizId = request.params.quizId
+    const user = request.user
+
+    try {
+        const questions = await BingoQuestion.find({ parentQuiz: quizId })
+
+        // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+        let shuffledQuestions = questions
+            .map(q => ({ q, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ q }) => q)
+
+        response.json(shuffledQuestions)
+    } catch (err) {
+        console.log(err);
+        response.status(400).json(err)
     }
 
 })

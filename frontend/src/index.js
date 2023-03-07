@@ -34,7 +34,6 @@ const theme = createTheme({
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-    <React.StrictMode>
         <BrowserRouter>
             <AuthProvider>
                 <CssBaseline />
@@ -45,5 +44,4 @@ root.render(
                 </ThemeProvider>
             </AuthProvider>
         </BrowserRouter>
-    </React.StrictMode>
 )

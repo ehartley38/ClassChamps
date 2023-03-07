@@ -30,11 +30,12 @@ export const StudentClassroomView = () => {
             <h1>{classroomObject.roomName}</h1>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <h3>Due homework</h3>
+                    <h3>Due</h3>
                     {activeHomework && activeHomework.map((assignment) =>
                         <StudentHomeworkPanel key={assignment.id} assignment={assignment} />
                     )}
-                    <h3>Complete homework</h3>
+                    <h3>Overdue</h3>
+                    <h3>Complete</h3>
                 </Grid>
             </Grid>
         </>
