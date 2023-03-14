@@ -7,10 +7,19 @@ bingoSessionsRouter.post('/', userExtractor, async (request, response) => {
     const body = request.body
     const user = request.user
 
+    /*
+    let shuffledQuestions = body.questions
+        .map(q => ({ q, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ q }) => q)
+
+    console.log(shuffledQuestions);*/
+
     const bingoSession = new BingoSession({
         assignment: body.assignment,
         student: user.id,
-        questions: body.questions
+        questions: body.questions,
+        //answersOrder: shuffledQuestions
     })
 
     try {

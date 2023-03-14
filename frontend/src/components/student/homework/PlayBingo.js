@@ -21,13 +21,14 @@ export const PlayBingo = ({ assignment }) => {
 
             // if session doesn't exist, create a new session
             if (count === 0) {
+                // Get all questions for this quiz
                 const questionData = await bingoQuestionsService.getAllByQuiz(jwt, assignment.quizId.id)
                 const questions = questionData.map(obj => {
                     return {
                         question: obj.question,
                         answer: obj.answer,
                         hint: obj.hint,
-                        isCorrect: false
+                        isCorrect: false,
                     }
                 })
 
@@ -36,7 +37,11 @@ export const PlayBingo = ({ assignment }) => {
                     questions: questions
                 }
 
+                // Create the sesssion
                 const savedSession = await bingoSessionsService.createSession(jwt, newSession)
+
+                // Set Answer cards
+
                 setSession(savedSession)
                 setQuestions(savedSession.questions)
                 setAnswerCards(shuffleArray(savedSession.questions))
@@ -66,49 +71,83 @@ export const PlayBingo = ({ assignment }) => {
 
     const handleAnswerClick = (questionId) => {
         if (questionId === questions[currentQuestionIndex]._id) {
-            console.log('Answer correct');
+            // Set isCorrect to true for question
+            const updatedQuestions = questions.map(q => {
+                if (q._id === questionId) {
+                    return {
+                        ...q, isCorrect: true
+                    }
+                }
+                return q
+            })
+            setQuestions(updatedQuestions)
+
+            // Update isCorrect to true in answerCards
+            const updatedAnswerCards = answerCards.map(c => {
+                if (c._id === questionId) {
+                    return {
+                        ...c, isCorrect:true
+                    }
+                }
+                return c
+            })
+            setAnswerCards(updatedAnswerCards)
+
+            setCurrentQuestionIndex(currentQuestionIndex + 1)
         } else {
             console.log('Answer incorrect');
         }
     }
 
-    return (
-        //https://stackoverflow.com/questions/55824260/same-height-cards-in-material-ui
-        <>
-            <Container sx={{ py: 1 }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={8} sx={{ my: 2 }}>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 3 }} >
-                            {answerCards && answerCards.map((question, index) => (
-                                <BingoAnswer
-                                    key={index}
-                                    question={question}
-                                    isCorrect={question.isCorrect}
-                                    handleAnswerClick={handleAnswerClick}
-                                    index={index}
-                                />
-                            ))}
-                        </Box>
-                    </Grid>
-                    <Grid item xs={4}>
-                        {questions.length > 0 &&
-                            <>
-                                <Typography variant='h3' sx={{ my: 2, textAlign: 'center', color: 'secondary.main' }}>
-                                    {assignment.assignmentName}
-                                </Typography>
-                                <Card sx={{ p: 1, mt: 2 }}>
-                                    {questions[currentQuestionIndex].question}
-                                </Card>
-                                <Card sx={{ p: 1, mt: 2 }}>
-                                    {questions[currentQuestionIndex].hint}
-                                </Card>
-                                <h3>Time</h3>
-                            </>
-                        }
-                    </Grid>
-                </Grid>
-            </Container>
-        </>
+    if (currentQuestionIndex < questions.length) {
+        return (
+            //https://stackoverflow.com/questions/55824260/same-height-cards-in-material-ui
+            <>
+                <Container sx={{ py: 1 }}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={8} sx={{ my: 2 }}>
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 3 }} >
+                                {answerCards && answerCards.map((question, index) => (
+                                    <BingoAnswer
+                                        key={index}
+                                        question={question}
+                                        isCorrect={question.isCorrect}
+                                        handleAnswerClick={handleAnswerClick}
+                                        index={index}
+                                    />
+                                ))}
+                                {console.log('answer cards', answerCards)}
+                                {console.log('question cards', questions)}
 
-    )
+                            </Box>
+                        </Grid>
+                        <Grid item xs={4}>
+                            {questions.length > 0 &&
+                                <>
+                                    <Typography variant='h3' sx={{ my: 2, textAlign: 'center', color: 'secondary.main' }}>
+                                        {assignment.assignmentName}
+                                    </Typography>
+                                    <Card sx={{ p: 1, mt: 2 }}>
+                                        {questions[currentQuestionIndex].question}
+                                    </Card>
+                                    <Card sx={{ p: 1, mt: 2 }}>
+                                        {questions[currentQuestionIndex].hint}
+                                    </Card>
+                                    <h3>Time</h3>
+                                </>
+                            }
+                        </Grid>
+                    </Grid>
+                </Container>
+            </>
+
+        )
+    } else {
+        return (
+            <>
+                Finished
+            </>
+        )
+    }
+
 }

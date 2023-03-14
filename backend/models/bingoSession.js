@@ -16,7 +16,7 @@ const bingoSessionSchema = new mongoose.Schema({
             hint: String,
             isCorrect: Boolean
         }
-    ]
+    ],
 })
 
 bingoSessionSchema.set('toJSON', {
