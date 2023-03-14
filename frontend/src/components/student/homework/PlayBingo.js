@@ -8,8 +8,8 @@ import { BingoAnswer } from "./BingoAnswer"
 export const PlayBingo = ({ assignment }) => {
     const [session, setSession] = useState({})
     const [questions, setQuestions] = useState([])
+    const [answerCards, setAnswerCards] = useState([])
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-    const [initialSession, setInitialSession] = useState(false)
 
     const { jwt } = useAuth()
 
@@ -21,7 +21,6 @@ export const PlayBingo = ({ assignment }) => {
 
             // if session doesn't exist, create a new session
             if (count === 0) {
-                setInitialSession(true)
                 const questionData = await bingoQuestionsService.getAllByQuiz(jwt, assignment.quizId.id)
                 const questions = questionData.map(obj => {
                     return {
@@ -39,12 +38,14 @@ export const PlayBingo = ({ assignment }) => {
 
                 const savedSession = await bingoSessionsService.createSession(jwt, newSession)
                 setSession(savedSession)
+                setQuestions(savedSession.questions)
+                setAnswerCards(shuffleArray(savedSession.questions))
             } else if (count === 1) {
                 // Else load the session
                 const currentSession = sessions.filter(session => session.assignment === assignment.id)[0]
                 setSession(currentSession)
                 setQuestions(currentSession.questions)
-
+                setAnswerCards(shuffleArray(currentSession.questions))
             } else {
                 console.log('Too many sessions');
             }
@@ -62,10 +63,8 @@ export const PlayBingo = ({ assignment }) => {
         return shuffledArray;
     };
 
-    
+
     const handleAnswerClick = (questionId) => {
-        console.log('clicked question id is', questionId);
-        console.log('current question is', session.questions[currentQuestionIndex]._id);
         if (questionId === questions[currentQuestionIndex]._id) {
             console.log('Answer correct');
         } else {
@@ -80,28 +79,16 @@ export const PlayBingo = ({ assignment }) => {
                 <Grid container spacing={2}>
                     <Grid item xs={8} sx={{ my: 2 }}>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 3 }} >
-                            {initialSession ? (
-                                questions && shuffleArray([...questions]).map((question, index) => (
-                                    <BingoAnswer
-                                        key={index}
-                                        question={question}
-                                        isCorrect={question.isCorrect}
-                                        handleAnswerClick={handleAnswerClick}
-                                        index={index}
-                                    />
-                                ))
-                            ) : (
-                                questions && questions.map((question, index) => (
-                                    <BingoAnswer
-                                        key={index}
-                                        question={question}
-                                        isCorrect={question.isCorrect}
-                                        handleAnswerClick={handleAnswerClick}
-                                    />
-                                ))
-                            )}
+                            {answerCards && answerCards.map((question, index) => (
+                                <BingoAnswer
+                                    key={index}
+                                    question={question}
+                                    isCorrect={question.isCorrect}
+                                    handleAnswerClick={handleAnswerClick}
+                                    index={index}
+                                />
+                            ))}
                         </Box>
-
                     </Grid>
                     <Grid item xs={4}>
                         {questions.length > 0 &&
@@ -115,12 +102,10 @@ export const PlayBingo = ({ assignment }) => {
                                 <Card sx={{ p: 1, mt: 2 }}>
                                     {questions[currentQuestionIndex].hint}
                                 </Card>
-
                                 <h3>Time</h3>
                             </>
                         }
                     </Grid>
-
                 </Grid>
             </Container>
         </>
