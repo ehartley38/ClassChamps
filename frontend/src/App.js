@@ -15,6 +15,7 @@ import { Loading } from './components/Loading';
 import { Homework } from './components/teacher/homework/Homework';
 import { CreateHomework } from './components/teacher/homework/CreateHomework';
 import { HomeworkRouter } from './components/student/homework/HomeworkRouter';
+import './App.css'
 
 
 const App = () => {
