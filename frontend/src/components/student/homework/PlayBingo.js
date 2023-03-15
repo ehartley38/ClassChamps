@@ -1,5 +1,6 @@
-import { Box, Card, Container, Grid, Typography } from "@mui/material"
+import { Box, Button, Card, Container, Grid, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import useAuth from "../../../providers/useAuth"
 import bingoQuestionsService from '../../../services/bingoQuestions'
 import bingoSessionsService from '../../../services/bingoSessions'
@@ -10,6 +11,7 @@ export const PlayBingo = ({ assignment }) => {
     const [questions, setQuestions] = useState([])
     const [answerCards, setAnswerCards] = useState([])
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+    let navigate = useNavigate()
 
     const { jwt } = useAuth()
 
@@ -80,13 +82,16 @@ export const PlayBingo = ({ assignment }) => {
                 }
                 return q
             })
+
+            // Update the session questions
             setQuestions(updatedQuestions)
+
 
             // Update isCorrect to true in answerCards
             const updatedAnswerCards = answerCards.map(c => {
                 if (c._id === questionId) {
                     return {
-                        ...c, isCorrect:true
+                        ...c, isCorrect: true
                     }
                 }
                 return c
@@ -97,6 +102,12 @@ export const PlayBingo = ({ assignment }) => {
         } else {
             console.log('Answer incorrect');
         }
+    }
+
+    const handleSave = async () => {
+            const response = await bingoSessionsService.updateQuestions(jwt, session.id, questions)
+            navigate('/')
+        
     }
 
     if (currentQuestionIndex < questions.length) {
@@ -116,9 +127,6 @@ export const PlayBingo = ({ assignment }) => {
                                         index={index}
                                     />
                                 ))}
-                                {console.log('answer cards', answerCards)}
-                                {console.log('question cards', questions)}
-
                             </Box>
                         </Grid>
                         <Grid item xs={4}>
@@ -127,15 +135,23 @@ export const PlayBingo = ({ assignment }) => {
                                     <Typography variant='h3' sx={{ my: 2, textAlign: 'center', color: 'secondary.main' }}>
                                         {assignment.assignmentName}
                                     </Typography>
-                                    <Card sx={{ p: 1, mt: 2 }}>
-                                        {questions[currentQuestionIndex].question}
-                                    </Card>
-                                    <Card sx={{ p: 1, mt: 2 }}>
-                                        {questions[currentQuestionIndex].hint}
-                                    </Card>
+                                    {questions[currentQuestionIndex].isCorrect ? (
+                                        setCurrentQuestionIndex(currentQuestionIndex + 1)
+                                    ) : (
+                                        <>
+                                        <Card sx={{ p: 1, mt: 2 }}>
+                                            {questions[currentQuestionIndex].question}
+                                        </Card>
+                                        <Card sx={{ p: 1, mt: 2 }}>
+                                            {questions[currentQuestionIndex].hint}
+                                        </Card>
+                                        </>
+                                    )
+                                    }
                                     <h3>Time</h3>
                                 </>
                             }
+                            <Button onClick={handleSave}>Save and Quit</Button>
                         </Grid>
                     </Grid>
                 </Container>
