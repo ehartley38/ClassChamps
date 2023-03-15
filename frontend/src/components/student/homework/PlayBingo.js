@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import useAuth from "../../../providers/useAuth"
 import bingoQuestionsService from '../../../services/bingoQuestions'
 import bingoSessionsService from '../../../services/bingoSessions'
+import { Loading } from "../../Loading"
 import { BingoAnswer } from "./BingoAnswer"
 
 export const PlayBingo = ({ assignment }) => {
@@ -11,6 +12,7 @@ export const PlayBingo = ({ assignment }) => {
     const [questions, setQuestions] = useState([])
     const [answerCards, setAnswerCards] = useState([])
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+    const [loading, setLoading] = useState(true)
     let navigate = useNavigate()
 
     const { jwt } = useAuth()
@@ -47,12 +49,14 @@ export const PlayBingo = ({ assignment }) => {
                 setSession(savedSession)
                 setQuestions(savedSession.questions)
                 setAnswerCards(shuffleArray(savedSession.questions))
+                setLoading(false)
             } else if (count === 1) {
                 // Else load the session
                 const currentSession = sessions.filter(session => session.assignment === assignment.id)[0]
                 setSession(currentSession)
                 setQuestions(currentSession.questions)
                 setAnswerCards(shuffleArray(currentSession.questions))
+                setLoading(false)
             } else {
                 console.log('Too many sessions');
             }
@@ -108,6 +112,12 @@ export const PlayBingo = ({ assignment }) => {
             const response = await bingoSessionsService.updateQuestions(jwt, session.id, questions)
             navigate('/')
         
+    }
+
+    if (loading) {
+        return (
+            <Loading />
+        )
     }
 
     if (currentQuestionIndex < questions.length) {
