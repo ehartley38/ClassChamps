@@ -7,11 +7,13 @@ bingoSessionsRouter.post('/', userExtractor, async (request, response) => {
     const body = request.body
     const user = request.user
 
+    timeNow = new Date()
 
     const bingoSession = new BingoSession({
         assignment: body.assignment,
         student: user.id,
         questions: body.questions,
+        startTime: timeNow
     })
 
     try {

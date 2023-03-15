@@ -6,6 +6,7 @@ import bingoQuestionsService from '../../../services/bingoQuestions'
 import bingoSessionsService from '../../../services/bingoSessions'
 import { Loading } from "../../Loading"
 import { BingoAnswer } from "./BingoAnswer"
+import { Timer } from "./Timer"
 
 export const PlayBingo = ({ assignment }) => {
     const [session, setSession] = useState({})
@@ -158,7 +159,7 @@ export const PlayBingo = ({ assignment }) => {
                                         </>
                                     )
                                     }
-                                    <h3>Time</h3>
+                                    <Timer startTime={session.startTime}/>
                                 </>
                             }
                             <Button onClick={handleSave}>Save and Quit</Button>
