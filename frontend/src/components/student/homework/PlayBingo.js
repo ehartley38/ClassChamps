@@ -1,12 +1,25 @@
-import { Box, Button, Card, Container, Grid, Typography } from "@mui/material"
+import { Box, Button, Card, Container, Grid, Modal, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import useWindowSize from 'react-use/lib/useWindowSize'
 import useAuth from "../../../providers/useAuth"
 import bingoQuestionsService from '../../../services/bingoQuestions'
 import bingoSessionsService from '../../../services/bingoSessions'
 import { Loading } from "../../Loading"
 import { BingoAnswer } from "./BingoAnswer"
 import { Timer } from "./Timer"
+import Confetti from 'react-confetti'
+
+const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
 
 export const PlayBingo = ({ assignment }) => {
     const [session, setSession] = useState({})
@@ -14,6 +27,8 @@ export const PlayBingo = ({ assignment }) => {
     const [answerCards, setAnswerCards] = useState([])
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [loading, setLoading] = useState(true)
+    const [stopTimer, setStopTimer] = useState(false)
+    const { width, height } = useWindowSize()
     let navigate = useNavigate()
 
     const { jwt } = useAuth()
@@ -66,6 +81,13 @@ export const PlayBingo = ({ assignment }) => {
 
     }, [])
 
+    useEffect(() => {
+        if (currentQuestionIndex !== 0 && questions.length !== 0 && (currentQuestionIndex >= questions.length)){
+            handleEnd()
+        }
+        
+    }, [currentQuestionIndex])
+
     const shuffleArray = (array) => {
         const shuffledArray = [...array]
         for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -110,9 +132,18 @@ export const PlayBingo = ({ assignment }) => {
     }
 
     const handleSave = async () => {
-            const response = await bingoSessionsService.updateQuestions(jwt, session.id, questions)
-            navigate('/')
-        
+        const response = await bingoSessionsService.updateQuestions(jwt, session.id, questions)
+        navigate(-1)
+    }
+
+    const handleReturnToClass = () => {
+        navigate(-1)
+    }
+
+    const handleEnd = async () => {
+        setStopTimer(true)
+        // Add assignment submission
+        // Delete session
     }
 
     if (loading) {
@@ -121,60 +152,77 @@ export const PlayBingo = ({ assignment }) => {
         )
     }
 
-    if (currentQuestionIndex < questions.length) {
-        return (
-            //https://stackoverflow.com/questions/55824260/same-height-cards-in-material-ui
-            <>
-                <Container sx={{ py: 1 }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={8} sx={{ my: 2 }}>
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 3 }} >
-                                {answerCards && answerCards.map((question, index) => (
-                                    <BingoAnswer
-                                        key={index}
-                                        question={question}
-                                        isCorrect={question.isCorrect}
-                                        handleAnswerClick={handleAnswerClick}
-                                        index={index}
-                                    />
-                                ))}
-                            </Box>
-                        </Grid>
-                        <Grid item xs={4}>
-                            {questions.length > 0 &&
-                                <>
-                                    <Typography variant='h3' sx={{ my: 2, textAlign: 'center', color: 'secondary.main' }}>
-                                        {assignment.assignmentName}
-                                    </Typography>
-                                    {questions[currentQuestionIndex].isCorrect ? (
-                                        setCurrentQuestionIndex(currentQuestionIndex + 1)
-                                    ) : (
-                                        <>
-                                        <Card sx={{ p: 1, mt: 2 }}>
-                                            {questions[currentQuestionIndex].question}
-                                        </Card>
-                                        <Card sx={{ p: 1, mt: 2 }}>
-                                            {questions[currentQuestionIndex].hint}
-                                        </Card>
-                                        </>
-                                    )
-                                    }
-                                    <Timer startTime={session.startTime}/>
-                                </>
-                            }
-                            <Button onClick={handleSave}>Save and Quit</Button>
-                        </Grid>
+    return (
+        //https://stackoverflow.com/questions/55824260/same-height-cards-in-material-ui
+        <>
+            <Container sx={{ py: 1 }}>
+                <Grid container spacing={2}>
+                    <Grid item xs={8} sx={{ my: 2 }}>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 3 }} >
+                            {answerCards && answerCards.map((question, index) => (
+                                <BingoAnswer
+                                    key={index}
+                                    question={question}
+                                    isCorrect={question.isCorrect}
+                                    handleAnswerClick={handleAnswerClick}
+                                    index={index}
+                                />
+                            ))}
+                        </Box>
                     </Grid>
-                </Container>
-            </>
+                    <Grid item xs={4}>
+                        {questions.length > 0 &&
+                            <>
+                                <Typography variant='h3' sx={{ my: 2, textAlign: 'center', color: 'secondary.main' }}>
+                                    {assignment.assignmentName}
+                                </Typography>
+                                {questions[currentQuestionIndex]?.isCorrect ? (
+                                    setCurrentQuestionIndex(currentQuestionIndex + 1)
+                                ) : (
+                                    <>
+                                        <Card sx={{ p: 1, mt: 2 }}>
+                                            {questions[currentQuestionIndex]?.question}
+                                        </Card>
+                                        <Card sx={{ p: 1, mt: 2 }}>
+                                            {questions[currentQuestionIndex]?.hint}
+                                        </Card>
+                                    </>
+                                )
+                                }
+                                <Timer startTime={session.startTime} stopTimer={stopTimer} />
+                            </>
+                        }
+                        <Button onClick={handleSave}>Save and Quit</Button>
+                    </Grid>
+                </Grid>
+                {(currentQuestionIndex < questions.length) ? (
+                    null
+                ) : (
+                    <>
+                        <Modal
+                            open={true}
 
-        )
-    } else {
-        return (
-            <>
-                Finished
-            </>
-        )
-    }
+                        >
+                            <Box sx={modalStyle}>
+                                <Typography>
+                                    Congratulations!
+                                </Typography>
+                                <Button
+                                    onClick={handleReturnToClass}
+                                >
+                                    Return to Class
+                                </Button>
+                            </Box>
+                        </Modal>
+                        <Confetti
+                            width={width}
+                            height={height}
+                        />
+                    </>
+                )}
+            </Container>
 
+        </>
+
+    )
 }

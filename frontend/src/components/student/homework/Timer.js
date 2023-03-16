@@ -8,7 +8,7 @@ const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 
-export const Timer = ({ startTime }) => {
+export const Timer = ({ startTime, stopTimer }) => {
     const timeNow = new Date()
     const storedTime = new Date(startTime)
     const [time, setTime] = useState(Math.abs(storedTime.getTime() - timeNow.getTime()))
@@ -16,14 +16,17 @@ export const Timer = ({ startTime }) => {
     //console.log(Math.abs(time));
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const timeNow = new Date();
-            const storedTime = new Date(startTime);
-            setTime(Math.abs(storedTime.getTime() - timeNow.getTime()));
-        }, 1000);
+        if (!stopTimer) {
+            const interval = setInterval(() => {
+                const timeNow = new Date();
+                const storedTime = new Date(startTime);
+                setTime(Math.abs(storedTime.getTime() - timeNow.getTime()));
+            }, 1000);
 
-        return () => clearInterval(interval);
-    }, [startTime]);
+            return () => clearInterval(interval);
+        }
+
+    }, [startTime, stopTimer]);
 
     return (
         <>
