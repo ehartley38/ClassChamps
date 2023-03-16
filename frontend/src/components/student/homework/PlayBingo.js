@@ -29,6 +29,7 @@ export const PlayBingo = ({ assignment }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [loading, setLoading] = useState(true)
     const [stopTimer, setStopTimer] = useState(false)
+    const [showHint, setShowHint] = useState(false)
 
     const { width, height } = useWindowSize()
     let navigate = useNavigate()
@@ -140,8 +141,8 @@ export const PlayBingo = ({ assignment }) => {
                 return c
             })
             setAnswerCards(updatedAnswerCards)
-
             setCurrentQuestionIndex(currentQuestionIndex + 1)
+            setShowHint(false)
         } else {
             console.log('Answer incorrect');
         }
@@ -211,16 +212,27 @@ export const PlayBingo = ({ assignment }) => {
                                         <Card sx={{ p: 1, mt: 2 }}>
                                             {questions[currentQuestionIndex]?.question}
                                         </Card>
-                                        <Card sx={{ p: 1, mt: 2 }}>
-                                            {questions[currentQuestionIndex]?.hint}
-                                        </Card>
+                                        {showHint ? (
+                                            <Card sx={{ p: 1, mt: 2 }}>
+                                                {questions[currentQuestionIndex]?.hint}
+                                            </Card>
+                                        ) : (
+                                            <Box textAlign='center'>
+                                                <Button onClick={() => setShowHint(true)}>
+                                                    Show Hint
+                                                </Button>
+                                            </Box>
+                                        )}
+
                                     </>
                                 )
                                 }
                                 <Timer startTime={session.startTime} stopTimer={stopTimer} time={time} setTime={setTime} />
                             </>
                         }
-                        <Button onClick={handleSave}>Save and Quit</Button>
+                        <Box textAlign='right'>
+                            <Button onClick={handleSave}>Save and Quit</Button>
+                        </Box>
                     </Grid>
                 </Grid>
                 {(currentQuestionIndex < questions.length) ? (
