@@ -5,6 +5,7 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import useAuth from "../../../providers/useAuth"
 import bingoQuestionsService from '../../../services/bingoQuestions'
 import bingoSessionsService from '../../../services/bingoSessions'
+import submissionsService from '../../../services/assignmentSubmissions'
 import { Loading } from "../../Loading"
 import { BingoAnswer } from "./BingoAnswer"
 import { Timer } from "./Timer"
@@ -28,10 +29,15 @@ export const PlayBingo = ({ assignment }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [loading, setLoading] = useState(true)
     const [stopTimer, setStopTimer] = useState(false)
+
     const { width, height } = useWindowSize()
     let navigate = useNavigate()
-
     const { jwt } = useAuth()
+
+    // Timer stuff
+    const timeNow = new Date()
+    const [time, setTime] = useState(undefined)
+
 
     useEffect(() => {
         const initialize = async () => {
@@ -60,12 +66,16 @@ export const PlayBingo = ({ assignment }) => {
                 // Create the sesssion
                 const savedSession = await bingoSessionsService.createSession(jwt, newSession)
 
-                // Set Answer cards
-
                 setSession(savedSession)
                 setQuestions(savedSession.questions)
                 setAnswerCards(shuffleArray(savedSession.questions))
                 setLoading(false)
+
+                // Set the initial value of `time` only if `session.startTime` is defined
+                if (savedSession.startTime) {
+                    const storedTime = new Date(savedSession.startTime)
+                    setTime(Math.abs(storedTime.getTime() - timeNow.getTime()))
+                }
             } else if (count === 1) {
                 // Else load the session
                 const currentSession = sessions.filter(session => session.assignment === assignment.id)[0]
@@ -73,6 +83,12 @@ export const PlayBingo = ({ assignment }) => {
                 setQuestions(currentSession.questions)
                 setAnswerCards(shuffleArray(currentSession.questions))
                 setLoading(false)
+
+                // Set the initial value of `time` only if `session.startTime` is defined
+                if (currentSession.startTime) {
+                    const storedTime = new Date(currentSession.startTime)
+                    setTime(Math.abs(storedTime.getTime() - timeNow.getTime()))
+                }
             } else {
                 console.log('Too many sessions');
             }
@@ -82,10 +98,10 @@ export const PlayBingo = ({ assignment }) => {
     }, [])
 
     useEffect(() => {
-        if (currentQuestionIndex !== 0 && questions.length !== 0 && (currentQuestionIndex >= questions.length)){
+        if (currentQuestionIndex !== 0 && questions.length !== 0 && (currentQuestionIndex >= questions.length)) {
             handleEnd()
         }
-        
+
     }, [currentQuestionIndex])
 
     const shuffleArray = (array) => {
@@ -140,10 +156,22 @@ export const PlayBingo = ({ assignment }) => {
         navigate(-1)
     }
 
+    const handlePlayAgain = async () => {
+        console.log('Reset');
+    }
+
     const handleEnd = async () => {
         setStopTimer(true)
+
         // Add assignment submission
+        const submission = {
+            assignment: assignment.id,
+            timeToComplete: time
+        }
+        const newSubmission = await submissionsService.create(jwt, submission)
+
         // Delete session
+        const response = await bingoSessionsService.deleteSession(jwt, session.id)
     }
 
     if (loading) {
@@ -189,7 +217,7 @@ export const PlayBingo = ({ assignment }) => {
                                     </>
                                 )
                                 }
-                                <Timer startTime={session.startTime} stopTimer={stopTimer} />
+                                <Timer startTime={session.startTime} stopTimer={stopTimer} time={time} setTime={setTime} />
                             </>
                         }
                         <Button onClick={handleSave}>Save and Quit</Button>
@@ -201,7 +229,6 @@ export const PlayBingo = ({ assignment }) => {
                     <>
                         <Modal
                             open={true}
-
                         >
                             <Box sx={modalStyle}>
                                 <Typography>

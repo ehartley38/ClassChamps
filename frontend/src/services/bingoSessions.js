@@ -33,4 +33,13 @@ const updateQuestions = async (jwt, sessionId, questionsArray) => {
     return response.data
 }
 
-export default { createSession, getUsersSessions, updateQuestions }
+const deleteSession = async (jwt, sessionId) => {
+    const response = await axios.delete(`${baseUrl}/${sessionId}`, {
+        headers: {
+            authorization: 'bearer ' + jwt.token
+        }
+    })
+    return response.data
+}
+
+export default { createSession, getUsersSessions, updateQuestions, deleteSession }

@@ -58,5 +58,21 @@ bingoSessionsRouter.post('/updateIsCorrect/:sessionId', userExtractor, async (re
     }
 })
 
+bingoSessionsRouter.delete('/:sessionId', userExtractor, async (request, response) => {
+    const user = request.user
+    const sessionId = request.params.sessionId
+
+    try {
+        const session = await BingoSession.findById(sessionId)
+        if (session.student.equals(user.id)) {
+            await BingoSession.deleteOne({ _id: sessionId })
+            response.status(204).end()
+        } else {
+            response.status(400).json({message: 'Student not part of session'})
+        }
+    } catch (err) {
+        response.status(400).end()
+    }
+})
 
 module.exports = bingoSessionsRouter
