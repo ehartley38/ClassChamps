@@ -40,7 +40,7 @@ export const StudentClassroomView = () => {
             try {
                 const assignmentData = await assignmentService.getByClassroom(jwt, classroomObject.id)
                 const submissionData = await submissionService.getAllByUser(jwt)
-                
+
                 setAssignments(assignmentData)
                 setSubmissions(submissionData)
             } catch (err) {
@@ -92,7 +92,7 @@ export const StudentClassroomView = () => {
                         }
                         return (
                             <Assignment key={assignment.id} assignment={assignment}
-                                setCurrentAssignmentId={setCurrentAssignmentId} />
+                                setCurrentAssignmentId={setCurrentAssignmentId} currentAssignmentId={currentAssignmentId} />
                         )
                     }
                     )}
@@ -100,11 +100,26 @@ export const StudentClassroomView = () => {
                     <h3>Complete</h3>
                     {completedAssignments && completedAssignments.map((assignment) =>
                         <Assignment key={assignment.id} assignment={assignment}
-                            setCurrentAssignmentId={setCurrentAssignmentId} />
+                            setCurrentAssignmentId={setCurrentAssignmentId} currentAssignmentId={currentAssignmentId} />
                     )}
                 </Grid>
                 <Grid item xs={4}>
-                    <Button onClick={handlePlay}>Play</Button>
+                    {currentAssignmentId ? (
+                        <>
+                            <Typography variant="h3">{getAssignment(currentAssignmentId).assignmentName}</Typography>
+                            <Button
+                                onClick={handlePlay}
+                                variant="contained"
+                                color="success"
+                                sx={{ my: 1 }}
+                            >
+                                Play
+                            </Button>
+                        </>
+                    ) : (
+                        <div style={{ height: '80px' }}></div>
+                    )}
+
                     <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
                         <Tabs value={tabValue} onChange={handleTabChange} centered>
                             <Tab label="Leaderboard" />
