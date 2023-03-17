@@ -5,7 +5,6 @@ export const Assignment = ({ assignment, setCurrentAssignmentId }) => {
 
     const handleClick = () => {
         setCurrentAssignmentId(assignment.id)
-        console.log(assignment.id);
     }
 
     return (

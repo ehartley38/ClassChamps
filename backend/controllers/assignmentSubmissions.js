@@ -28,7 +28,7 @@ assignmentSubmissionsRouter.get('/', userExtractor, async (request, response) =>
     const user = request.user
     
     try {
-        const submissions = await AssignmentSubmission.find({ student: user.id }).populate('assignment', 'assignmentName')
+        const submissions = await AssignmentSubmission.find({ student: user.id }).sort({submissionDate: -1}).populate('assignment', 'assignmentName')
         response.status(200).json(submissions)
     } catch (err) {
         response.status(400).json(err)

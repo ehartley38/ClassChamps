@@ -6,7 +6,7 @@ import useAuth from "../../../providers/useAuth"
 import { useState, useEffect } from "react"
 import { Assignment } from "./Assignment"
 import { AppBar, Box, Button, Card, CardActionArea, CardContent, Grid, List, Tab, Tabs, Typography } from "@mui/material"
-import { FixedSizeList } from "react-window"
+import { convertMilliseconds } from "../../../utils/tools"
 
 const TabPanel = ({ value, index, children }) => {
 
@@ -40,7 +40,7 @@ export const StudentClassroomView = () => {
             try {
                 const assignmentData = await assignmentService.getByClassroom(jwt, classroomObject.id)
                 const submissionData = await submissionService.getAllByUser(jwt)
-
+                
                 setAssignments(assignmentData)
                 setSubmissions(submissionData)
             } catch (err) {
@@ -108,7 +108,7 @@ export const StudentClassroomView = () => {
                     <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
                         <Tabs value={tabValue} onChange={handleTabChange} centered>
                             <Tab label="Leaderboard" />
-                            <Tab label="Submissions" />
+                            <Tab label="Your Submissions" />
                         </Tabs>
                     </Box>
                     <TabPanel value={tabValue} index={0}>
@@ -117,7 +117,16 @@ export const StudentClassroomView = () => {
                         </Box>
                     </TabPanel>
                     <TabPanel value={tabValue} index={1}>
-                        Submissions
+                        {submissions && submissions.map((submission) => {
+                            if (submission.assignment.id === currentAssignmentId) {
+                                return (
+                                    <Card key={submission.id} elevation={1} sx={{ my: 1 }}>
+                                        <Typography>Date Completed: {submission.submissionDate.substring(0, 19)}</Typography>
+                                        <Typography>Time: {convertMilliseconds(Date.parse(submission.timeToComplete))}</Typography>
+                                    </Card>
+                                )
+                            }
+                        })}
                     </TabPanel>
                 </Grid>
             </Grid>
