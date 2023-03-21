@@ -5,7 +5,7 @@ import submissionService from '../../../services/assignmentSubmissions'
 import useAuth from "../../../providers/useAuth"
 import { useState, useEffect } from "react"
 import { Assignment } from "./Assignment"
-import { AppBar, Box, Button, Card, CardActionArea, CardContent, Divider, Grid, List, ListItem, ListItemText, Tab, Tabs, Typography } from "@mui/material"
+import { AppBar, Avatar, Box, Button, Card, CardActionArea, CardContent, Divider, Grid, List, ListItem, ListItemAvatar, ListItemText, Tab, Tabs, Typography } from "@mui/material"
 import { convertMilliseconds } from "../../../utils/tools"
 import { LeaderboardItem } from "./LeaderboardItem"
 import { FixedSizeList } from "react-window"
@@ -137,26 +137,9 @@ export const StudentClassroomView = () => {
                     </Box>
                     <TabPanel value={tabValue} index={0}>
                         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                            {leaderboardData && leaderboardData.map((submission, index) => {
-                                return (
-                                    <>
-                                        <ListItem alignItems="flex-start">
-                                            <Typography>
-                                                {index + 1}
-                                            </Typography>
-                                            <Typography>
-                                                {submission.student}
-                                            </Typography>
-                                            <Typography
-                                            >
-                                                {convertMilliseconds(Date.parse(submission.timeToComplete))}
-                                            </Typography>
-                                        </ListItem>
-                                        <Divider />
-                                    </>
-                                )
-                            })}
-
+                            {leaderboardData && leaderboardData.map((submission, index) =>
+                                <LeaderboardItem key={index} submission={submission} index={index} />
+                            )}
                         </List>
 
                     </TabPanel>

@@ -1,38 +1,22 @@
 import { Divider, ListItem, ListItemText, Typography } from "@mui/material"
+import { convertMilliseconds } from "../../../utils/tools"
 
-export const LeaderboardItem = ({ submission }) => {
+export const LeaderboardItem = ({ index, submission }) => {
 
-    return (
-        
-          
-            
-            <ListItem alignItems="flex-start">
-            <ListItemText
-              primary="Brunch this weekend?"
-              secondary={
-                <>
-                 <Typography
-                    
-                  >
-                    Ali Connors
-                  </Typography>
-                  {" — I'll be in your neighborhood doing errands this…"}
-                </>
-              }
-            />
-          </ListItem>
-    )
+  return (
+
+    <ListItem alignItems="flex-start">
+      <Typography sx={{ mx: 3 }} >
+        {index + 1}
+      </Typography>
+      <Typography sx={{ fontWeight: 'bold', mr: 3 }} >
+        {submission.student}
+      </Typography>
+      <Typography sx={{ textAlign: 'right' }}>
+        {convertMilliseconds(Date.parse(submission.timeToComplete))}
+      </Typography>
+    </ListItem>
+
+
+  )
 }
-
-/*   <ListItem>
-                <ListItemText
-                    primary={submission.student}
-                    secondary={
-                        <>
-                            <Typography>
-                                {submission.timeToComplete}
-                            </Typography>
-                        </>
-                    }
-                />
-            </ListItem>*/
