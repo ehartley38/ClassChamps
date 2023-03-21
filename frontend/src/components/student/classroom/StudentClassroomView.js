@@ -32,6 +32,7 @@ export const StudentClassroomView = () => {
     const [submissions, setSubmissions] = useState()
     const [tabValue, setTabValue] = useState(0)
     const [currentAssignmentId, setCurrentAssignmentId] = useState(undefined)
+    const [allSubmissions, setAllSubmissions] = useState({}) // This contains all submissions from all users for a given assignment
     const { jwt } = useAuth()
     let navigate = useNavigate()
 
@@ -92,7 +93,9 @@ export const StudentClassroomView = () => {
                         }
                         return (
                             <Assignment key={assignment.id} assignment={assignment}
-                                setCurrentAssignmentId={setCurrentAssignmentId} currentAssignmentId={currentAssignmentId} />
+                                setCurrentAssignmentId={setCurrentAssignmentId}
+                                currentAssignmentId={currentAssignmentId}
+                            />
                         )
                     }
                     )}
@@ -100,7 +103,9 @@ export const StudentClassroomView = () => {
                     <h3>Complete</h3>
                     {completedAssignments && completedAssignments.map((assignment) =>
                         <Assignment key={assignment.id} assignment={assignment}
-                            setCurrentAssignmentId={setCurrentAssignmentId} currentAssignmentId={currentAssignmentId} />
+                            setCurrentAssignmentId={setCurrentAssignmentId}
+                            currentAssignmentId={currentAssignmentId}
+                        />
                     )}
                 </Grid>
                 <Grid item xs={4}>

@@ -21,4 +21,14 @@ const getByClassroom = async (jwt, classroomId) => {
     return response.data
 }
 
-export default { create, getByClassroom }
+// Get leaderboard data for assignment
+const getLeaderboardData = async (jwt, assignmentId) => {
+    const response = await axios.get(`${baseUrl}/leaderboard/${assignmentId}`, {
+        headers: {
+            authorization: 'bearer ' + jwt.token
+        }
+    })
+    return response.data
+}
+
+export default { create, getByClassroom, getLeaderboardData }

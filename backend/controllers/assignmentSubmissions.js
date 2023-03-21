@@ -26,9 +26,9 @@ assignmentSubmissionsRouter.post('/', userExtractor, async (request, response) =
 // Get all sumbissions for a given user
 assignmentSubmissionsRouter.get('/', userExtractor, async (request, response) => {
     const user = request.user
-    
+
     try {
-        const submissions = await AssignmentSubmission.find({ student: user.id }).sort({submissionDate: -1}).populate('assignment', 'assignmentName')
+        const submissions = await AssignmentSubmission.find({ student: user.id }).sort({ submissionDate: -1 }).populate('assignment', 'assignmentName')
         response.status(200).json(submissions)
     } catch (err) {
         response.status(400).json(err)
@@ -36,5 +36,16 @@ assignmentSubmissionsRouter.get('/', userExtractor, async (request, response) =>
 
 })
 
+// Get all submissions for all users for a given assignment
+assignmentSubmissionsRouter.get('/:assignmentId', userExtractor, async (request, response) => {
+    const assignmentId = request.params.assignmentId
+
+    try {
+        const submissions = await AssignmentSubmission.find({ assignment: assignmentId })
+        response.status(200).json(submissions)
+    } catch (err) {
+        response.status(400).json(err)
+    }
+})
 
 module.exports = assignmentSubmissionsRouter
