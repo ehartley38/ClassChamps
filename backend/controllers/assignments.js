@@ -3,6 +3,7 @@ const assignmentRouter = require('express').Router()
 const Assignment = require('../models/assignment')
 const Classroom = require('../models/classroom')
 const AssignmentSubmission = require('../models/assignmentSubmission')
+const User = require('../models/user')
 const mongoose = require('mongoose')
 
 
@@ -45,9 +46,10 @@ assignmentRouter.get('/leaderboard/:assignmentId', userExtractor, async (request
     const user = request.user
     const assignmentId = request.params.assignmentId
 
-    // Find all submissions, sort by time, then group by student, and select 
-    // the first document in each group
+
     AssignmentSubmission.aggregate([
+        // Find all submissions, sort by time, then group by student, and select 
+        // the first document in each group
         { $match: { assignment: mongoose.Types.ObjectId(assignmentId) } },
         { $sort: { timeToComplete: 1 } },
         {
@@ -55,13 +57,33 @@ assignmentRouter.get('/leaderboard/:assignmentId', userExtractor, async (request
                 _id: '$student',
                 submission: { $first: '$$ROOT' }
             }
-        }
+        },
+        // Sort by timeToComplete within each group
+        { $sort: { 'submission.timeToComplete': 1 } },
+        // Lookup to perform a join query betwen AssignmentSubmission and User collection
+        {
+            $lookup: {
+                from: 'users',
+                localField: '_id',
+                foreignField: '_id',
+                as: 'student'
+            }
+        },
+        {
+            $unwind: '$student'
+        },
+        {
+            $project: {
+                'submission.student': '$student.username',
+                'submission.timeToComplete': 1
+            }
+        },
     ]).exec((err, submissions) => {
         if (err) {
             console.log(err);
             return
         }
-        console.log(submissions);
+        response.json(submissions)
     })
 
 })

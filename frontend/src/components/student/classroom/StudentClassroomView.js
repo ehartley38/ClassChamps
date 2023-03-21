@@ -5,8 +5,10 @@ import submissionService from '../../../services/assignmentSubmissions'
 import useAuth from "../../../providers/useAuth"
 import { useState, useEffect } from "react"
 import { Assignment } from "./Assignment"
-import { AppBar, Box, Button, Card, CardActionArea, CardContent, Grid, List, Tab, Tabs, Typography } from "@mui/material"
+import { AppBar, Box, Button, Card, CardActionArea, CardContent, Divider, Grid, List, ListItem, ListItemText, Tab, Tabs, Typography } from "@mui/material"
 import { convertMilliseconds } from "../../../utils/tools"
+import { LeaderboardItem } from "./LeaderboardItem"
+import { FixedSizeList } from "react-window"
 
 const TabPanel = ({ value, index, children }) => {
 
@@ -23,7 +25,6 @@ const TabPanel = ({ value, index, children }) => {
     );
 }
 
-
 export const StudentClassroomView = () => {
     const location = useLocation()
     const classroomObject = location.state.classroom
@@ -33,6 +34,7 @@ export const StudentClassroomView = () => {
     const [tabValue, setTabValue] = useState(0)
     const [currentAssignmentId, setCurrentAssignmentId] = useState(undefined)
     const [allSubmissions, setAllSubmissions] = useState({}) // This contains all submissions from all users for a given assignment
+    const [leaderboardData, setLeaderboardData] = useState([])
     const { jwt } = useAuth()
     let navigate = useNavigate()
 
@@ -95,6 +97,7 @@ export const StudentClassroomView = () => {
                             <Assignment key={assignment.id} assignment={assignment}
                                 setCurrentAssignmentId={setCurrentAssignmentId}
                                 currentAssignmentId={currentAssignmentId}
+                                setLeaderboardData={setLeaderboardData}
                             />
                         )
                     }
@@ -105,6 +108,7 @@ export const StudentClassroomView = () => {
                         <Assignment key={assignment.id} assignment={assignment}
                             setCurrentAssignmentId={setCurrentAssignmentId}
                             currentAssignmentId={currentAssignmentId}
+                            setLeaderboardData={setLeaderboardData}
                         />
                     )}
                 </Grid>
@@ -132,9 +136,29 @@ export const StudentClassroomView = () => {
                         </Tabs>
                     </Box>
                     <TabPanel value={tabValue} index={0}>
-                        <Box>
-                            Leaderboard
-                        </Box>
+                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                            {leaderboardData && leaderboardData.map((submission, index) => {
+                                return (
+                                    <>
+                                        <ListItem alignItems="flex-start">
+                                            <Typography>
+                                                {index + 1}
+                                            </Typography>
+                                            <Typography>
+                                                {submission.student}
+                                            </Typography>
+                                            <Typography
+                                            >
+                                                {convertMilliseconds(Date.parse(submission.timeToComplete))}
+                                            </Typography>
+                                        </ListItem>
+                                        <Divider />
+                                    </>
+                                )
+                            })}
+
+                        </List>
+
                     </TabPanel>
                     <TabPanel value={tabValue} index={1}>
                         {submissions && submissions.map((submission) => {

@@ -3,14 +3,15 @@ import { Link, useNavigate } from "react-router-dom"
 import useAuth from "../../../providers/useAuth"
 import assignmentService from '../../../services/assignments'
 
-export const Assignment = ({ assignment, setCurrentAssignmentId, currentAssignmentId }) => {
+export const Assignment = ({ assignment, setCurrentAssignmentId, currentAssignmentId, setLeaderboardData }) => {
     const { jwt } = useAuth()
 
     const handleClick = async () => {
         setCurrentAssignmentId(assignment.id)
         try {
-          const leaderboardData = await assignmentService.getLeaderboardData(jwt, assignment.id)  
-
+            const leaderboardData = await assignmentService.getLeaderboardData(jwt, assignment.id)
+            const formattedData = leaderboardData.map(a => a.submission)
+            setLeaderboardData(formattedData)
         } catch (err) {
             console.log(err);
         }
