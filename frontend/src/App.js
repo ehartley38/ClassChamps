@@ -16,6 +16,7 @@ import { Homework } from './components/teacher/homework/Homework';
 import { CreateHomework } from './components/teacher/homework/CreateHomework';
 import { HomeworkRouter } from './components/student/homework/HomeworkRouter';
 import './App.css'
+import { Profile } from './components/student/Profile';
 
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
                 <Route index element={<StudentClassroomView />} />
                 <Route path="homework/:assignmentId" element={<HomeworkRouter />} />
               </Route>
+              <Route path="profile" element={<Profile />} ></Route>
             </Route>
             <Route path='/teacher'>
               <Route index element={<TeacherDashboard />} />

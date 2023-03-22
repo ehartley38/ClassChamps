@@ -7,10 +7,12 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SignOut } from './SignOut';
+import useAuth from '../providers/useAuth';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
 export const NavBar = () => {
+    const { user } = useAuth()
 
     return (
         <AppBar position="static">
@@ -33,12 +35,17 @@ export const NavBar = () => {
                     >
                         ClassChamps
                     </Typography>
-           
+
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <Button to={'/'} component={Link} sx={{ my: 2, color: 'white', display: 'block' }} >
                             Home
                         </Button>
-                        {}   
+                        {(user && user.role === 'teacher') ? null : (
+                            <Button to={'/profile'} component={Link} sx={{ my: 2, color: 'white', display: 'block' }} >
+                                Profile
+                            </Button>
+                        )}
+
                     </Box>
                     <SignOut />
 

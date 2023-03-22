@@ -24,7 +24,11 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Quiz'
     }
-  ]
+  ],
+  experiencePoints: {
+    type: Number,
+    default: 0
+  }
 })
 
 userSchema.plugin(uniqueValidator)

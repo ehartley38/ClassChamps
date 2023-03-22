@@ -8,4 +8,22 @@ const convertMilliseconds = (milliseconds) => {
     return `${days}d ${hours}h ${minutes}m ${seconds}s`
 }
 
-module.exports = { convertMilliseconds }
+// Calculate level from XP
+const calculateLevel = (xp) => {
+    let level = 1
+    let xpThreshold = 100
+    
+    while (xp >= xpThreshold) {
+        //console.log(`Level ${level} is ${xpThreshold} XP`)
+        level ++
+        xpThreshold += 100 + (level - 2) * 200
+    }
+    
+    const previousLevelXp = xpThreshold - (100 + (level - 2) * 200)
+    const nextLevelXp = xpThreshold 
+    
+    return [level, previousLevelXp, nextLevelXp]
+
+} 
+
+module.exports = { convertMilliseconds, calculateLevel }
