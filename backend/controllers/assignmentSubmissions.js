@@ -12,7 +12,8 @@ assignmentSubmissionsRouter.post('/', userExtractor, async (request, response) =
         assignment: body.assignment,
         student: user.id,
         submissionDate: timeNow,
-        timeToComplete: body.timeToComplete
+        timeToComplete: body.timeToComplete,
+        displayOnLeaderboard: body.displayOnLeaderboard
     })
 
     try {

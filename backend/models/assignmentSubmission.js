@@ -10,7 +10,11 @@ const assignmentSubmissionSchema = new mongoose.Schema({
         ref: 'User'
     },
     submissionDate: Date,
-    timeToComplete: Date
+    timeToComplete: Date,
+    displayOnLeaderboard: {
+        type: Boolean,
+        default: false
+    },
 })
 
 assignmentSubmissionSchema.set('toJSON', {

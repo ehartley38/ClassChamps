@@ -9,6 +9,7 @@ export const Assignment = ({ assignment, setCurrentAssignmentId, currentAssignme
     const handleClick = async () => {
         setCurrentAssignmentId(assignment.id)
         try {
+            // Need to optimise!
             const leaderboardData = await assignmentService.getLeaderboardData(jwt, assignment.id)
             const formattedData = leaderboardData.map(a => a.submission)
             setLeaderboardData(formattedData)

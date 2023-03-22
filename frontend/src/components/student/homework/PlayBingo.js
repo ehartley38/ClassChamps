@@ -1,4 +1,4 @@
-import { Box, Button, Card, Container, Grid, Modal, Typography } from "@mui/material"
+import { Box, Button, Card, Checkbox, Container, FormControlLabel, FormGroup, Grid, Modal, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import useWindowSize from 'react-use/lib/useWindowSize'
@@ -30,6 +30,7 @@ export const PlayBingo = ({ assignment }) => {
     const [loading, setLoading] = useState(true)
     const [stopTimer, setStopTimer] = useState(false)
     const [showHint, setShowHint] = useState(false)
+    const [displayOnLeaderboard, setDisplayOnLeaderboard] = useState(false)
 
     const { width, height } = useWindowSize()
     let navigate = useNavigate()
@@ -37,7 +38,8 @@ export const PlayBingo = ({ assignment }) => {
 
     // Timer stuff
     const timeNow = new Date()
-    const [time, setTime] = useState(undefined)
+    const [time, setTime] = useState(undefined) // Current time
+    const [endTime, setEndTime] = useState(undefined) // Completion time
 
 
     useEffect(() => {
@@ -153,27 +155,29 @@ export const PlayBingo = ({ assignment }) => {
         navigate(-1)
     }
 
-    const handleReturnToClass = () => {
-        navigate(-1)
-    }
-
-    const handlePlayAgain = async () => {
-        console.log('Reset');
-    }
-
-    const handleEnd = async () => {
-        setStopTimer(true)
-
+    const handleEndSave = async () => {
         // Add assignment submission
         const submission = {
             assignment: assignment.id,
-            timeToComplete: time
+            timeToComplete: endTime,
+            displayOnLeaderboard: displayOnLeaderboard
         }
         const newSubmission = await submissionsService.create(jwt, submission)
 
         // Delete session
         const response = await bingoSessionsService.deleteSession(jwt, session.id)
+        navigate(-1)
     }
+
+    const handleCheckbox = async () => {
+        displayOnLeaderboard ? setDisplayOnLeaderboard(false) : setDisplayOnLeaderboard(true)
+    }
+
+    const handleEnd = async () => {
+        setStopTimer(true)
+        setEndTime(time)
+    }
+
 
     if (loading) {
         return (
@@ -243,14 +247,19 @@ export const PlayBingo = ({ assignment }) => {
                             open={true}
                         >
                             <Box sx={modalStyle}>
-                                <Typography>
+                                <Typography variant="h3" align='center'>
                                     Congratulations!
                                 </Typography>
-                                <Button
-                                    onClick={handleReturnToClass}
-                                >
-                                    Return to Class
-                                </Button>
+                                <FormGroup>
+                                    <FormControlLabel control={<Checkbox onChange={handleCheckbox} />} label="Submit to class leaderboard?" />
+                                </FormGroup>
+                                <Box textAlign='center'>
+                                    <Button
+                                        onClick={handleEndSave}
+                                    >
+                                        Save and Exit
+                                    </Button>
+                                </Box>
                             </Box>
                         </Modal>
                         <Confetti

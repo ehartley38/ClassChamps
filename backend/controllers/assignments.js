@@ -50,7 +50,10 @@ assignmentRouter.get('/leaderboard/:assignmentId', userExtractor, async (request
     AssignmentSubmission.aggregate([
         // Find all submissions, sort by time, then group by student, and select 
         // the first document in each group
-        { $match: { assignment: mongoose.Types.ObjectId(assignmentId) } },
+        { $match: { 
+            assignment: mongoose.Types.ObjectId(assignmentId), 
+            displayOnLeaderboard: true
+        } },
         { $sort: { timeToComplete: 1 } },
         {
             $group: {
