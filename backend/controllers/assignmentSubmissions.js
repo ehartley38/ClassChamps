@@ -2,6 +2,7 @@ const { userExtractor } = require('../utils/middleware')
 const assignmentSubmissionsRouter = require('express').Router()
 const AssignmentSubmission = require('../models/assignmentSubmission')
 
+// Create a new submission and handle xp gains
 assignmentSubmissionsRouter.post('/', userExtractor, async (request, response) => {
     const body = request.body
     const user = request.user
@@ -22,6 +23,10 @@ assignmentSubmissionsRouter.post('/', userExtractor, async (request, response) =
     } catch (err) {
         response.status(400).json(err)
     }
+
+    const submissions = await AssignmentSubmission.find({ student: user.id, assignment: body.assignment })
+    console.log('all submits', submissions);
+
 })
 
 // Get all sumbissions for a given user

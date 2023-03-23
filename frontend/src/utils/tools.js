@@ -14,7 +14,7 @@ const calculateLevel = (xp) => {
     let xpThreshold = 100
     
     while (xp >= xpThreshold) {
-        //console.log(`Level ${level} is ${xpThreshold} XP`)
+        console.log(`Level ${level + 1} is ${xpThreshold} XP`)
         level ++
         xpThreshold += 100 + (level - 2) * 200
     }
@@ -25,5 +25,12 @@ const calculateLevel = (xp) => {
     return [level, previousLevelXp, nextLevelXp]
 
 } 
+
+// Level 2 is 100 XP
+// Level 3 is 200 XP
+// Level 4 is 500 XP
+// Level 5 is 1000 XP
+// Level 6 is 1700 XP
+// Level 7 is 2600 XP
 
 module.exports = { convertMilliseconds, calculateLevel }
