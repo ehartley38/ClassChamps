@@ -19,7 +19,7 @@ const calculateLevel = (xp) => {
         xpThreshold += 100 + (level - 2) * 200
     }
 
-    const previousLevelXp = xpThreshold - (100 + (level - 2) * 200)
+    const previousLevelXp = (level === 1) ? 0 : xpThreshold - (100 + (level - 2) * 200)
     const nextLevelXp = xpThreshold
 
     return [level, previousLevelXp, nextLevelXp]

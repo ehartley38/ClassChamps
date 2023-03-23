@@ -7,13 +7,11 @@ import { useEffect } from "react";
 import usersService from '../../services/users'
 
 export const Profile = () => {
-    const { user, jwt } = useAuth()
+    const { user } = useAuth()
     const [level, previousLevelXp, nextLevelXp] = calculateLevel(user.experiencePoints)
 
-    const percentage = Math.floor(((nextLevelXp - user.experiencePoints) / (nextLevelXp - previousLevelXp)) * 100)
-    
+    const percentage = Math.floor(((user.experiencePoints - previousLevelXp) / (nextLevelXp - previousLevelXp)) * 100)
     // Need to fix level zero bug
-    // Need to fix XP not updating until refresh bug by updating user context
 
     return (
         <>
