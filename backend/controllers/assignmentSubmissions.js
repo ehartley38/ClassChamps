@@ -1,6 +1,7 @@
 const { userExtractor } = require('../utils/middleware')
 const assignmentSubmissionsRouter = require('express').Router()
 const AssignmentSubmission = require('../models/assignmentSubmission')
+let toolFile = require('../utils/tools')
 
 // Create a new submission and handle xp gains
 assignmentSubmissionsRouter.post('/', userExtractor, async (request, response) => {
@@ -24,8 +25,16 @@ assignmentSubmissionsRouter.post('/', userExtractor, async (request, response) =
         response.status(400).json(err)
     }
 
-    const submissions = await AssignmentSubmission.find({ student: user.id, assignment: body.assignment })
-    console.log('all submits', submissions);
+    // Assign xp to student
+    try {
+        const submissions = await AssignmentSubmission.find({ student: user.id, assignment: body.assignment })
+        const xpGain = toolFile.xpCalculator(submissions.length)
+        user.experiencePoints += xpGain
+        await user.save()
+    } catch (err) {
+        console.log(err);
+    }
+
 
 })
 

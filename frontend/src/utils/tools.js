@@ -4,7 +4,7 @@ const convertMilliseconds = (milliseconds) => {
     const minutes = Math.floor((milliseconds / (1000 * 60)) % 60)
     const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24)
     const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24))
-    
+
     return `${days}d ${hours}h ${minutes}m ${seconds}s`
 }
 
@@ -12,19 +12,20 @@ const convertMilliseconds = (milliseconds) => {
 const calculateLevel = (xp) => {
     let level = 1
     let xpThreshold = 100
-    
+
     while (xp >= xpThreshold) {
-        console.log(`Level ${level + 1} is ${xpThreshold} XP`)
-        level ++
+        //console.log(`Level ${level + 1} is ${xpThreshold} XP`)
+        level++
         xpThreshold += 100 + (level - 2) * 200
     }
-    
+
     const previousLevelXp = xpThreshold - (100 + (level - 2) * 200)
-    const nextLevelXp = xpThreshold 
-    
+    const nextLevelXp = xpThreshold
+
     return [level, previousLevelXp, nextLevelXp]
 
-} 
+}
+
 
 // Level 2 is 100 XP
 // Level 3 is 200 XP
