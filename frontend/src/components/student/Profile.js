@@ -3,13 +3,17 @@ import useAuth from "../../providers/useAuth"
 import { calculateLevel } from "../../utils/tools"
 import ProgressBar from "@ramonak/react-progress-bar";
 import CountUp from 'react-countup'
+import { useEffect } from "react";
+import usersService from '../../services/users'
 
 export const Profile = () => {
     const { user, jwt } = useAuth()
     const [level, previousLevelXp, nextLevelXp] = calculateLevel(user.experiencePoints)
 
     const percentage = Math.floor(((nextLevelXp - user.experiencePoints) / (nextLevelXp - previousLevelXp)) * 100)
+    
     // Need to fix level zero bug
+    // Need to fix XP not updating until refresh bug by updating user context
 
     return (
         <>

@@ -20,7 +20,6 @@ assignmentSubmissionsRouter.post('/', userExtractor, async (request, response) =
 
     try {
         const savedSubmission = await submission.save()
-        response.status(201).json(savedSubmission)
     } catch (err) {
         response.status(400).json(err)
     }
@@ -31,6 +30,9 @@ assignmentSubmissionsRouter.post('/', userExtractor, async (request, response) =
         const xpGain = toolFile.xpCalculator(submissions.length)
         user.experiencePoints += xpGain
         await user.save()
+
+        // Return the xp gained
+        response.status(201).json(xpGain)
     } catch (err) {
         console.log(err);
     }

@@ -34,7 +34,7 @@ export const PlayBingo = ({ assignment }) => {
 
     const { width, height } = useWindowSize()
     let navigate = useNavigate()
-    const { jwt } = useAuth()
+    const { jwt, user, setUser } = useAuth()
 
     // Timer stuff
     const timeNow = new Date()
@@ -156,13 +156,15 @@ export const PlayBingo = ({ assignment }) => {
     }
 
     const handleEndSave = async () => {
-        // Add assignment submission
+        // Create new submission and return xpGained
         const submission = {
             assignment: assignment.id,
             timeToComplete: endTime,
             displayOnLeaderboard: displayOnLeaderboard
         }
-        const newSubmission = await submissionsService.create(jwt, submission)
+        const xpGained = await submissionsService.create(jwt, submission)
+        setUser({ ...user, experiencePoints: user.experiencePoints + xpGained })
+
 
         // Delete session
         const response = await bingoSessionsService.deleteSession(jwt, session.id)
