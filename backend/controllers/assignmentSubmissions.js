@@ -1,10 +1,10 @@
-const { userExtractor } = require('../utils/middleware')
+const { userExtractor, checkBadges } = require('../utils/middleware')
 const assignmentSubmissionsRouter = require('express').Router()
 const AssignmentSubmission = require('../models/assignmentSubmission')
 let toolFile = require('../utils/tools')
 
 // Create a new submission and handle xp gains
-assignmentSubmissionsRouter.post('/', userExtractor, async (request, response) => {
+assignmentSubmissionsRouter.post('/', [userExtractor, checkBadges], async (request, response) => {
     const body = request.body
     const user = request.user
 

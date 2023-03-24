@@ -28,7 +28,13 @@ const userSchema = new mongoose.Schema({
   experiencePoints: {
     type: Number,
     default: 0
-  }
+  },
+  awardedBadgeIds: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'AwardedBadge'
+    }
+  ]
 })
 
 userSchema.plugin(uniqueValidator)
