@@ -23,8 +23,8 @@ const getUsersSessions = async (jwt) => {
 }
 
 // Update an array of questions in a session
-const updateQuestions = async (jwt, sessionId, questionsArray) => {
-    const response = await axios.post(`${baseUrl}/updateIsCorrect/${sessionId}`, { questionsArray }, {
+const updateQuestions = async (jwt, sessionId, questionsArray, mistakeMade) => {
+    const response = await axios.post(`${baseUrl}/updateIsCorrect/${sessionId}`, { questionsArray, mistakeMade }, {
         headers: {
             authorization: 'bearer ' + jwt.token
         }

@@ -98,7 +98,10 @@ const checkBadges = async (request, response, next) => {
 
             // Bingo Genius
             case '641da2e095a6c2ad1c5fd680':
-                console.log('Bingo Genius');
+                if (body.mistakeMade === false) {
+                    badgesToBeAwarded.push(id)
+                }
+
                 break
             // Streak Master
             case '641da2f795a6c2ad1c5fd682':

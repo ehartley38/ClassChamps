@@ -15,7 +15,8 @@ assignmentSubmissionsRouter.post('/', [userExtractor, checkBadges], async (reque
         student: user.id,
         submissionDate: timeNow,
         timeToComplete: body.timeToComplete,
-        displayOnLeaderboard: body.displayOnLeaderboard
+        displayOnLeaderboard: body.displayOnLeaderboard,
+        mistakeMade: body.mistakeMade
     })
 
     try {

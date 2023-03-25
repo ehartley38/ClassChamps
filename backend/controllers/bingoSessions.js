@@ -42,14 +42,11 @@ bingoSessionsRouter.post('/updateIsCorrect/:sessionId', userExtractor, async (re
     const body = request.body
     const sessionId = request.params.sessionId
 
-    //console.log('body questions is', body.questionsArray);
-
     try {
         const session = await BingoSession.findById(sessionId)
         if (session.student.equals(user.id)) {
-            //console.log('Updating questions');
-            await BingoSession.findOneAndUpdate({ _id: sessionId}, {questions: body.questionsArray})
-            response.status(200).json({message: 'Questions updated'})
+            await BingoSession.findOneAndUpdate({ _id: sessionId}, {questions: body.questionsArray, mistakeMade: body.mistakeMade})
+            response.status(200).json({message: 'Session updated'})
         } else {
             response.status(400).json({message: 'Invalid student'})
         }

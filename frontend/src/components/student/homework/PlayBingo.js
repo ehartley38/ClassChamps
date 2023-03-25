@@ -31,6 +31,7 @@ export const PlayBingo = ({ assignment }) => {
     const [stopTimer, setStopTimer] = useState(false)
     const [showHint, setShowHint] = useState(false)
     const [displayOnLeaderboard, setDisplayOnLeaderboard] = useState(false)
+    const [mistakeMade, setMistakeMade] = useState(false)
 
     const { width, height } = useWindowSize()
     let navigate = useNavigate()
@@ -86,6 +87,7 @@ export const PlayBingo = ({ assignment }) => {
                 setQuestions(currentSession.questions)
                 setAnswerCards(shuffleArray(currentSession.questions))
                 setLoading(false)
+                setMistakeMade(currentSession.mistakeMade)
 
                 // Set the initial value of `time` only if `session.startTime` is defined
                 if (currentSession.startTime) {
@@ -118,6 +120,7 @@ export const PlayBingo = ({ assignment }) => {
 
 
     const handleAnswerClick = (questionId) => {
+        // Handle correct
         if (questionId === questions[currentQuestionIndex]._id) {
             // Set isCorrect to true for question
             const updatedQuestions = questions.map(q => {
@@ -146,12 +149,13 @@ export const PlayBingo = ({ assignment }) => {
             setCurrentQuestionIndex(currentQuestionIndex + 1)
             setShowHint(false)
         } else {
-            console.log('Answer incorrect');
+            // Handle incorrect
+            setMistakeMade(true)
         }
     }
 
     const handleSave = async () => {
-        const response = await bingoSessionsService.updateQuestions(jwt, session.id, questions)
+        const response = await bingoSessionsService.updateQuestions(jwt, session.id, questions, mistakeMade)
         navigate(-1)
     }
 
@@ -160,7 +164,8 @@ export const PlayBingo = ({ assignment }) => {
         const submission = {
             assignment: assignment.id,
             timeToComplete: endTime,
-            displayOnLeaderboard: displayOnLeaderboard
+            displayOnLeaderboard: displayOnLeaderboard,
+            mistakeMade: mistakeMade
         }
         const xpGained = await submissionsService.create(jwt, submission)
         setUser({ ...user, experiencePoints: user.experiencePoints + xpGained })

@@ -15,6 +15,10 @@ const assignmentSubmissionSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    mistakeMade: {
+        type: Boolean,
+        default: false
+    }
 })
 
 assignmentSubmissionSchema.set('toJSON', {

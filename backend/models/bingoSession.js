@@ -18,6 +18,10 @@ const bingoSessionSchema = new mongoose.Schema({
         }
     ],
     startTime: Date,
+    mistakeMade: {
+        type: Boolean,
+        default: false
+    }
 })
 
 bingoSessionSchema.set('toJSON', {
