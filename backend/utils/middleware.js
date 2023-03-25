@@ -59,6 +59,7 @@ const checkBadges = async (request, response, next) => {
     const body = request.body
     const userBadges = user.awardedBadgeIds
 
+
     const badgeIds = ['641da25595a6c2ad1c5fd67c', '641da2af95a6c2ad1c5fd67e', '641da2e095a6c2ad1c5fd680',
         '641da2f795a6c2ad1c5fd682', '641da30f95a6c2ad1c5fd684', '641da32b95a6c2ad1c5fd686']
 
@@ -101,7 +102,6 @@ const checkBadges = async (request, response, next) => {
                 if (body.mistakeMade === false) {
                     badgesToBeAwarded.push(id)
                 }
-
                 break
             // Streak Master
             case '641da2f795a6c2ad1c5fd682':
@@ -109,7 +109,10 @@ const checkBadges = async (request, response, next) => {
                 break
             // Perseverance Pro
             case '641da30f95a6c2ad1c5fd684':
-                console.log('Perseverance Pro');
+                const submissions = await AssignmentSubmission.find({ student: user.id, assignment: body.assignment })
+                if (submissions.length === 1) {
+                    badgesToBeAwarded.push(id)
+                }
                 break
             // Mastermind
             case '641da32b95a6c2ad1c5fd686':
