@@ -32,6 +32,7 @@ export const PlayBingo = ({ assignment }) => {
     const [showHint, setShowHint] = useState(false)
     const [displayOnLeaderboard, setDisplayOnLeaderboard] = useState(false)
     const [mistakeMade, setMistakeMade] = useState(false)
+    const [hintUsed, setHintUsed] = useState(false)
 
     const { width, height } = useWindowSize()
     let navigate = useNavigate()
@@ -88,6 +89,7 @@ export const PlayBingo = ({ assignment }) => {
                 setAnswerCards(shuffleArray(currentSession.questions))
                 setLoading(false)
                 setMistakeMade(currentSession.mistakeMade)
+                setHintUsed(currentSession.hintUsed)
 
                 // Set the initial value of `time` only if `session.startTime` is defined
                 if (currentSession.startTime) {
@@ -155,7 +157,7 @@ export const PlayBingo = ({ assignment }) => {
     }
 
     const handleSave = async () => {
-        const response = await bingoSessionsService.updateQuestions(jwt, session.id, questions, mistakeMade)
+        const response = await bingoSessionsService.updateQuestions(jwt, session.id, questions, mistakeMade, hintUsed)
         navigate(-1)
     }
 
@@ -165,7 +167,8 @@ export const PlayBingo = ({ assignment }) => {
             assignment: assignment.id,
             timeToComplete: endTime,
             displayOnLeaderboard: displayOnLeaderboard,
-            mistakeMade: mistakeMade
+            mistakeMade: mistakeMade,
+            hintUsed: hintUsed
         }
         const xpGained = await submissionsService.create(jwt, submission)
         setUser({ ...user, experiencePoints: user.experiencePoints + xpGained })
@@ -174,6 +177,11 @@ export const PlayBingo = ({ assignment }) => {
         // Delete session
         const response = await bingoSessionsService.deleteSession(jwt, session.id)
         navigate(-1)
+    }
+
+    const handleHintClick = () => {
+        setShowHint(true)
+        setHintUsed(true)
     }
 
     const handleCheckbox = async () => {
@@ -229,7 +237,7 @@ export const PlayBingo = ({ assignment }) => {
                                             </Card>
                                         ) : (
                                             <Box textAlign='center'>
-                                                <Button onClick={() => setShowHint(true)}>
+                                                <Button onClick={handleHintClick}>
                                                     Show Hint
                                                 </Button>
                                             </Box>

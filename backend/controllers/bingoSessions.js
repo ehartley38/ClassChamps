@@ -45,10 +45,14 @@ bingoSessionsRouter.post('/updateIsCorrect/:sessionId', userExtractor, async (re
     try {
         const session = await BingoSession.findById(sessionId)
         if (session.student.equals(user.id)) {
-            await BingoSession.findOneAndUpdate({ _id: sessionId}, {questions: body.questionsArray, mistakeMade: body.mistakeMade})
-            response.status(200).json({message: 'Session updated'})
+            await BingoSession.findOneAndUpdate({ _id: sessionId }, {
+                questions: body.questionsArray,
+                mistakeMade: body.mistakeMade,
+                hintUsed: body.hintUsed
+            })
+            response.status(200).json({ message: 'Session updated' })
         } else {
-            response.status(400).json({message: 'Invalid student'})
+            response.status(400).json({ message: 'Invalid student' })
         }
     } catch (err) {
         console.log(err);
@@ -65,7 +69,7 @@ bingoSessionsRouter.delete('/:sessionId', userExtractor, async (request, respons
             await BingoSession.deleteOne({ _id: sessionId })
             response.status(204).end()
         } else {
-            response.status(400).json({message: 'Student not part of session'})
+            response.status(400).json({ message: 'Student not part of session' })
         }
     } catch (err) {
         response.status(400).end()

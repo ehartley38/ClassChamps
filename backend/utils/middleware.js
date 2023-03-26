@@ -93,8 +93,6 @@ const checkBadges = async (request, response, next) => {
                 } catch (err) {
                     console.log(err);
                 }
-
-
                 break
 
             // Bingo Genius
@@ -103,10 +101,12 @@ const checkBadges = async (request, response, next) => {
                     badgesToBeAwarded.push(id)
                 }
                 break
+
             // Streak Master
             case '641da2f795a6c2ad1c5fd682':
                 console.log('Streak Master');
                 break
+
             // Perseverance Pro
             case '641da30f95a6c2ad1c5fd684':
                 const submissions = await AssignmentSubmission.find({ student: user.id, assignment: body.assignment })
@@ -114,9 +114,12 @@ const checkBadges = async (request, response, next) => {
                     badgesToBeAwarded.push(id)
                 }
                 break
+                
             // Mastermind
             case '641da32b95a6c2ad1c5fd686':
-                console.log('Mastermind');
+                if (body.hintUsed === false) {
+                    badgesToBeAwarded.push(id)
+                }
                 break
         }
     })

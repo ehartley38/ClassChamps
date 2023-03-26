@@ -21,6 +21,10 @@ const bingoSessionSchema = new mongoose.Schema({
     mistakeMade: {
         type: Boolean,
         default: false
+    },
+    hintUsed: {
+        type: Boolean,
+        default: false
     }
 })
 
