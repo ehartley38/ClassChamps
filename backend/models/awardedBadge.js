@@ -9,7 +9,18 @@ const awardedBadgeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Badge'
     },
-    awardedDate: Date
+    awarded: {
+        type: Boolean,
+        default: true
+    },
+    awardedDate: {
+        type: Date,
+        default: undefined
+    },
+    criteriaCount: {
+        type: Number,
+        default: 0
+    }
 })
 
 awardedBadgeSchema.set('toJSON', {

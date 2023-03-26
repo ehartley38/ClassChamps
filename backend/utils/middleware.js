@@ -4,6 +4,7 @@ const config = require('../utils/config')
 const User = require('../models/user')
 const AssignmentSubmission = require('../models/assignmentSubmission')
 const Assignment = require('../models/assignment')
+const AwardedBadge = require('../models/awardedBadge')
 
 const WEEKMS = 604800000
 
@@ -64,7 +65,11 @@ const checkBadges = async (request, response, next) => {
         '641da2f795a6c2ad1c5fd682', '641da30f95a6c2ad1c5fd684', '641da32b95a6c2ad1c5fd686']
 
     const badgesToBeAwarded = []
-    badgeIds.forEach(async id => {
+    // Used for loop instead of forEach because of
+    // https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop
+    for (let i = 0; i < badgeIds.length; i++) {
+        const id = badgeIds[i]
+
         if (userBadges.includes(id)) {
             return
         }
@@ -83,9 +88,8 @@ const checkBadges = async (request, response, next) => {
 
             // Early Bird
             case '641da2af95a6c2ad1c5fd67e':
-                timeNow = new Date()
-                const submissionDate = timeNow
                 try {
+                    const submissionDate = new Date()
                     const assignment = await Assignment.find({ _id: body.assignment })
                     if (assignment[0].dueDate.getTime() - submissionDate.getTime() > WEEKMS) {
                         badgesToBeAwarded.push(id)
@@ -104,7 +108,42 @@ const checkBadges = async (request, response, next) => {
 
             // Streak Master
             case '641da2f795a6c2ad1c5fd682':
-                console.log('Streak Master');
+                // First check if a student has already submitted this assignment. 
+                // If so, this does not count toward the badge progress
+                const submission = await AssignmentSubmission.findOne({ assignment: body.assignment, student: user.id })
+                if (submission !== null) {
+                    break
+                }
+
+                // Now check submission meets badge criteria
+                let awardedBadge = await AwardedBadge.findOne({ badgeId: id, studentId: user.id })
+                if (awardedBadge === null) {
+                    const newAwardedBadge = new AwardedBadge({
+                        studentId: user.id,
+                        badgeId: id,
+                        awarded: false,
+                    })
+                    await newAwardedBadge.save()
+                    awardedBadge = await AwardedBadge.findOne({ badgeId: id, studentId: user.id })
+                }
+
+                const assignment = await Assignment.findOne({ _id: body.assignment })
+                const submissionDate = new Date()
+
+                // If submitted on time, then add one to badge criteria
+                if (assignment.dueDate.getTime() > submissionDate.getTime()) {
+                    awardedBadge.criteriaCount += 1
+                    if (awardedBadge.criteriaCount === 5) {
+                        awardedBadge.awarded = true
+                        badgesToBeAwarded.push(id)
+                    }
+
+                    await awardedBadge.save()
+                } else {
+                    // Else reset criteria to zero
+                    awardedBadge.criteriaCount = 0
+                    await awardedBadge.save()
+                }
                 break
 
             // Perseverance Pro
@@ -114,7 +153,7 @@ const checkBadges = async (request, response, next) => {
                     badgesToBeAwarded.push(id)
                 }
                 break
-                
+
             // Mastermind
             case '641da32b95a6c2ad1c5fd686':
                 if (body.hintUsed === false) {
@@ -122,7 +161,7 @@ const checkBadges = async (request, response, next) => {
                 }
                 break
         }
-    })
+    }
 
     next()
 }
