@@ -17,6 +17,7 @@ import { CreateHomework } from "./components/teacher/homework/CreateHomework";
 import { HomeworkRouter } from "./components/student/homework/HomeworkRouter";
 import "./App.css";
 import { Profile } from "./components/student/Profile";
+import { Badges } from "./components/student/homework/Badges";
 
 const App = () => {
   const { user, loading } = useAuth();
@@ -40,7 +41,10 @@ const App = () => {
                   element={<HomeworkRouter />}
                 />
               </Route>
-              <Route path="profile" element={<Profile />}></Route>
+              <Route path="profile">
+                <Route index element={<Profile />} />
+                <Route path="badges" element={<Badges />} />
+              </Route>
             </Route>
             <Route path="/teacher">
               <Route index element={<TeacherDashboard />} />

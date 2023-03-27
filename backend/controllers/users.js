@@ -36,6 +36,13 @@ usersRouter.get("/:id", userExtractor, async (request, response) => {
 
   const userObject = await User.findById(id)
     .populate("classrooms")
+    .populate({
+      path: "awardedBadgeIds",
+      populate: {
+        path: "badgeId",
+        model: "Badge",
+      },
+    })
     .exec();
   response.json(userObject);
 });

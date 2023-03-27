@@ -1,16 +1,18 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import useAuth from "../../providers/useAuth";
 import { calculateLevel } from "../../utils/tools";
 import ProgressBar from "@ramonak/react-progress-bar";
 import CountUp from "react-countup";
 import { useEffect } from "react";
 import usersService from "../../services/users";
+import { useNavigate } from "react-router-dom";
 
 export const Profile = () => {
   const { user } = useAuth();
   const [level, previousLevelXp, nextLevelXp] = calculateLevel(
     user.experiencePoints
   );
+  let navigate = useNavigate();
 
   const percentage = Math.floor(
     ((user.experiencePoints - previousLevelXp) /
@@ -49,7 +51,7 @@ export const Profile = () => {
         </Grid>
       </Grid>
       <Grid container spacing={0}>
-        <Typography>Badges</Typography>
+        <Button onClick={() => navigate("badges")}>Badges</Button>
       </Grid>
     </>
   );
