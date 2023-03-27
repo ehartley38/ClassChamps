@@ -12,4 +12,5 @@ awardedBadgesRouter.post('/', userExtractor, async (request, response) => {
     // })
 })
 
+
 module.exports = awardedBadgesRouter
