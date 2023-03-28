@@ -6,10 +6,6 @@ import badgesService from "../../../services/badges";
 import { UnearnedBadgeCard } from "./UnearnedBadgeCard";
 import firstSteps from "../../../assets/images/firstSteps.png";
 
-const badgeImages = {
-  "641da25595a6c2ad1c5fd67c": firstSteps,
-};
-
 export const Badges = () => {
   const { user } = useAuth();
   const [allBadges, setAllBadges] = useState([]); // This contains all badges available
@@ -54,7 +50,6 @@ export const Badges = () => {
                   key={awardedBadge.id}
                   awardedBadge={awardedBadge}
                   badge={awardedBadge.badgeId}
-                  badgeImages={badgeImages}
                 />
               ))}
 

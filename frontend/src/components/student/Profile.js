@@ -6,6 +6,7 @@ import CountUp from "react-countup";
 import { useEffect } from "react";
 import usersService from "../../services/users";
 import { useNavigate } from "react-router-dom";
+import { BadgeCard } from "./homework/BadgeCard";
 
 export const Profile = () => {
   const { user } = useAuth();
@@ -50,9 +51,58 @@ export const Profile = () => {
           </Box>
         </Grid>
       </Grid>
-      <Grid container spacing={0}>
-        <Button onClick={() => navigate("badges")}>Badges</Button>
-      </Grid>
+
+      {user.awardedBadgeIds.length === 0 ? (
+        <>
+          <Grid container>
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Typography sx={{}}>No recenty earned badges :(</Typography>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                <Button variant="outlined" onClick={() => navigate("badges")}>
+                  View all badges
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        </>
+      ) : (
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h3">Latest Badges</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 3,
+                mt: 2,
+              }}
+            >
+              {/* Display up to three most recently awarded badges */}
+              {user.awardedBadgeIds &&
+                user.awardedBadgeIds
+                  .reverse()
+                  .slice(0, 3)
+                  .map((awardedBadge) => (
+                    <BadgeCard
+                      key={awardedBadge.id}
+                      awardedBadge={awardedBadge}
+                      badge={awardedBadge.badgeId}
+                    />
+                  ))}
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <Box display="flex" justifyContent="flex-end" sx={{ m: 1 }}>
+              <Button variant="outlined" onClick={() => navigate("badges")}>
+                View all
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 };
