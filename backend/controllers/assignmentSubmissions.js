@@ -40,7 +40,9 @@ assignmentSubmissionsRouter.post(
       await user.save();
 
       // Return the xp gained
-      response.status(201).json(xpGain);
+      response
+        .status(201)
+        .json({ xpGain: xpGain, awardedBadges: response.awardedBadges });
     } catch (err) {
       console.log(err);
     }

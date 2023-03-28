@@ -20,8 +20,8 @@ export const Profile = () => {
       (nextLevelXp - previousLevelXp)) *
       100
   );
-  // Need to fix level zero bug
 
+  console.log(user);
   return (
     <>
       <Grid container spacing={0} alignItems="center" justifyContent="center">

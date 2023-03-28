@@ -147,6 +147,7 @@ const checkBadges = async (request, response, next) => {
   }
 
   // Loop through all badgesToBeAwarded and create awardedBadge
+  const awardedBadges = [];
   for (let i = 0; i < badgesToBeAwarded.length; i++) {
     const badgeId = badgesToBeAwarded[i];
 
@@ -158,8 +159,11 @@ const checkBadges = async (request, response, next) => {
     });
 
     try {
-      await awardedBadge.save();
+      const savedAwardedBadge = await awardedBadge.save();
       user.awardedBadgeIds.push(awardedBadge.id);
+      const populatedAwardedBadge = await savedAwardedBadge.populate("badgeId");
+      console.log("populated badge is", populatedAwardedBadge);
+      awardedBadges.push(populatedAwardedBadge);
     } catch (err) {
       console.log(err);
     }
@@ -170,7 +174,7 @@ const checkBadges = async (request, response, next) => {
     console.log(err);
   }
 
-  request.recentlyAwardedBadges = badgesToBeAwarded;
+  response.awardedBadges = awardedBadges;
 
   next();
 };

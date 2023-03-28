@@ -202,8 +202,17 @@ export const PlayBingo = ({ assignment }) => {
       hintUsed: hintUsed,
     };
     try {
-      const xpGained = await submissionsService.create(jwt, submission);
-      setUser({ ...user, experiencePoints: user.experiencePoints + xpGained });
+      const response = await submissionsService.create(jwt, submission);
+      console.log("Awarded badges gained is", response.awardedBadges);
+      console.log("XP gain is", response.xpGain);
+      const updatedUser = { ...user };
+      updatedUser.awardedBadgeIds = [
+        ...updatedUser.awardedBadgeIds,
+        ...response.awardedBadges,
+      ];
+      updatedUser.experiencePoints += response.xpGain;
+      setUser(updatedUser);
+      //2840xp
     } catch (err) {}
 
     // Delete session
