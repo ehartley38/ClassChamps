@@ -14,8 +14,10 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  Collapse,
   Divider,
   Grid,
+  IconButton,
   List,
   ListItem,
   ListItemAvatar,
@@ -38,6 +40,7 @@ const TabPanel = ({ value, index, children }) => {
 export const StudentClassroomView = () => {
   const location = useLocation();
   const classroomObject = location.state.classroom;
+  const isJoinError = location.state.isJoinError;
   const [assignments, setAssignments] = useState(); // This contains ALL assignments
   const [completedAssignments, setCompletedAssignments] = useState([]); // This contains ONLY completed assignments
   const [submissions, setSubmissions] = useState();
@@ -46,6 +49,9 @@ export const StudentClassroomView = () => {
   const [allSubmissions, setAllSubmissions] = useState({}); // This contains all submissions from all users for a given assignment
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [openSnackBar, setOpenSnackbar] = useState(true);
+  const [openSuccessfulJoin, setOpenSuccessfulJoin] = useState(
+    isJoinError === true || isJoinError === undefined ? false : true
+  ); // :/ If no join error, then set successful join message to open
   const { jwt, recentBadges, setRecentBadges } = useAuth();
   let navigate = useNavigate();
 
@@ -106,8 +112,27 @@ export const StudentClassroomView = () => {
     setRecentBadges([]);
   };
 
+  const handleSuccessfulJoinClose = () => {
+    setOpenSuccessfulJoin(false);
+  };
+
   return (
     <>
+      {/* Display successful join message */}
+      {!isJoinError ? (
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={openSuccessfulJoin}
+          onClose={handleSuccessfulJoinClose}
+        >
+          <Alert severity="success">
+            Successfully joined {classroomObject.roomName}!
+          </Alert>
+        </Snackbar>
+      ) : (
+        <></>
+      )}
+      {/* Display recently earned badges */}
       {recentBadges.length > 0 ? (
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -129,6 +154,7 @@ export const StudentClassroomView = () => {
       ) : (
         <></>
       )}
+      {/* Main content */}
       <h1>{classroomObject.roomName}</h1>
       <Grid container spacing={2}>
         <Grid item xs={8}>
