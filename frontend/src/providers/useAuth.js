@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }) => {
       try {
         const fetchedJwt = window.localStorage.getItem("loggedAppUser");
         if (jwt) {
-          setLoading(true);
           const fetchedUser = await usersService.getUserDetails(jwt);
           setUser(fetchedUser);
         } else if (fetchedJwt && jwt === undefined) {
@@ -51,7 +50,6 @@ export const AuthProvider = ({ children }) => {
         console.log(err);
       } finally {
         setLoadingInitial(false);
-        setLoading(false);
       }
     };
     fetchUser();
@@ -96,6 +94,7 @@ export const AuthProvider = ({ children }) => {
     window.localStorage.removeItem("loggedAppUser");
     setJwt(undefined);
     setUser(undefined);
+    setLoading(false);
   };
 
   /*

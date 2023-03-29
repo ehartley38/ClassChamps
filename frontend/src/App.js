@@ -20,7 +20,7 @@ import { Profile } from "./components/student/Profile";
 import { Badges } from "./components/student/homework/Badges";
 
 const App = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, loadingInitial } = useAuth();
 
   if (loading) {
     return <Loading />;
