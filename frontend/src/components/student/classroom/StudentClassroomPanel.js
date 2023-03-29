@@ -1,21 +1,56 @@
-import { Box, Button, Paper, Typography } from "@mui/material"
-import { useNavigate } from "react-router-dom"
+import { Box, Button, Paper, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../../providers/useAuth";
+import assignmentService from "../../../services/assignments";
 
 export const StudentClassroomPanel = ({ classroom }) => {
-    let navigate = useNavigate()
+  const [dueAssignments, setDueAssignments] = useState();
+  let navigate = useNavigate();
+  const { jwt } = useAuth();
 
-    const handleDetails = () => {
-        navigate(`${classroom.roomName}`, { state: { classroom } })
-    }
+  useEffect(() => {
+    // For each assignment in this classroom, check if it is due
+    const dueAssignments = classroom.assignmentIds.filter((assignment) => {
+      return new Date(assignment.dueDate) > new Date();
+    });
+    setDueAssignments(dueAssignments);
+  }, []);
 
-    return (
-        <>
-            <Paper elevation={3} sx={{ width: '31%' }}>
-                <Typography sx={{ m: 5 }}>{classroom.roomName}</Typography>
-                <Box textAlign='center'>
-                    <Button variant="contained" onClick={() => handleDetails()}>Enter</Button>
-                </Box>
-            </Paper>
-        </>
-    )
-}
+  const handleDetails = () => {
+    navigate(`${classroom.roomName}`, { state: { classroom } });
+  };
+
+  return (
+    <>
+      <Box sx={{ width: "31%" }}>
+        <Paper
+          elevation={3}
+          sx={{
+            height: 150,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box>
+            <Typography align="center" sx={{ pt: 2 }} variant="h6">
+              {classroom.roomName}
+            </Typography>
+            <Typography align="center">
+              {dueAssignments &&
+                `${dueAssignments.length} assignment${
+                  dueAssignments.length === 1 ? "" : "'s"
+                } due!`}
+            </Typography>
+          </Box>
+          <Box textAlign="center" sx={{ pb: 2 }}>
+            <Button variant="contained" onClick={() => handleDetails()}>
+              Enter
+            </Button>
+          </Box>
+        </Paper>
+      </Box>
+    </>
+  );
+};
