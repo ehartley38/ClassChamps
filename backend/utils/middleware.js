@@ -67,7 +67,16 @@ const checkBadges = async (request, response, next) => {
     "641da32b95a6c2ad1c5fd686",
   ];
 
+  const badgeXp = {
+    "641da25595a6c2ad1c5fd67c": 50, // First steps
+    "641da2af95a6c2ad1c5fd67e": 100, // Early bird
+    "641da2e095a6c2ad1c5fd680": 100, // Bingo Genius
+    "641da30f95a6c2ad1c5fd684": 50, // Perseverance Pro
+    "641da32b95a6c2ad1c5fd686": 50, // Mastermind
+  };
+
   const badgesToBeAwarded = [];
+  let totalBadgeXp = 0;
   // Used for loop instead of forEach because of
   // https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop
   // Loop through all existing badge ids
@@ -97,6 +106,8 @@ const checkBadges = async (request, response, next) => {
           });
           if (submissions.length === 0) {
             badgesToBeAwarded.push(existingBadgeId);
+            user.experiencePoints += badgeXp[existingBadgeId];
+            totalBadgeXp += badgeXp[existingBadgeId];
           }
         } catch (err) {
           console.log(err);
@@ -113,6 +124,8 @@ const checkBadges = async (request, response, next) => {
             WEEKMS
           ) {
             badgesToBeAwarded.push(existingBadgeId);
+            user.experiencePoints += badgeXp[existingBadgeId];
+            totalBadgeXp += badgeXp[existingBadgeId];
           }
         } catch (err) {
           console.log(err);
@@ -123,6 +136,8 @@ const checkBadges = async (request, response, next) => {
       case "641da2e095a6c2ad1c5fd680":
         if (body.mistakeMade === false) {
           badgesToBeAwarded.push(existingBadgeId);
+          user.experiencePoints += badgeXp[existingBadgeId];
+          totalBadgeXp += badgeXp[existingBadgeId];
         }
         break;
 
@@ -134,6 +149,8 @@ const checkBadges = async (request, response, next) => {
         });
         if (submissions.length === 1) {
           badgesToBeAwarded.push(existingBadgeId);
+          user.experiencePoints += badgeXp[existingBadgeId];
+          totalBadgeXp += badgeXp[existingBadgeId];
         }
         break;
 
@@ -141,6 +158,8 @@ const checkBadges = async (request, response, next) => {
       case "641da32b95a6c2ad1c5fd686":
         if (body.hintUsed === false) {
           badgesToBeAwarded.push(existingBadgeId);
+          user.experiencePoints += badgeXp[existingBadgeId];
+          totalBadgeXp += badgeXp[existingBadgeId];
         }
         break;
     }
@@ -162,7 +181,6 @@ const checkBadges = async (request, response, next) => {
       const savedAwardedBadge = await awardedBadge.save();
       user.awardedBadgeIds.push(awardedBadge.id);
       const populatedAwardedBadge = await savedAwardedBadge.populate("badgeId");
-      console.log("populated badge is", populatedAwardedBadge);
       awardedBadges.push(populatedAwardedBadge);
     } catch (err) {
       console.log(err);
@@ -174,6 +192,7 @@ const checkBadges = async (request, response, next) => {
     console.log(err);
   }
 
+  request.totalBadgeXp = totalBadgeXp;
   response.awardedBadges = awardedBadges;
 
   next();

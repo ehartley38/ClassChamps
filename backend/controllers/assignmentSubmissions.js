@@ -39,10 +39,12 @@ assignmentSubmissionsRouter.post(
       user.experiencePoints += xpGain;
       await user.save();
 
+      const totalXpGain = xpGain + request.totalBadgeXp;
+
       // Return the xp gained
       response
         .status(201)
-        .json({ xpGain: xpGain, awardedBadges: response.awardedBadges });
+        .json({ xpGain: totalXpGain, awardedBadges: response.awardedBadges });
     } catch (err) {
       console.log(err);
     }
