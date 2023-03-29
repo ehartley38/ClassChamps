@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 const AuthContext = createContext({
   user: undefined,
   jwt: undefined,
+  recentBadges: undefined,
   login: (username, password) => {},
   signUp: (username, password, name) => {},
   signOut: () => {},
@@ -22,6 +23,7 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [jwt, setJwt] = useState(undefined);
+  const [recentBadges, setRecentBadges] = useState([]);
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [loadingInitial, setLoadingInitial] = useState(true);
@@ -124,6 +126,8 @@ export const AuthProvider = ({ children }) => {
         loading,
         error,
         loadingInitial,
+        recentBadges,
+        setRecentBadges,
       }}
     >
       {!loadingInitial && children}

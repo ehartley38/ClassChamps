@@ -1,19 +1,12 @@
-import { useEffect } from "react"
-import { useLocation, useParams } from "react-router-dom"
-import { PlayBingo } from "./PlayBingo"
+import { useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { PlayBingo } from "./PlayBingo";
 
-export const HomeworkRouter = ({  }) => {
-    const location = useLocation()
-    const assignment = location.state.assignment
+export const HomeworkRouter = () => {
+  const location = useLocation();
 
-    if (assignment.quizId.quizType === 'Bingo') return (
-        <PlayBingo assignment={assignment} />
-    )
+  if (location.state.assignment.quizId.quizType === "Bingo")
+    return <PlayBingo assignment={location.state.assignment} />;
 
-    return (
-        <>
-        Quiz type not found
-        </> 
-    )
-
-}
+  return <>Quiz type not found</>;
+};

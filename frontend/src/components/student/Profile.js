@@ -21,7 +21,6 @@ export const Profile = () => {
       100
   );
 
-  console.log(user);
   return (
     <>
       <Grid container spacing={0} alignItems="center" justifyContent="center">

@@ -47,7 +47,7 @@ export const PlayBingo = ({ assignment }) => {
 
   const { width, height } = useWindowSize();
   let navigate = useNavigate();
-  const { jwt, user, setUser } = useAuth();
+  const { jwt, user, setUser, setRecentBadges } = useAuth();
 
   // Timer stuff
   const timeNow = new Date();
@@ -203,8 +203,6 @@ export const PlayBingo = ({ assignment }) => {
     };
     try {
       const response = await submissionsService.create(jwt, submission);
-      console.log("Awarded badges gained is", response.awardedBadges);
-      console.log("XP gain is", response.xpGain);
       const updatedUser = { ...user };
       updatedUser.awardedBadgeIds = [
         ...updatedUser.awardedBadgeIds,
@@ -212,12 +210,13 @@ export const PlayBingo = ({ assignment }) => {
       ];
       updatedUser.experiencePoints += response.xpGain;
       setUser(updatedUser);
+      setRecentBadges(response.awardedBadges);
       //2840xp
     } catch (err) {}
 
     // Delete session
     const response = await bingoSessionsService.deleteSession(jwt, session.id);
-    navigate(-1);
+    navigate(-1, { state: { awardedBadges: response.awardedBadges } });
   };
 
   const handleHintClick = () => {
