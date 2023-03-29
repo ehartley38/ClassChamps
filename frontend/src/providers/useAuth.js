@@ -93,7 +93,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signOut = () => {
-    console.log("signout");
     window.localStorage.removeItem("loggedAppUser");
     setJwt(undefined);
     setUser(undefined);

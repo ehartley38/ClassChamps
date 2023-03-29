@@ -99,35 +99,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
-// return (
-//     <div>
-//         <form onSubmit={handleLogin}>
-//             <div>
-//                 username
-//                 <input
-//                     type="text"
-//                     value={username}
-//                     name="Username"
-//                     onChange={({ target }) => setUsername(target.value)}
-//                 />
-//             </div>
-//             <div>
-//                 password
-//                 <input
-//                     type="password"
-//                     value={password}
-//                     name="Password"
-//                     onChange={({ target }) => setPassword(target.value)}
-//                 />
-//             </div>
-//             <button disabled={loading} type="submit">Sign in</button>
-//         </form>
-//         <div>
-//             Dont have an account?
-//             <button>
-//                 <NavLink to='/'>Click here</NavLink>
-//             </button>
-//         </div>
-//     </div>
-// )
