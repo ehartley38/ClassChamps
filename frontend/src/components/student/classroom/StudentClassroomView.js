@@ -74,7 +74,7 @@ export const StudentClassroomView = () => {
     fetchClassroomData();
   }, []);
 
-  // Update the completed assignmetns list
+  // Update the completed assignments list
   useEffect(() => {
     const completed = [];
     if (assignments && submissions) {
@@ -101,7 +101,6 @@ export const StudentClassroomView = () => {
 
   const handlePlay = () => {
     const assignment = getAssignment(currentAssignmentId);
-    const test = 6;
     navigate(`homework/${assignment.id}`, {
       state: { assignment: assignment },
     });
@@ -180,7 +179,6 @@ export const StudentClassroomView = () => {
                 />
               );
             })}
-          <h3>Overdue</h3>
           <h3>Complete</h3>
           {completedAssignments &&
             completedAssignments.map((assignment) => (

@@ -3,10 +3,12 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  Grid,
   IconButton,
   Paper,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../../providers/useAuth";
 import assignmentService from "../../../services/assignments";
@@ -17,6 +19,9 @@ export const Assignment = ({
   currentAssignmentId,
   setLeaderboardData,
 }) => {
+  const [isOverdue, setIsOverdue] = useState(
+    new Date(assignment.dueDate) < new Date()
+  );
   const { jwt } = useAuth();
 
   const handleClick = async () => {
@@ -41,7 +46,26 @@ export const Assignment = ({
     >
       <CardActionArea onClick={handleClick}>
         <CardContent>
-          <Typography>{assignment.assignmentName}</Typography>
+          <Grid container>
+            <Grid item xs={6}>
+              <Typography>{assignment.assignmentName}</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid container justifyContent="flex-end">
+                {isOverdue ? (
+                  <Typography color="red">{`Overdue: ${assignment.dueDate.substring(
+                    0,
+                    10
+                  )}`}</Typography>
+                ) : (
+                  <Typography>{`Due: ${assignment.dueDate.substring(
+                    0,
+                    10
+                  )}`}</Typography>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
         </CardContent>
       </CardActionArea>
     </Card>

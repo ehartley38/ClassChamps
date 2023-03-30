@@ -44,7 +44,9 @@ assignmentRouter.get(
     const classroomId = request.params.classroomId;
     const assignments = await Assignment.find({
       classroomId: classroomId,
-    }).populate("quizId", "quizType");
+    })
+      .populate("quizId", "quizType")
+      .sort({ dueDate: 1 });
 
     response.json(assignments);
   }

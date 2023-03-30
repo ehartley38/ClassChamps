@@ -37,12 +37,7 @@ export const StudentClassroomPanel = ({ classroom }) => {
             <Typography align="center" sx={{ pt: 2 }} variant="h6">
               {classroom.roomName}
             </Typography>
-            <Typography align="center">
-              {dueAssignments &&
-                `${dueAssignments.length} assignment${
-                  dueAssignments.length === 1 ? "" : "'s"
-                } due!`}
-            </Typography>
+            <Typography align="center"></Typography>
           </Box>
           <Box textAlign="center" sx={{ pb: 2 }}>
             <Button variant="contained" onClick={() => handleDetails()}>
