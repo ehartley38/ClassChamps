@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../../providers/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import assignmentService from "../../../services/assignments";
 
 export const Assignment = ({
@@ -18,6 +18,7 @@ export const Assignment = ({
   setCurrentAssignmentId,
   currentAssignmentId,
   setLeaderboardData,
+  complete,
 }) => {
   const [isOverdue, setIsOverdue] = useState(
     new Date(assignment.dueDate) < new Date()
@@ -52,7 +53,9 @@ export const Assignment = ({
             </Grid>
             <Grid item xs={6}>
               <Grid container justifyContent="flex-end">
-                {isOverdue ? (
+                {complete ? (
+                  <></>
+                ) : isOverdue ? (
                   <Typography color="red">{`Overdue: ${assignment.dueDate.substring(
                     0,
                     10

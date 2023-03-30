@@ -10,7 +10,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { FixedSizeList } from "react-window";
-import useAuth from "../../../providers/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import classroomService from "../../../services/classrooms";
 import assignmentService from "../../../services/assignments";
 import quizzesService from "../../../services/quizzes";

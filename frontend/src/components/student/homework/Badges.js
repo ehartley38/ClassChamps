@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import useAuth from "../../../providers/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import { BadgeCard } from "./BadgeCard";
 import badgesService from "../../../services/badges";
 import { UnearnedBadgeCard } from "./UnearnedBadgeCard";

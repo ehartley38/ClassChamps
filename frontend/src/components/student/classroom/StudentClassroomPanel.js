@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../../providers/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import assignmentService from "../../../services/assignments";
 
 export const StudentClassroomPanel = ({ classroom }) => {

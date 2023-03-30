@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useWindowSize from "react-use/lib/useWindowSize";
-import useAuth from "../../../providers/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import bingoQuestionsService from "../../../services/bingoQuestions";
 import bingoSessionsService from "../../../services/bingoSessions";
 import submissionsService from "../../../services/assignmentSubmissions";
@@ -21,6 +21,7 @@ import { Loading } from "../../Loading";
 import { BingoAnswer } from "./BingoAnswer";
 import { Timer } from "./Timer";
 import Confetti from "react-confetti";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 const modalStyle = {
   position: "absolute",
@@ -177,6 +178,9 @@ export const PlayBingo = ({ assignment }) => {
       setShowHint(false);
     } else {
       // Handle incorrect
+      enqueueSnackbar("Incorrect", {
+        variant: "warning",
+      });
       setMistakeMade(true);
     }
   };
@@ -326,6 +330,9 @@ export const PlayBingo = ({ assignment }) => {
             <Confetti width={width} height={height} />
           </>
         )}
+        <Box>
+          <SnackbarProvider />
+        </Box>
       </Container>
     </>
   );

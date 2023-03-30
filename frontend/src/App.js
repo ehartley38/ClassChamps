@@ -10,7 +10,7 @@ import { TeacherDashboard } from "./components/teacher/TeacherDashbaord";
 import { StudentClassroomView } from "./components/student/classroom/StudentClassroomView";
 import { Container } from "@mui/material";
 import { NavBar } from "./components/NavBar";
-import useAuth from "./providers/useAuth";
+import useAuth from "./hooks/useAuth";
 import { Loading } from "./components/Loading";
 import { Homework } from "./components/teacher/homework/Homework";
 import { CreateHomework } from "./components/teacher/homework/CreateHomework";

@@ -18,8 +18,6 @@ const AuthContext = createContext({
   signOut: () => {},
 });
 
-//https://dev.to/finiam/predictable-react-authentication-with-the-context-api-g10
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [jwt, setJwt] = useState(undefined);
@@ -97,21 +95,6 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
-  /*
-    const memoedValue = useMemo(
-        () => ({
-            user,
-            loading,
-            error,
-            login,
-            signUp,
-            signOut,
-            jwt
-        }),
-        [user, loading, error, jwt]
-    );
-    */
-
   return (
     <AuthContext.Provider
       value={{
@@ -133,6 +116,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export default function useAuth() {
-  return useContext(AuthContext);
-}
+export default AuthContext;

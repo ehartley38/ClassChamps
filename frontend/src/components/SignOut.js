@@ -1,9 +1,7 @@
 import { Box, Button } from "@mui/material";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../providers/useAuth";
-import { UserContext } from "../providers/UserProvider";
-import classroomService from "../services/classrooms";
+import useAuth from "../hooks/useAuth";
 
 export const SignOut = () => {
   let navigate = useNavigate();

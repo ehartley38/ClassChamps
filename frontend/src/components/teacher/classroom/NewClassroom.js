@@ -1,44 +1,42 @@
-import { useState } from "react"
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import classroomService from '../../../services/classrooms'
-import useAuth from "../../../providers/useAuth";
-
+import classroomService from "../../../services/classrooms";
+import useAuth from "../../../hooks/useAuth";
 
 export const NewClassroom = () => {
-    const [roomName, setRoomName] = useState('')
-    const { jwt } = useAuth()
+  const [roomName, setRoomName] = useState("");
+  const { jwt } = useAuth();
 
-    let navigate = useNavigate()
+  let navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        try {
-            // Add the classroom
-            const returnedClassroom = await classroomService.create(jwt, {
-                roomName: roomName
-            })
+    try {
+      // Add the classroom
+      const returnedClassroom = await classroomService.create(jwt, {
+        roomName: roomName,
+      });
 
-            setRoomName('')
-            navigate('/teacher/classrooms')
-        } catch (err) {
-            console.log(err)
-        }
-
+      setRoomName("");
+      navigate("/teacher/classrooms");
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    return (
-        <div>
-            <h1>Create new classroom</h1>
-            <form onSubmit={handleSubmit}>
-                Room name
-                <input
-                    id="roomname"
-                    value={roomName}
-                    onChange={({ target }) => setRoomName(target.value)}
-                />
-                <button type="submit">Create Classroom</button>
-            </form>
-        </div>
-    )
-}
+  return (
+    <div>
+      <h1>Create new classroom</h1>
+      <form onSubmit={handleSubmit}>
+        Room name
+        <input
+          id="roomname"
+          value={roomName}
+          onChange={({ target }) => setRoomName(target.value)}
+        />
+        <button type="submit">Create Classroom</button>
+      </form>
+    </div>
+  );
+};

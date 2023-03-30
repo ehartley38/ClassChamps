@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import useAuth from "../../providers/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { calculateLevel } from "../../utils/tools";
 import ProgressBar from "@ramonak/react-progress-bar";
 import CountUp from "react-countup";

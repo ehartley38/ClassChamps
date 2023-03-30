@@ -2,26 +2,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import classroomService from "../../../services/classrooms";
 import assignmentService from "../../../services/assignments";
 import submissionService from "../../../services/assignmentSubmissions";
-import useAuth from "../../../providers/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import { useState, useEffect } from "react";
 import { Assignment } from "./Assignment";
 import {
   Alert,
-  AppBar,
-  Avatar,
   Box,
   Button,
   Card,
-  CardActionArea,
-  CardContent,
-  Collapse,
-  Divider,
   Grid,
-  IconButton,
   List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Snackbar,
   Tab,
   Tabs,
@@ -141,6 +131,7 @@ export const StudentClassroomView = () => {
           <Alert
             severity="success"
             onClick={() => {
+              setRecentBadges([]);
               navigate("/profile/badges");
             }}
             sx={{ cursor: "pointer" }}
@@ -188,6 +179,7 @@ export const StudentClassroomView = () => {
                 setCurrentAssignmentId={setCurrentAssignmentId}
                 currentAssignmentId={currentAssignmentId}
                 setLeaderboardData={setLeaderboardData}
+                complete={true}
               />
             ))}
         </Grid>

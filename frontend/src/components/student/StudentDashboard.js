@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { JoinRoom } from "./JoinRoom";
 import { StudentClassroomPanel } from "./classroom/StudentClassroomPanel";
 import { Box, Container, Grid, Typography } from "@mui/material";
-import useAuth from "../../providers/useAuth";
+import useAuth from "../../hooks/useAuth";
 import classroomService from "../../services/classrooms";
 import { Loading } from "../Loading";
 

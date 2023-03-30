@@ -1,47 +1,47 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import useAuth, { AuthProvider } from './providers/useAuth'
-import { BrowserRouter } from 'react-router-dom'
-import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
-import { LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { BrowserRouter } from "react-router-dom";
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AuthProvider } from "./context/AuthProvider";
 
 const theme = createTheme({
-    palette: {
-        primary: {
-            main: "#013e87",
-        },
-        secondary: {
-            main: "#2e74c9",
-        },
+  palette: {
+    primary: {
+      main: "#013e87",
     },
-    typography: {
-        h1: {
-            fontSize: "3rem",
-            fontWeight: 600,
-        },
-        h2: {
-            fontSize: "1.75rem",
-            fontWeight: 600,
-        },
-        h3: {
-            fontSize: "1.5rem",
-            fontWeight: 600,
-        },
+    secondary: {
+      main: "#2e74c9",
     },
-})
+  },
+  typography: {
+    h1: {
+      fontSize: "3rem",
+      fontWeight: 600,
+    },
+    h2: {
+      fontSize: "1.75rem",
+      fontWeight: 600,
+    },
+    h3: {
+      fontSize: "1.5rem",
+      fontWeight: 600,
+    },
+  },
+});
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-        <BrowserRouter>
-            <AuthProvider>
-                <CssBaseline />
-                <ThemeProvider theme={theme}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <App />
-                    </LocalizationProvider>
-                </ThemeProvider>
-            </AuthProvider>
-        </BrowserRouter>
-)
+  <BrowserRouter>
+    <AuthProvider>
+      <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <App />
+        </LocalizationProvider>
+      </ThemeProvider>
+    </AuthProvider>
+  </BrowserRouter>
+);

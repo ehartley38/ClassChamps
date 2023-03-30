@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
-import usersService from "../services/users";
-import { UserContext } from "../providers/UserProvider";
+
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -14,7 +13,7 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import useAuth from "../providers/useAuth";
+import useAuth from "../hooks/useAuth";
 
 export const SignUp = () => {
   const [name, setName] = useState("");
