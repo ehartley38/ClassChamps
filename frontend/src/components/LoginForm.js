@@ -1,16 +1,12 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import useAuth from "../providers/useAuth";
+import useAuth from "../hooks/useAuth";
 import {
   Box,
   Button,
   Container,
-  createTheme,
   Grid,
-  Link,
-  Paper,
   TextField,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
 
@@ -19,7 +15,7 @@ import {
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { login, loading } = useAuth();
+  const { login } = useAuth();
 
   let navigate = useNavigate();
 

@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
 import usersService from "../services/users";
-import { UserContext } from "../providers/UserProvider";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -14,14 +13,14 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import useAuth from "../providers/useAuth";
+import useAuth from "../hooks/useAuth";
 
 export const SignUp = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
-  const { signUp } = useAuth();
+  //const { signUp } = useAuth();
 
   let navigate = useNavigate();
 
@@ -44,7 +43,7 @@ export const SignUp = () => {
     }
 
     try {
-      signUp(username, password, name);
+      //signUp(username, password, name);
 
       setName("");
       setUsername("");

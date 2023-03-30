@@ -1,5 +1,4 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import useAuth from "../../providers/useAuth";
 import { calculateLevel } from "../../utils/tools";
 import ProgressBar from "@ramonak/react-progress-bar";
 import CountUp from "react-countup";
@@ -7,16 +6,17 @@ import { useEffect } from "react";
 import usersService from "../../services/users";
 import { useNavigate } from "react-router-dom";
 import { BadgeCard } from "./homework/BadgeCard";
+import useAuth from "../../hooks/useAuth";
 
 export const Profile = () => {
-  const { user } = useAuth();
+  const { userDetails } = useAuth();
   const [level, previousLevelXp, nextLevelXp] = calculateLevel(
-    user.experiencePoints
+    userDetails.experiencePoints
   );
   let navigate = useNavigate();
 
   const percentage = Math.floor(
-    ((user.experiencePoints - previousLevelXp) /
+    ((userDetails.experiencePoints - previousLevelXp) /
       (nextLevelXp - previousLevelXp)) *
       100
   );
@@ -26,13 +26,13 @@ export const Profile = () => {
       <Grid container spacing={0} alignItems="center" justifyContent="center">
         <Grid item xs={8}>
           <Typography variant="h3" textAlign={"center"} sx={{ mt: 1 }}>
-            {`@${user.username}`}
+            {`@${userDetails.username}`}
           </Typography>
           <Box className="circle" sx={{ mt: 5, mb: -2 }}>
             <span className="number">{level}</span>
           </Box>
           <Box sx={{ textAlign: "center", mt: 0 }}>
-            <CountUp end={user.experiencePoints} duration={1} /> XP
+            <CountUp end={userDetails.experiencePoints} duration={1} /> XP
           </Box>
           <Box sx={{ mt: 1 }}>
             <ProgressBar
@@ -51,7 +51,7 @@ export const Profile = () => {
         </Grid>
       </Grid>
 
-      {user.awardedBadgeIds.length === 0 ? (
+      {userDetails.awardedBadgeIds.length === 0 ? (
         <>
           <Grid container>
             <Grid item xs={12}>
@@ -80,8 +80,8 @@ export const Profile = () => {
               }}
             >
               {/* Display up to three most recently awarded badges */}
-              {user.awardedBadgeIds &&
-                user.awardedBadgeIds
+              {userDetails.awardedBadgeIds &&
+                userDetails.awardedBadgeIds
                   .reverse()
                   .slice(0, 3)
                   .map((awardedBadge) => (

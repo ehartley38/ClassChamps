@@ -10,30 +10,37 @@ import { TeacherDashboard } from "./components/teacher/TeacherDashbaord";
 import { StudentClassroomView } from "./components/student/classroom/StudentClassroomView";
 import { Container } from "@mui/material";
 import { NavBar } from "./components/NavBar";
-import useAuth from "./providers/useAuth";
 import { Loading } from "./components/Loading";
 import { Homework } from "./components/teacher/homework/Homework";
 import { CreateHomework } from "./components/teacher/homework/CreateHomework";
 import { HomeworkRouter } from "./components/student/homework/HomeworkRouter";
+import { Unauthorized } from "./components/Unauthorized";
+import { RequireAuth } from "./components/RequireAuth";
 import "./App.css";
 import { Profile } from "./components/student/Profile";
 import { Badges } from "./components/student/homework/Badges";
+import useAuth from "./hooks/useAuth";
+
+const ROLES = { Student: 2001, Teacher: 3001 };
 
 const App = () => {
-  const { user, loading, loadingInitial } = useAuth();
+  const { userDetails } = useAuth();
 
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (user) {
+  if (userDetails) {
     return (
       <>
         <NavBar />
         <Container>
           <Routes>
             <Route path="/">
-              <Route index element={<StudentDashboard />} />
+              {/* Public Routes */}
+              <Route path="unauthorized" element={<Unauthorized />} />
+
+              {/* Private Routes */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.Teacher]} />}>
+                <Route index element={<StudentDashboard />} />
+              </Route>
+
               <Route path=":roomName">
                 <Route index element={<StudentClassroomView />} />
                 <Route

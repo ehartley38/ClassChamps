@@ -1,13 +1,13 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import useAuth from "../../../providers/useAuth";
 import { BadgeCard } from "./BadgeCard";
 import badgesService from "../../../services/badges";
 import { UnearnedBadgeCard } from "./UnearnedBadgeCard";
 import firstSteps from "../../../assets/images/firstSteps.png";
+import useAuth from "../../../hooks/useAuth";
 
 export const Badges = () => {
-  const { user } = useAuth();
+  const { userDetails } = useAuth();
   const [allBadges, setAllBadges] = useState([]); // This contains all badges available
   const [unearnedBadges, setUnearnedBadges] = useState([]); // This contains all badges yet to be earnt by a user
 
@@ -16,7 +16,7 @@ export const Badges = () => {
       const allBadges = await badgesService.getAll();
       setAllBadges(allBadges);
 
-      const userBadgeIds = user.awardedBadgeIds.map(
+      const userBadgeIds = userDetails.awardedBadgeIds.map(
         (awardedBadge) => awardedBadge.badgeId.id
       );
       const unearnedBadges = allBadges.filter(
@@ -44,8 +44,8 @@ export const Badges = () => {
             }}
           >
             {/* Display awarded badges first */}
-            {user.awardedBadgeIds &&
-              user.awardedBadgeIds.map((awardedBadge) => (
+            {userDetails.awardedBadgeIds &&
+              userDetails.awardedBadgeIds.map((awardedBadge) => (
                 <BadgeCard
                   key={awardedBadge.id}
                   awardedBadge={awardedBadge}

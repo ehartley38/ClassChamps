@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../../providers/useAuth";
 import assignmentService from "../../../services/assignments";
+import useAuth from "../../../hooks/useAuth";
 
 export const Assignment = ({
   assignment,
@@ -22,14 +22,14 @@ export const Assignment = ({
   const [isOverdue, setIsOverdue] = useState(
     new Date(assignment.dueDate) < new Date()
   );
-  const { jwt } = useAuth();
+  const { auth } = useAuth();
 
   const handleClick = async () => {
     setCurrentAssignmentId(assignment.id);
     try {
       // Need to optimise!
       const leaderboardData = await assignmentService.getLeaderboardData(
-        jwt,
+        auth.jwt,
         assignment.id
       );
       const formattedData = leaderboardData.map((a) => a.submission);

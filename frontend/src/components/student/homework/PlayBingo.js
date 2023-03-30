@@ -13,7 +13,6 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useWindowSize from "react-use/lib/useWindowSize";
-import useAuth from "../../../providers/useAuth";
 import bingoQuestionsService from "../../../services/bingoQuestions";
 import bingoSessionsService from "../../../services/bingoSessions";
 import submissionsService from "../../../services/assignmentSubmissions";
@@ -21,6 +20,7 @@ import { Loading } from "../../Loading";
 import { BingoAnswer } from "./BingoAnswer";
 import { Timer } from "./Timer";
 import Confetti from "react-confetti";
+import useAuth from "../../../hooks/useAuth";
 
 const modalStyle = {
   position: "absolute",
@@ -47,7 +47,7 @@ export const PlayBingo = ({ assignment }) => {
 
   const { width, height } = useWindowSize();
   let navigate = useNavigate();
-  const { jwt, user, setUser, setRecentBadges } = useAuth();
+  const { auth, userDetails, setUser, setRecentBadges } = useAuth();
 
   // Timer stuff
   const timeNow = new Date();
@@ -57,7 +57,7 @@ export const PlayBingo = ({ assignment }) => {
   useEffect(() => {
     const initialize = async () => {
       // Check if session exists for this particular assignment
-      const sessions = await bingoSessionsService.getUsersSessions(jwt);
+      const sessions = await bingoSessionsService.getUsersSessions(auth.jwt);
       const count = sessions.filter(
         (session) => session.assignment === assignment.id
       ).length;
@@ -66,7 +66,7 @@ export const PlayBingo = ({ assignment }) => {
       if (count === 0) {
         // Get all questions for this quiz
         const questionData = await bingoQuestionsService.getAllByQuiz(
-          jwt,
+          auth.jwt,
           assignment.quizId.id
         );
         const questions = questionData.map((obj) => {
@@ -85,7 +85,7 @@ export const PlayBingo = ({ assignment }) => {
 
         // Create the sesssion
         const savedSession = await bingoSessionsService.createSession(
-          jwt,
+          auth.jwt,
           newSession
         );
 
@@ -183,7 +183,7 @@ export const PlayBingo = ({ assignment }) => {
 
   const handleSave = async () => {
     const response = await bingoSessionsService.updateQuestions(
-      jwt,
+      auth.jwt,
       session.id,
       questions,
       mistakeMade,
@@ -202,8 +202,8 @@ export const PlayBingo = ({ assignment }) => {
       hintUsed: hintUsed,
     };
     try {
-      const response = await submissionsService.create(jwt, submission);
-      const updatedUser = { ...user };
+      const response = await submissionsService.create(auth.jwt, submission);
+      const updatedUser = { ...userDetails };
       updatedUser.awardedBadgeIds = [
         ...updatedUser.awardedBadgeIds,
         ...response.awardedBadges,
@@ -215,7 +215,10 @@ export const PlayBingo = ({ assignment }) => {
     } catch (err) {}
 
     // Delete session
-    const response = await bingoSessionsService.deleteSession(jwt, session.id);
+    const response = await bingoSessionsService.deleteSession(
+      auth.jwt,
+      session.id
+    );
     navigate(-1, { state: { awardedBadges: response.awardedBadges } });
   };
 

@@ -2,7 +2,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import classroomService from "../../../services/classrooms";
 import assignmentService from "../../../services/assignments";
 import submissionService from "../../../services/assignmentSubmissions";
-import useAuth from "../../../providers/useAuth";
 import { useState, useEffect } from "react";
 import { Assignment } from "./Assignment";
 import {
@@ -30,6 +29,7 @@ import {
 import { convertMilliseconds } from "../../../utils/tools";
 import { LeaderboardItem } from "./LeaderboardItem";
 import { FixedSizeList } from "react-window";
+import useAuth from "../../../hooks/useAuth";
 
 const TabPanel = ({ value, index, children }) => {
   return (
@@ -52,17 +52,18 @@ export const StudentClassroomView = () => {
   const [openSuccessfulJoin, setOpenSuccessfulJoin] = useState(
     isJoinError === true || isJoinError === undefined ? false : true
   ); // :/ If no join error, then set successful join message to open
-  const { jwt, recentBadges, setRecentBadges } = useAuth();
+  //const { jwt, recentBadges, setRecentBadges } = useAuth();
+  const { auth, recentBadges } = useAuth();
   let navigate = useNavigate();
 
   useEffect(() => {
     const fetchClassroomData = async () => {
       try {
         const assignmentData = await assignmentService.getByClassroom(
-          jwt,
+          auth.jwt,
           classroomObject.id
         );
-        const submissionData = await submissionService.getAllByUser(jwt);
+        const submissionData = await submissionService.getAllByUser(auth.jwt);
 
         setAssignments(assignmentData);
         setSubmissions(submissionData);
@@ -108,7 +109,7 @@ export const StudentClassroomView = () => {
 
   const handleSnackClose = () => {
     setOpenSnackbar(false);
-    setRecentBadges([]);
+    //setRecentBadges([]);
   };
 
   const handleSuccessfulJoinClose = () => {

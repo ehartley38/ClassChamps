@@ -10,12 +10,12 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { FixedSizeList } from "react-window";
-import useAuth from "../../../providers/useAuth";
 import classroomService from "../../../services/classrooms";
 import assignmentService from "../../../services/assignments";
 import quizzesService from "../../../services/quizzes";
 import { Student } from "./Student";
 import { HomeworkPanel } from "./HomeworkPanel";
+import useAuth from "../../../hooks/useAuth";
 
 export const Row = ({ index, style, quizList, handleClick, selectedIndex }) => {
   return (
@@ -41,19 +41,19 @@ export const ClassroomView = () => {
   const [dueDate, setDueDate] = useState("");
   const [activeHomework, setActiveHomework] = useState([]);
   const [assignmentName, setAssignmentName] = useState("");
-  const { jwt } = useAuth();
+  const { auth } = useAuth();
 
   useEffect(() => {
     const fetchClassroomData = async () => {
       try {
         const classroomData = await classroomService.getById(
-          jwt,
+          auth.jwt,
           classroomObject.id
         );
         setClassroom(classroomData);
 
         const assignmentData = await assignmentService.getByClassroom(
-          jwt,
+          auth.jwt,
           classroomObject.id
         );
         setActiveHomework(assignmentData);
@@ -68,7 +68,7 @@ export const ClassroomView = () => {
   const handleGenerate = async () => {
     try {
       const updatedClassroom = await classroomService.generateClassCode(
-        jwt,
+        auth.jwt,
         classroomObject
       );
       setClassroom(updatedClassroom);
@@ -79,7 +79,7 @@ export const ClassroomView = () => {
 
   const handleAssignToggle = async () => {
     setAssignHomework(true);
-    const quizList = await quizzesService.getAll(jwt);
+    const quizList = await quizzesService.getAll(auth.jwt);
 
     setQuizList(quizList);
   };
@@ -106,7 +106,7 @@ export const ClassroomView = () => {
     };
 
     try {
-      const response = await assignmentService.create(jwt, newAssignment);
+      const response = await assignmentService.create(auth.jwt, newAssignment);
       setActiveHomework([...activeHomework, response]);
     } catch (err) {
       console.log(err);

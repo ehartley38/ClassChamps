@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../providers/useAuth";
-import { UserContext } from "../../providers/UserProvider";
+import useAuth from "../../context/useAuth";
+import { UserContext } from "../../context/UserProvider";
 import classroomService from "../../services/classrooms";
 
 const modalStyle = {
