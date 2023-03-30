@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { JoinRoom } from "./JoinRoom";
 import { StudentClassroomPanel } from "./classroom/StudentClassroomPanel";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Skeleton, Typography } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
 import classroomService from "../../services/classrooms";
 import { Loading } from "../Loading";
@@ -40,7 +40,7 @@ export const StudentDashboard = () => {
         >
           Student Dashboard
         </Typography>
-        Welcome {user.name}
+        <Typography variant="h6">Welcome {user.name}</Typography>
         <Typography variant="h3" sx={{ color: "secondary.main" }}>
           Your classrooms
         </Typography>
@@ -54,13 +54,30 @@ export const StudentDashboard = () => {
                 gap: 4,
               }}
             >
-              {classrooms.map((classroom) => (
-                <StudentClassroomPanel
-                  key={classroom.id}
-                  classroom={classroom}
-                />
-              ))}
-              <JoinRoom />
+              {classrooms ? (
+                <>
+                  {classrooms.map((classroom) => (
+                    <StudentClassroomPanel
+                      key={classroom.id}
+                      classroom={classroom}
+                    />
+                  ))}
+                  <JoinRoom />
+                </>
+              ) : (
+                <>
+                  <Box sx={{ width: "31%" }}>
+                    <Skeleton variant="rounded" height={150} sx={{ m: 2 }} />
+                  </Box>
+
+                  <Box sx={{ width: "31%" }}>
+                    <Skeleton variant="rounded" height={150} sx={{ m: 2 }} />
+                  </Box>
+                  <Box sx={{ width: "31%" }}>
+                    <Skeleton variant="rounded" height={150} sx={{ m: 2 }} />
+                  </Box>
+                </>
+              )}
             </Box>
           </Grid>
         </Grid>

@@ -31,7 +31,7 @@ export const Badges = () => {
     <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h2" sx={{ mt: 2 }}>
+          <Typography variant="h2" sx={{ color: "secondary.main", mt: 2 }}>
             My Badges
           </Typography>
           <Box

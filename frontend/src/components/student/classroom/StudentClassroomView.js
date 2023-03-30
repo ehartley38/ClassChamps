@@ -12,6 +12,7 @@ import {
   Card,
   Grid,
   List,
+  Skeleton,
   Snackbar,
   Tab,
   Tabs,
@@ -145,11 +146,12 @@ export const StudentClassroomView = () => {
         <></>
       )}
       {/* Main content */}
-      <h1>{classroomObject.roomName}</h1>
+      <Typography variant="h2" sx={{ color: "primary.main", mt: 2 }}>
+        {classroomObject.roomName}
+      </Typography>
       <Grid container spacing={2}>
         <Grid item xs={8}>
-          <h3>Due</h3>
-          {assignments &&
+          {assignments ? (
             assignments.map((assignment) => {
               // If the assignment has already been submitted, dont render here.
               if (
@@ -158,30 +160,55 @@ export const StudentClassroomView = () => {
                   (submission) => submission.assignment.id === assignment.id
                 )
               ) {
-                return;
+                return <></>;
               }
               return (
+                <>
+                  <Typography
+                    variant="h3"
+                    sx={{ color: "secondary.main", mt: 2 }}
+                  >
+                    Due
+                  </Typography>
+                  <Assignment
+                    key={assignment.id}
+                    assignment={assignment}
+                    setCurrentAssignmentId={setCurrentAssignmentId}
+                    currentAssignmentId={currentAssignmentId}
+                    setLeaderboardData={setLeaderboardData}
+                  />
+                </>
+              );
+            })
+          ) : (
+            <>
+              <Skeleton variant="rounded" width={40} sx={{ m: 2 }} />
+              <Skeleton variant="rounded" height={50} sx={{ m: 2 }} />{" "}
+            </>
+          )}
+          {assignments ? (
+            <>
+              <Typography variant="h3" sx={{ color: "secondary.main", mt: 2 }}>
+                Complete
+              </Typography>
+              {completedAssignments.map((assignment) => (
                 <Assignment
                   key={assignment.id}
                   assignment={assignment}
                   setCurrentAssignmentId={setCurrentAssignmentId}
                   currentAssignmentId={currentAssignmentId}
                   setLeaderboardData={setLeaderboardData}
+                  complete={true}
                 />
-              );
-            })}
-          <h3>Complete</h3>
-          {completedAssignments &&
-            completedAssignments.map((assignment) => (
-              <Assignment
-                key={assignment.id}
-                assignment={assignment}
-                setCurrentAssignmentId={setCurrentAssignmentId}
-                currentAssignmentId={currentAssignmentId}
-                setLeaderboardData={setLeaderboardData}
-                complete={true}
-              />
-            ))}
+              ))}
+            </>
+          ) : (
+            <>
+              <Skeleton variant="rounded" width={90} sx={{ m: 2 }} />
+              <Skeleton variant="rounded" height={50} sx={{ m: 2 }} />
+              <Skeleton variant="rounded" height={50} sx={{ m: 2 }} />
+            </>
+          )}
         </Grid>
         <Grid item xs={4}>
           {currentAssignmentId ? (
@@ -208,18 +235,38 @@ export const StudentClassroomView = () => {
               <Tab label="Your Submissions" />
             </Tabs>
           </Box>
+          {/* Leaderboard */}
           <TabPanel value={tabValue} index={0}>
             <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-              {leaderboardData &&
+              {leaderboardData ? (
                 leaderboardData.map((submission, index) => (
                   <LeaderboardItem
                     key={index}
                     submission={submission}
                     index={index}
                   />
-                ))}
+                ))
+              ) : (
+                <>
+                  <Skeleton
+                    variant="rounded"
+                    height={10}
+                    width={"50%"}
+                    sx={{ mt: 1 }}
+                  />
+                  <Skeleton sx={{}} />
+                  <Skeleton
+                    variant="rounded"
+                    height={10}
+                    width={"50%"}
+                    sx={{ mt: 1 }}
+                  />
+                  <Skeleton sx={{}} />
+                </>
+              )}
             </List>
           </TabPanel>
+          {/* Submissions */}
           <TabPanel value={tabValue} index={1}>
             {submissions &&
               submissions.map((submission) => {
@@ -239,6 +286,7 @@ export const StudentClassroomView = () => {
                     </Card>
                   );
                 }
+                return <></>;
               })}
           </TabPanel>
         </Grid>

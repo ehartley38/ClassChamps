@@ -1,10 +1,14 @@
-import { Box, CircularProgress, Grid } from "@mui/material"
+import { Box, CircularProgress, Grid } from "@mui/material";
 
 export const Loading = () => {
-    return (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <CircularProgress />
-        </div>
-
-    )
-}
+  return (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+    >
+      <CircularProgress size={80} thickness={3} />
+    </Box>
+  );
+};

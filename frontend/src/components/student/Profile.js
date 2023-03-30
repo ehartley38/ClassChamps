@@ -69,7 +69,9 @@ export const Profile = () => {
       ) : (
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h3">Latest Badges</Typography>
+            <Typography variant="h3" sx={{ color: "secondary.main" }}>
+              Latest Badges
+            </Typography>
             <Box
               sx={{
                 display: "flex",

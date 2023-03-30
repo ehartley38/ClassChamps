@@ -9,6 +9,9 @@ import { AuthProvider } from "./context/AuthProvider";
 
 const theme = createTheme({
   palette: {
+    background: {
+      default: "#eeeeee",
+    },
     primary: {
       main: "#013e87",
     },
@@ -17,6 +20,7 @@ const theme = createTheme({
     },
   },
   typography: {
+    fontFamily: "Rubik",
     h1: {
       fontSize: "3rem",
       fontWeight: 600,
@@ -36,8 +40,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <AuthProvider>
-      <CssBaseline />
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <App />
         </LocalizationProvider>
