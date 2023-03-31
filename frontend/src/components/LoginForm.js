@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import {
   Box,
@@ -13,25 +13,33 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
+import loginService from "../services/login";
 
 // https://github.com/mui/material-ui/tree/v5.11.11/docs/data/material/getting-started/templates/sign-in
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { login, loading, error } = useAuth();
+  const { setAuth, error } = useAuth();
 
   let navigate = useNavigate();
+  const location = useLocation;
+  const from = location.state?.from?.pathname || "/";
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      login(username, password);
+      //login(username, password);
+      const response = await loginService.login({ username, password });
+      const accessToken = response?.accessToken;
+      const roles = response?.roles;
+      setAuth({ username, password, roles, accessToken });
+
       setUsername("");
       setPassword("");
 
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (err) {
       console.log(err);
     }

@@ -65,16 +65,17 @@ export const AuthProvider = ({ children }) => {
   }, [auth]);
 
   const login = async (username, password) => {
-    try {
-      const response = await loginService.login({ username, password });
-      const accessToken = response?.accessToken;
-      const roles = response?.roles;
-      setAuth({ username, password, roles, accessToken });
-    } catch (err) {
-      setError(err.data);
-    } finally {
-      setLoading(false);
-    }
+    // try {
+    //   const response = await loginService.login({ username, password });
+    //   const accessToken = response?.accessToken;
+    //   const roles = response?.roles;
+    //   console.log(response);
+    //   setAuth({ username, password, roles, accessToken });
+    // } catch (err) {
+    //   setError(err.data);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   const signUp = async (username, password, name) => {
@@ -114,6 +115,7 @@ export const AuthProvider = ({ children }) => {
         recentBadges,
         setRecentBadges,
         auth,
+        setAuth,
       }}
     >
       {children}

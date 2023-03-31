@@ -19,7 +19,7 @@ const getAll = async (jwt) => {
 const getAllStudentClassrooms = async (jwt) => {
   const response = await axios.get(`${baseUrl}/studentClassrooms`, {
     headers: {
-      authorization: "bearer " + jwt.token,
+      authorization: "bearer " + jwt,
     },
   });
   return response.data;
