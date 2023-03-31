@@ -21,10 +21,11 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [jwt, setJwt] = useState(undefined);
+  const [auth, setAuth] = useState({});
+
   const [recentBadges, setRecentBadges] = useState([]);
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
-  const [loadingInitial, setLoadingInitial] = useState(true);
 
   const location = useLocation();
 
@@ -34,37 +35,43 @@ export const AuthProvider = ({ children }) => {
   }, [location.pathname]);
 
   // Fetches the user details whenever the jwt changes
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const fetchedJwt = window.localStorage.getItem("loggedAppUser");
+  //       if (jwt) {
+  //         const fetchedUser = await usersService.getUserDetails(jwt);
+  //         setUser(fetchedUser);
+  //       } else if (fetchedJwt && jwt === undefined) {
+  //         setJwt(JSON.parse(fetchedJwt));
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //     } finally {
+  //       setLoadingInitial(false);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, [jwt]);
+
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const fetchedJwt = window.localStorage.getItem("loggedAppUser");
-        if (jwt) {
-          const fetchedUser = await usersService.getUserDetails(jwt);
-          setUser(fetchedUser);
-        } else if (fetchedJwt && jwt === undefined) {
-          setJwt(JSON.parse(fetchedJwt));
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoadingInitial(false);
+    const fetchUserDetails = async () => {
+      if (auth.accessToken !== undefined) {
+        console.log(auth.accessToken);
+        const fetchedUser = await usersService.getUserDetails(auth.accessToken);
+        console.log(fetchedUser);
+        setUser(fetchedUser);
       }
     };
-    fetchUser();
-  }, [jwt]);
+    fetchUserDetails();
+  }, [auth]);
 
   const login = async (username, password) => {
-    setLoading(true);
-
     try {
-      const generatedJwt = await loginService.login({ username, password });
-      window.localStorage.setItem(
-        "loggedAppUser",
-        JSON.stringify(generatedJwt)
-      );
-
-      // GeneratedJwt returns a Json Object, hence why it is set to the jwt directly without any parsing
-      setJwt(generatedJwt);
+      const response = await loginService.login({ username, password });
+      const accessToken = response?.accessToken;
+      const roles = response?.roles;
+      setAuth({ username, password, roles, accessToken });
     } catch (err) {
       setError(err.data);
     } finally {
@@ -106,12 +113,11 @@ export const AuthProvider = ({ children }) => {
         jwt,
         loading,
         error,
-        loadingInitial,
         recentBadges,
         setRecentBadges,
       }}
     >
-      {!loadingInitial && children}
+      {children}
     </AuthContext.Provider>
   );
 };
