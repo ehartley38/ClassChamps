@@ -40,7 +40,7 @@ const userExtractor = async (request, response, next) => {
     request.token = authorization.replace("bearer ", "");
   }
 
-  const decodedToken = jwt.verify(request.token, config.SECRET);
+  const decodedToken = jwt.verify(request.token, config.ACCESS_TOKEN_SECRET);
   if (!decodedToken.id) {
     return response.status(401).json({ error: "token invalid" });
   }

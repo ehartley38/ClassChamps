@@ -57,9 +57,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (auth.accessToken !== undefined) {
-        console.log(auth.accessToken);
         const fetchedUser = await usersService.getUserDetails(auth.accessToken);
-        console.log(fetchedUser);
         setUser(fetchedUser);
       }
     };
@@ -115,6 +113,7 @@ export const AuthProvider = ({ children }) => {
         error,
         recentBadges,
         setRecentBadges,
+        auth,
       }}
     >
       {children}
