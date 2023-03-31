@@ -8,6 +8,19 @@ const AwardedBadge = require("../models/awardedBadge");
 
 const WEEKMS = 604800000;
 
+const credentials = (request, response, next) => {
+  // console.log("Inside credentials");
+  // const origin = request.headers.origin;
+  // console.log("Origin is", origin);
+  // if (config.allowedOrigins.includes(origin)) {
+  //   console.log("Origin allowed");
+  //   response.header("Access-Control-Allow-Credentials", true);
+  // }
+  response.header("Access-Control-Allow-Credentials", true);
+
+  next();
+};
+
 const requestLogger = (request, response, next) => {
   logger.info("Method:", request.method);
   logger.info("Path:  ", request.path);
@@ -204,4 +217,5 @@ module.exports = {
   errorHandler,
   userExtractor,
   checkBadges,
+  credentials,
 };

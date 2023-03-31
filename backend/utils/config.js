@@ -10,9 +10,12 @@ const MONGODB_URI =
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
+const allowedOrigins = ["http://localhost:3003", "http://localhost:3000"];
+
 module.exports = {
   MONGODB_URI,
   PORT,
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET,
+  allowedOrigins,
 };

@@ -34,8 +34,18 @@ loginRouter.post("/", async (request, response) => {
     { expiresIn: "1d" }
   );
 
+  // Save refresh token with current user
   user.refreshToken = refreshToken;
   await user.save();
+
+  // Create secure cookie with refresh token
+  response.cookie("jwt", refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    maxAge: 24 * 60 * 60 * 1000,
+  });
+
   response.status(200).send({ roles, accessToken });
 });
 
