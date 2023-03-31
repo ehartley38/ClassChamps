@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
       // GeneratedJwt returns a Json Object, hence why it is set to the jwt directly without any parsing
       setJwt(generatedJwt);
     } catch (err) {
-      setError(err);
+      setError(err.data);
     } finally {
       setLoading(false);
     }

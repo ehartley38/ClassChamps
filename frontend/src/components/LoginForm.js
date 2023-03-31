@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import {
@@ -19,7 +19,7 @@ import {
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { login, loading } = useAuth();
+  const { login, loading, error } = useAuth();
 
   let navigate = useNavigate();
 
@@ -36,6 +36,10 @@ const LoginForm = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
 
   return (
     <Container component="main" maxWidth="xs">

@@ -228,7 +228,6 @@ export const StudentClassroomView = () => {
           ) : (
             <div style={{ height: "80px" }}></div>
           )}
-
           <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
             <Tabs value={tabValue} onChange={handleTabChange} centered>
               <Tab label="Leaderboard" />
