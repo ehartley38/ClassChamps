@@ -4,6 +4,7 @@ require("express-async-errors");
 const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
+const corsOptions = require("./utils/corsOptions");
 const logger = require("./utils/logger");
 const cookieParser = require("cookie-parser");
 
@@ -37,7 +38,8 @@ mongoose
 // Add this before CORS
 app.use(middleware.credentials);
 
-app.use(cors());
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(middleware.requestLogger);

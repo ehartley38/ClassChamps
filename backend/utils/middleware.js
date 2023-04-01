@@ -9,9 +9,8 @@ const AwardedBadge = require("../models/awardedBadge");
 const WEEKMS = 604800000;
 
 const credentials = (request, response, next) => {
-  // console.log("Inside credentials");
-  // const origin = request.headers.origin;
-  // console.log("Origin is", origin);
+  // const origin = request.headers.origin || request.headers.referer;
+
   // if (config.allowedOrigins.includes(origin)) {
   //   console.log("Origin allowed");
   //   response.header("Access-Control-Allow-Credentials", true);
@@ -48,9 +47,10 @@ const errorHandler = (error, request, response, next) => {
 };
 
 const userExtractor = async (request, response, next) => {
-  const authorization = request.get("authorization");
-  if (authorization && authorization.startsWith("bearer ")) {
-    request.token = authorization.replace("bearer ", "");
+  const authorization = request.get("Authorization");
+  console.log(authorization);
+  if (authorization && authorization.startsWith("Bearer ")) {
+    request.token = authorization.replace("Bearer ", "");
   }
 
   const decodedToken = jwt.verify(request.token, config.ACCESS_TOKEN_SECRET);

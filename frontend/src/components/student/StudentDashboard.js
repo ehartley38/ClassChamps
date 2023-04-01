@@ -4,26 +4,44 @@ import { StudentClassroomPanel } from "./classroom/StudentClassroomPanel";
 import { Box, Container, Grid, Skeleton, Typography } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
 import classroomService from "../../services/classrooms";
+import { useRefreshToken } from "../../hooks/useRefreshToken";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const StudentDashboard = () => {
   const { user, auth } = useAuth();
   const [classrooms, setClassrooms] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const refresh = useRefreshToken();
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchClassrooms = async () => {
       try {
-        const classroomArray = await classroomService.getAllStudentClassrooms(
-          auth.accessToken
+        // const classroomArray = await classroomService.getAllStudentClassrooms(
+        //   auth.accessToken
+        // );
+
+        const userData = await axiosPrivate.get("/api/users/id");
+        setUserData(userData.data);
+
+        const classroomArray = await axiosPrivate.get(
+          "/api/classrooms/studentClassrooms"
         );
-        setClassrooms(classroomArray);
+        setClassrooms(classroomArray.data);
       } catch (err) {
+        console.log(err);
+        navigate("/login", { state: { from: location }, replace: true });
       } finally {
       }
     };
-    if (user !== undefined) fetchClassrooms();
-  }, [user, auth]);
 
-  if (classrooms && user) {
+    fetchClassrooms();
+  }, []);
+
+  if (classrooms && userData) {
     return (
       <div>
         <Typography
@@ -32,7 +50,7 @@ export const StudentDashboard = () => {
         >
           Student Dashboard
         </Typography>
-        <Typography variant="h6">Welcome {user.name}</Typography>
+        <Typography variant="h6">Welcome {userData.name}</Typography>
         <Typography variant="h3" sx={{ color: "secondary.main" }}>
           Your classrooms
         </Typography>
@@ -73,6 +91,7 @@ export const StudentDashboard = () => {
             </Box>
           </Grid>
         </Grid>
+        <button onClick={() => refresh()}>Refresh</button>
       </div>
     );
   }

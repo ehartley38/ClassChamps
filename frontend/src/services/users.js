@@ -1,24 +1,29 @@
-import axios from "axios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+
 const baseUrl = "/api/users";
 
-let token = null;
-
-const setToken = (newToken) => {
-  token = `bearer ${newToken}`;
-};
+// const setToken = (newToken) => {
+//   token = `bearer ${newToken}`;
+// };
 
 const signUp = async (credentials) => {
-  const response = await axios.post(baseUrl, credentials);
-  return response.data;
+  // const response = await useAxiosPrivate.post(baseUrl, credentials, {
+  //   headers: { "Content-Type": "application/json" },
+  //   withCredentials: true,
+  // });
+  //const response = await axiosPrivate.get();
+  // return response.data;
 };
 
 const getUserDetails = async (jwt) => {
-  const request = await axios.get(baseUrl + "/id", {
-    headers: {
-      authorization: "bearer " + jwt,
-    },
-  });
+  // const request = await useAxiosPrivate.get(baseUrl + "/id", {
+  //   headers: {
+  //     authorization: "bearer " + jwt,
+  //   },
+  // });
+
+  const request = await useAxiosPrivate.get(`${baseUrl}/id`);
   return request.data;
 };
 
-export default { setToken, signUp, getUserDetails };
+export default { signUp, getUserDetails };

@@ -8,6 +8,7 @@ import React, {
 import usersService from "../services/users";
 import loginService from "../services/login";
 import { useLocation } from "react-router-dom";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const AuthContext = createContext({
   user: undefined,
@@ -28,6 +29,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   const location = useLocation();
+
+  const axiosPrivate = useAxiosPrivate();
 
   // If we change page, reset the error state.
   useEffect(() => {
@@ -54,15 +57,18 @@ export const AuthProvider = ({ children }) => {
   //   fetchUser();
   // }, [jwt]);
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      if (auth.accessToken !== undefined) {
-        const fetchedUser = await usersService.getUserDetails(auth.accessToken);
-        setUser(fetchedUser);
-      }
-    };
-    fetchUserDetails();
-  }, [auth]);
+  // useEffect(() => {
+  //   const fetchUserDetails = async () => {
+  //     console.log("Fetching user details");
+  //     if (auth.accessToken !== undefined) {
+  //       //const fetchedUser = await usersService.getUserDetails();
+  //       const response = await axiosPrivate.get(`/api/users/id`);
+  //       console.log(response.data);
+  //       //setUser(fetchedUser);
+  //     }
+  //   };
+  //   //fetchUserDetails();
+  // }, [auth, axiosPrivate]);
 
   const login = async (username, password) => {
     // try {

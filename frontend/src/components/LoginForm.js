@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import loginService from "../services/login";
+import axios from "axios";
 
 // https://github.com/mui/material-ui/tree/v5.11.11/docs/data/material/getting-started/templates/sign-in
 
@@ -31,9 +32,19 @@ const LoginForm = () => {
 
     try {
       //login(username, password);
-      const response = await loginService.login({ username, password });
-      const accessToken = response?.accessToken;
-      const roles = response?.roles;
+      //const response = await loginService.login({ username, password });
+      const response = await axios.post(
+        "/api/login",
+        JSON.stringify({ username, password }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      const accessToken = response?.data?.accessToken;
+      const roles = response?.data?.roles;
+      // const accessToken = response?.accessToken;
+      // const roles = response?.roles;
       setAuth({ username, password, roles, accessToken });
 
       setUsername("");
