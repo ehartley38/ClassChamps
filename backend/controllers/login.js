@@ -25,13 +25,13 @@ loginRouter.post("/", async (request, response) => {
   };
 
   const accessToken = jwt.sign(userForToken, config.ACCESS_TOKEN_SECRET, {
-    expiresIn: "10s",
+    expiresIn: "1d",
   });
 
   const refreshToken = jwt.sign(
     { username: user.username },
     config.REFRESH_TOKEN_SECRET,
-    { expiresIn: "1d" }
+    { expiresIn: "7d" }
   );
 
   // Save refresh token with current user

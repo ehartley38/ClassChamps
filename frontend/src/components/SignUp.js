@@ -1,5 +1,4 @@
 import { useState, useContext } from "react";
-
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -14,6 +13,8 @@ import {
   Typography,
 } from "@mui/material";
 import useAuth from "../hooks/useAuth";
+import usersService from "../services/users";
+import axios from "../services/axios";
 
 export const SignUp = () => {
   const [name, setName] = useState("");
@@ -43,7 +44,21 @@ export const SignUp = () => {
     }
 
     try {
-      signUp(username, password, name);
+      //signUp(username, password, name);
+      // const response = await usersService.signUp({
+      //   username,
+      //   password,
+      //   name,
+      // });
+
+      const response = axios.post(
+        "/register",
+        { username, password, name },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
       setName("");
       setUsername("");
@@ -141,48 +156,3 @@ export const SignUp = () => {
     </Container>
   );
 };
-
-{
-  /* <div>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <h2> Sign up here</h2>
-          Name
-          <input
-            id="name"
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
-          <br />
-          Username
-          <input
-            id="username"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-          />
-          <br />
-          Password
-          <input
-            id="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-          <br />
-          Confirm Password
-          <input
-            id="confirm-password"
-            value={confirmPassword}
-            onChange={({ target }) => setConfirmPassword(target.value)}
-          />
-          <button type="submit">Sign up</button>
-        </form>
-        <button onClick={handleTestButton}>Test</button>
-        <div>
-          Already have an account?
-          <button>
-            <NavLink to="/login">Click here</NavLink>
-          </button>
-        </div>
-      </div>
-    </div> */
-}

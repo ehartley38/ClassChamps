@@ -123,7 +123,7 @@ const LoginForm = () => {
 
           <Grid container>
             <Grid item>
-              <NavLink to="/">Don't have an account? Sign Up</NavLink>
+              <NavLink to="/register">Don't have an account? Sign Up</NavLink>
             </Grid>
           </Grid>
         </Box>

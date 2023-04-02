@@ -21,7 +21,7 @@ refreshTokensRouter.get("/", async (request, response) => {
       id: user.id,
     };
     const accessToken = jwt.sign(userForToken, config.ACCESS_TOKEN_SECRET, {
-      expiresIn: "10s",
+      expiresIn: "1d",
     });
     response.json({ roles, accessToken });
   });

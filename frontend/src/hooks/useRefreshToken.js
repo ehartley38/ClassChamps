@@ -5,7 +5,6 @@ export const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
   const refresh = async () => {
-    console.log("Using refresh token");
     const response = await axios.get("/api/refreshTokens", {
       withCredentials: true,
     });

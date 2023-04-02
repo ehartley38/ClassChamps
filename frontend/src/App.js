@@ -33,6 +33,7 @@ const App = () => {
 
   return (
     <>
+      {/* {auth.username ? <NavBar /> : <></>} */}
       <NavBar />
       <Container>
         <Routes>

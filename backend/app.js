@@ -21,6 +21,7 @@ const assignmentSubmissionsRouter = require("./controllers/assignmentSubmissions
 const badgesRouter = require("./controllers/badges");
 const awardedBadgesRouter = require("./controllers/awardedBadges");
 const refreshTokensRouter = require("./controllers/refreshTokens");
+const registerRouter = require("./controllers/register");
 
 const middleware = require("./utils/middleware");
 const mongoose = require("mongoose");
@@ -49,6 +50,7 @@ app.use(cookieParser());
 app.use("/api/login", loginRouter);
 app.use("/api/refreshTokens", refreshTokensRouter);
 app.use("/api/logout", logoutRouter);
+app.use("/api/register", registerRouter);
 
 app.use(middleware.verifyJWT);
 app.use("/api/users", usersRouter);
