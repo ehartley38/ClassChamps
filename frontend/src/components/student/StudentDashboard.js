@@ -20,10 +20,6 @@ export const StudentDashboard = () => {
   useEffect(() => {
     const fetchClassrooms = async () => {
       try {
-        // const classroomArray = await classroomService.getAllStudentClassrooms(
-        //   auth.accessToken
-        // );
-
         const userData = await axiosPrivate.get("/api/users/id");
         setUserData(userData.data);
 

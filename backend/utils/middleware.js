@@ -46,25 +46,71 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-const userExtractor = async (request, response, next) => {
-  const authorization = request.get("Authorization");
-  console.log(authorization);
-  if (authorization && authorization.startsWith("Bearer ")) {
-    request.token = authorization.replace("Bearer ", "");
-  }
+const verifyJWT = (request, response, next) => {
+  const authHeader =
+    request.headers.authorization || request.headers.Authorization;
+  if (!authHeader?.startsWith("Bearer ")) return response.sendStatus(401);
+  const token = authHeader.split(" ")[1];
+  console.log(token);
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
+    if (err) return response.sendStatus(403); //invalid token
+    const user = await User.findById(decoded.id).populate("awardedBadgeIds");
+    if (!user) {
+      return response.status(403).json({ error: "user invalid" });
+    }
+    request.user = user;
 
-  const decodedToken = jwt.verify(request.token, config.ACCESS_TOKEN_SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token invalid" });
-  }
-  const user = await User.findById(decodedToken.id).populate("awardedBadgeIds");
-  if (!user) {
-    return response.status(401).json({ error: "user invalid" });
-  }
-  request.user = user;
+    next();
+  });
+};
 
+const userExtractor = (request, response, next) => {
   next();
 };
+
+// const userExtractor = async (request, response, next) => {
+//   const authorization = request.get("Authorization");
+//   console.log(authorization);
+//   if (authorization && authorization.startsWith("Bearer ")) {
+//     request.token = authorization.replace("Bearer ", "");
+//   }
+
+//   try {
+//     const decodedToken = jwt.verify(request.token, config.ACCESS_TOKEN_SECRET);
+//     const user = await User.findById(decodedToken.id).populate(
+//       "awardedBadgeIds"
+//     );
+//     if (!user) {
+//       return response.status(401).json({ error: "user invalid" });
+//     }
+//     request.user = user;
+//   } catch (err) {
+//     return response.status(401);
+//   }
+
+// async (err, decodedToken) => {
+//   if (err) return response.status(401);
+//   const user = await User.findById(decodedToken.id).populate(
+//     "awardedBadgeIds"
+//   );
+//   if (!user) {
+//     return response.status(401).json({ error: "user invalid" });
+//   }
+//   request.user = user;
+// }
+
+// const decodedToken = jwt.verify(request.token, config.ACCESS_TOKEN_SECRET);
+// if (!decodedToken.id) {
+//   return response.status(401).json({ error: "token invalid" });
+// }
+// const user = await User.findById(decodedToken.id).populate("awardedBadgeIds");
+// if (!user) {
+//   return response.status(401).json({ error: "user invalid" });
+// }
+// request.user = user;
+
+//   next();
+// };
 
 // Check if user meets criteria for badges that are related to submitting assignments
 const checkBadges = async (request, response, next) => {
@@ -218,4 +264,5 @@ module.exports = {
   userExtractor,
   checkBadges,
   credentials,
+  verifyJWT,
 };

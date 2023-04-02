@@ -29,10 +29,9 @@ usersRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
-usersRouter.get("/:id", userExtractor, async (request, response) => {
+usersRouter.get("/:id", async (request, response) => {
   const user = request.user;
-
-  const id = user._id;
+  const id = request.user._id;
 
   const userObject = await User.findById(id)
     .populate("classrooms")

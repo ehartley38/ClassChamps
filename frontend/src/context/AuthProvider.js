@@ -60,14 +60,12 @@ export const AuthProvider = ({ children }) => {
   // useEffect(() => {
   //   const fetchUserDetails = async () => {
   //     console.log("Fetching user details");
-  //     if (auth.accessToken !== undefined) {
-  //       //const fetchedUser = await usersService.getUserDetails();
-  //       const response = await axiosPrivate.get(`/api/users/id`);
-  //       console.log(response.data);
-  //       //setUser(fetchedUser);
-  //     }
+  //     //const fetchedUser = await usersService.getUserDetails();
+  //     const response = await axiosPrivate.get(`/api/users/id`);
+  //     console.log(response.data);
+  //     //setUser(response.data);
   //   };
-  //   //fetchUserDetails();
+  //   fetchUserDetails();
   // }, [auth, axiosPrivate]);
 
   const login = async (username, password) => {

@@ -25,7 +25,6 @@ refreshTokensRouter.get("/", async (request, response) => {
     });
     response.json({ roles, accessToken });
   });
-  return response.status(400);
 });
 
 module.exports = refreshTokensRouter;

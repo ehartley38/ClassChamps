@@ -21,6 +21,7 @@ import { Badges } from "./components/student/homework/Badges";
 import { Layout } from "./components/Layout";
 import { Unauthorized, unauthorized } from "./components/Unauthorized";
 import { RequireAuth } from "./components/RequireAuth";
+import { PersistLogin } from "./components/PersistLogin";
 
 const ROLES = {
   Student: 2000,
@@ -42,35 +43,37 @@ const App = () => {
             <Route path="unauthorized" element={<Unauthorized />} />
 
             {/* Student Protected Routes */}
-            <Route element={<RequireAuth allowedRoles={[ROLES.Student]} />}>
-              <Route path="/">
-                <Route index element={<StudentDashboard />} />
-                <Route path=":roomName">
-                  <Route index element={<StudentClassroomView />} />
-                  <Route
-                    path="homework/:assignmentId"
-                    element={<HomeworkRouter />}
-                  />
-                </Route>
-                <Route path="profile">
-                  <Route index element={<Profile />} />
-                  <Route path="badges" element={<Badges />} />
+            <Route element={<PersistLogin />}>
+              <Route element={<RequireAuth allowedRoles={[ROLES.Student]} />}>
+                <Route path="/">
+                  <Route index element={<StudentDashboard />} />
+                  <Route path=":roomName">
+                    <Route index element={<StudentClassroomView />} />
+                    <Route
+                      path="homework/:assignmentId"
+                      element={<HomeworkRouter />}
+                    />
+                  </Route>
+                  <Route path="profile">
+                    <Route index element={<Profile />} />
+                    <Route path="badges" element={<Badges />} />
+                  </Route>
                 </Route>
               </Route>
-            </Route>
 
-            {/* Teacher Protected Routes */}
-            <Route element={<RequireAuth allowedRoles={[ROLES.Teacher]} />}>
-              <Route path="/teacher">
-                <Route index element={<TeacherDashboard />} />
-                <Route path="classrooms">
-                  <Route index element={<Classrooms />} />
-                  <Route path="new" element={<NewClassroom />} />
-                  <Route path=":roomName" element={<ClassroomView />} />
-                </Route>
-                <Route path="homework">
-                  <Route index element={<Homework />} />
-                  <Route path="create" element={<CreateHomework />} />
+              {/* Teacher Protected Routes */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.Teacher]} />}>
+                <Route path="/teacher">
+                  <Route index element={<TeacherDashboard />} />
+                  <Route path="classrooms">
+                    <Route index element={<Classrooms />} />
+                    <Route path="new" element={<NewClassroom />} />
+                    <Route path=":roomName" element={<ClassroomView />} />
+                  </Route>
+                  <Route path="homework">
+                    <Route index element={<Homework />} />
+                    <Route path="create" element={<CreateHomework />} />
+                  </Route>
                 </Route>
               </Route>
             </Route>

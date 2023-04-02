@@ -45,8 +45,11 @@ app.use(morgan("tiny"));
 app.use(middleware.requestLogger);
 app.use(cookieParser());
 
-app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
+app.use("/api/refreshTokens", refreshTokensRouter);
+
+app.use(middleware.verifyJWT);
+app.use("/api/users", usersRouter);
 app.use("/api/classrooms", classroomsRouter);
 app.use("/api/bingoQuestions", bingoQuestionsRouter);
 app.use("/api/quizzes", quizzesRouter);
@@ -55,10 +58,9 @@ app.use("/api/bingoSessions", bingoSessionsRouter);
 app.use("/api/assignmentSubmissions", assignmentSubmissionsRouter);
 app.use("/api/badges", badgesRouter);
 app.use("/api/awardedBadges", awardedBadgesRouter);
-app.use("/api/refreshTokens", refreshTokensRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
-app.use(middleware.userExtractor);
+//app.use(middleware.userExtractor);
 
 module.exports = app;

@@ -31,7 +31,7 @@ loginRouter.post("/", async (request, response) => {
   const refreshToken = jwt.sign(
     { username: user.username },
     config.REFRESH_TOKEN_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "1d" }
   );
 
   // Save refresh token with current user

@@ -10,10 +10,6 @@ const useAxiosPrivate = () => {
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
-        //console.log(config.headers);
-        // console.log("Auth is", auth);
-
-        console.log("Request intercept auth state is", auth);
         if (!config.headers["Authorization"] && auth !== undefined) {
           config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
         }
@@ -26,6 +22,7 @@ const useAxiosPrivate = () => {
       (response) => response,
       // If there is no response, then handle the error (issue a new access token)
       async (error) => {
+        console.log("Axios private error:", error);
         const prevRequest = error?.config;
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
