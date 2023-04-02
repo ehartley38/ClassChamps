@@ -20,13 +20,10 @@ export const PersistLogin = () => {
     };
 
     // If we do not have an access token, then attempt to generate new one
-    !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
+    !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    console.log("isLoading:", isLoading);
-    console.log("Access Token:", auth.accessToken);
-  }, [isLoading]);
-
-  return <>{isLoading ? <p>Loading</p> : <Outlet />}</>;
+  return (
+    <>{!persist ? <Outlet /> : isLoading ? <p>Loading...</p> : <Outlet />}</>
+  );
 };

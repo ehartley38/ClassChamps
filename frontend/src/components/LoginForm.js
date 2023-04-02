@@ -4,8 +4,10 @@ import useAuth from "../hooks/useAuth";
 import {
   Box,
   Button,
+  Checkbox,
   Container,
   createTheme,
+  FormControlLabel,
   Grid,
   Link,
   Paper,
@@ -21,7 +23,7 @@ import axios from "axios";
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { setAuth, error } = useAuth();
+  const { setAuth, error, persist, setPersist } = useAuth();
 
   let navigate = useNavigate();
   const location = useLocation;
@@ -56,9 +58,13 @@ const LoginForm = () => {
     }
   };
 
+  const handlePersist = () => {
+    setPersist((prev) => !prev);
+  };
+
   useEffect(() => {
-    console.log(error);
-  }, [error]);
+    localStorage.setItem("persist", persist);
+  }, [persist]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -101,6 +107,11 @@ const LoginForm = () => {
             onChange={({ target }) => setPassword(target.value)}
             autoComplete="current-password"
           />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+            onChange={handlePersist}
+          />
           <Button
             type="submit"
             fullWidth
@@ -109,6 +120,7 @@ const LoginForm = () => {
           >
             Sign In
           </Button>
+
           <Grid container>
             <Grid item>
               <NavLink to="/">Don't have an account? Sign Up</NavLink>

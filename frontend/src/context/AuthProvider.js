@@ -23,6 +23,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [jwt, setJwt] = useState(undefined);
   const [auth, setAuth] = useState({});
+  const [persist, setPersist] = useState(
+    JSON.parse(localStorage.getItem("persist")) || false
+  );
 
   const [recentBadges, setRecentBadges] = useState([]);
   const [error, setError] = useState();
@@ -120,6 +123,8 @@ export const AuthProvider = ({ children }) => {
         setRecentBadges,
         auth,
         setAuth,
+        persist,
+        setPersist,
       }}
     >
       {children}

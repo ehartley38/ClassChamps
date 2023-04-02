@@ -20,9 +20,8 @@ const useAxiosPrivate = () => {
 
     const responseIntercept = axiosPrivate.interceptors.response.use(
       (response) => response,
-      // If there is no response, then handle the error (issue a new access token)
+      // If error 403 (forbidden), then access token has expired so issue a new one
       async (error) => {
-        console.log("Axios private error:", error);
         const prevRequest = error?.config;
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;

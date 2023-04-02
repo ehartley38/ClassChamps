@@ -27,7 +27,7 @@ export const Profile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userData = await axiosPrivate.get("/api/users/id");
+      const userData = await axiosPrivate.get("/users/id");
       setUserData(userData.data);
     };
     fetchData();

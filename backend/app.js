@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 // Routers
 const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
+const logoutRouter = require("./controllers/logout");
 const classroomsRouter = require("./controllers/classrooms");
 const bingoQuestionsRouter = require("./controllers/bingoQuestions");
 const quizzesRouter = require("./controllers/quizzes");
@@ -47,6 +48,7 @@ app.use(cookieParser());
 
 app.use("/api/login", loginRouter);
 app.use("/api/refreshTokens", refreshTokensRouter);
+app.use("/api/logout", logoutRouter);
 
 app.use(middleware.verifyJWT);
 app.use("/api/users", usersRouter);

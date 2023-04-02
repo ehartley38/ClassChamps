@@ -20,11 +20,11 @@ export const StudentDashboard = () => {
   useEffect(() => {
     const fetchClassrooms = async () => {
       try {
-        const userData = await axiosPrivate.get("/api/users/id");
+        const userData = await axiosPrivate.get("/users/id");
         setUserData(userData.data);
 
         const classroomArray = await axiosPrivate.get(
-          "/api/classrooms/studentClassrooms"
+          "/classrooms/studentClassrooms"
         );
         setClassrooms(classroomArray.data);
       } catch (err) {
