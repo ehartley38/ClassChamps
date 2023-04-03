@@ -22,6 +22,8 @@ import axios from "axios";
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const { setAuth, error, persist, setPersist } = useAuth();
 
   let navigate = useNavigate();
@@ -55,12 +57,25 @@ const LoginForm = () => {
 
       navigate(from, { replace: true });
     } catch (err) {
-      console.log(err);
+      if (err.response.status === 401) {
+        setErrorMessage("Username or password incorrect");
+        setShowErrorMessage(true);
+      }
     }
   };
 
   const handlePersist = () => {
     setPersist((prev) => !prev);
+  };
+
+  const handleUsernameChange = (target) => {
+    setUsername(target.value);
+    setShowErrorMessage(false);
+  };
+
+  const handlePasswordChange = (target) => {
+    setPassword(target.value);
+    setShowErrorMessage(false);
   };
 
   useEffect(() => {
@@ -77,9 +92,22 @@ const LoginForm = () => {
           alignItems: "center",
         }}
       >
-        {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar> */}
+        <Typography
+          variant="h6"
+          noWrap
+          component="a"
+          sx={{
+            mb: 2,
+            display: { xs: "none", md: "flex" },
+            fontFamily: "monospace",
+            fontWeight: 700,
+            letterSpacing: ".3rem",
+            color: "inherit",
+            textDecoration: "none",
+          }}
+        >
+          ClassChamps
+        </Typography>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
@@ -92,22 +120,40 @@ const LoginForm = () => {
             label="Username"
             name="username"
             value={username}
-            onChange={({ target }) => setUsername(target.value)}
+            onChange={({ target }) => handleUsernameChange(target)}
             autoComplete="username"
             autoFocus
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            autoComplete="current-password"
-          />
+          {showErrorMessage ? (
+            <TextField
+              error
+              helperText={errorMessage}
+              label="Password"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              type="password"
+              id="password"
+              value={password}
+              onChange={({ target }) => handlePasswordChange(target)}
+              autoComplete="current-password"
+            />
+          ) : (
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              value={password}
+              onChange={({ target }) => handlePasswordChange(target)}
+              autoComplete="current-password"
+            />
+          )}
+
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"

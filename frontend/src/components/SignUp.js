@@ -1,15 +1,11 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
   Container,
-  createTheme,
   Grid,
-  Link,
-  Paper,
   TextField,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
 import axios from "../services/axios";
@@ -41,7 +37,7 @@ export const SignUp = () => {
     }
 
     try {
-      const response = axios.post(
+      const response = await axios.post(
         "/register",
         { username, password, name },
         {
@@ -57,7 +53,8 @@ export const SignUp = () => {
 
       navigate("/login");
     } catch (err) {
-      console.log(err);
+      console.log("Error");
+      console.log(err.response.status);
     }
   };
 
@@ -71,9 +68,22 @@ export const SignUp = () => {
           alignItems: "center",
         }}
       >
-        {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar> */}
+        <Typography
+          variant="h6"
+          noWrap
+          component="a"
+          sx={{
+            mb: 2,
+            display: { xs: "none", md: "flex" },
+            fontFamily: "monospace",
+            fontWeight: 700,
+            letterSpacing: ".3rem",
+            color: "inherit",
+            textDecoration: "none",
+          }}
+        >
+          ClassChamps
+        </Typography>
         <Typography component="h1" variant="h5">
           Register
         </Typography>
