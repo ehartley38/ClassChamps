@@ -9,9 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../../hooks/useAuth";
-import assignmentService from "../../../services/assignments";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export const Assignment = ({
   assignment,
@@ -23,16 +21,17 @@ export const Assignment = ({
   const [isOverdue, setIsOverdue] = useState(
     new Date(assignment.dueDate) < new Date()
   );
-  const { jwt } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   const handleClick = async () => {
     setCurrentAssignmentId(assignment.id);
     try {
       // Need to optimise!
-      const leaderboardData = await assignmentService.getLeaderboardData(
-        jwt,
-        assignment.id
+      const leaderboardResponse = await axiosPrivate.get(
+        `/assignments/leaderboard/${assignment.id}`
       );
+      const leaderboardData = leaderboardResponse.data;
+
       const formattedData = leaderboardData.map((a) => a.submission);
       setLeaderboardData(formattedData);
     } catch (err) {

@@ -29,7 +29,8 @@ usersRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
-usersRouter.get("/:id", async (request, response) => {
+// Get user info
+usersRouter.get("/id", async (request, response) => {
   const user = request.user;
   const id = request.user._id;
 

@@ -10,12 +10,10 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { FixedSizeList } from "react-window";
-import useAuth from "../../../hooks/useAuth";
-import classroomService from "../../../services/classrooms";
-import assignmentService from "../../../services/assignments";
-import quizzesService from "../../../services/quizzes";
+
 import { Student } from "./Student";
 import { HomeworkPanel } from "./HomeworkPanel";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export const Row = ({ index, style, quizList, handleClick, selectedIndex }) => {
   return (
@@ -41,37 +39,31 @@ export const ClassroomView = () => {
   const [dueDate, setDueDate] = useState("");
   const [activeHomework, setActiveHomework] = useState([]);
   const [assignmentName, setAssignmentName] = useState("");
-  const { jwt } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    const fetchClassroomData = async () => {
-      try {
-        const classroomData = await classroomService.getById(
-          jwt,
-          classroomObject.id
-        );
-        setClassroom(classroomData);
+    const fetchData = async () => {
+      const classroomData = await axiosPrivate.get(
+        `/classrooms/${classroomObject.id}`
+      );
+      const assignmentData = await axiosPrivate.get(
+        `/assignments/classroom/${classroomObject.id}`
+      );
 
-        const assignmentData = await assignmentService.getByClassroom(
-          jwt,
-          classroomObject.id
-        );
-        setActiveHomework(assignmentData);
-      } catch (err) {
-        console.log(err);
-      }
+      setClassroom(classroomData.data);
+      setActiveHomework(assignmentData.data);
     };
 
-    fetchClassroomData();
+    fetchData();
   }, []);
 
   const handleGenerate = async () => {
     try {
-      const updatedClassroom = await classroomService.generateClassCode(
-        jwt,
+      const updatedClassroom = await axiosPrivate.put(
+        `/classrooms/${classroomObject.id}/generate-code`,
         classroomObject
       );
-      setClassroom(updatedClassroom);
+      setClassroom(updatedClassroom.data);
     } catch (err) {
       console.log(err);
     }
@@ -79,9 +71,8 @@ export const ClassroomView = () => {
 
   const handleAssignToggle = async () => {
     setAssignHomework(true);
-    const quizList = await quizzesService.getAll(jwt);
-
-    setQuizList(quizList);
+    const quizList = await axiosPrivate.get("/quizzes");
+    setQuizList(quizList.data);
   };
 
   const handleCancel = () => {
@@ -106,8 +97,11 @@ export const ClassroomView = () => {
     };
 
     try {
-      const response = await assignmentService.create(jwt, newAssignment);
-      setActiveHomework([...activeHomework, response]);
+      const savedAssignment = await axiosPrivate.post(
+        "/assignments",
+        newAssignment
+      );
+      setActiveHomework([...activeHomework, savedAssignment.data]);
     } catch (err) {
       console.log(err);
     } finally {

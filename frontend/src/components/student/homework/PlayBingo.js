@@ -14,14 +14,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useWindowSize from "react-use/lib/useWindowSize";
 import useAuth from "../../../hooks/useAuth";
-import bingoQuestionsService from "../../../services/bingoQuestions";
-import bingoSessionsService from "../../../services/bingoSessions";
-import submissionsService from "../../../services/assignmentSubmissions";
 import { Loading } from "../../Loading";
 import { BingoAnswer } from "./BingoAnswer";
 import { Timer } from "./Timer";
 import Confetti from "react-confetti";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 const modalStyle = {
   position: "absolute",
@@ -46,9 +44,11 @@ export const PlayBingo = ({ assignment }) => {
   const [mistakeMade, setMistakeMade] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
 
+  const axiosPrivate = useAxiosPrivate();
+
   const { width, height } = useWindowSize();
   let navigate = useNavigate();
-  const { jwt, user, setUser, setRecentBadges } = useAuth();
+  const { setRecentBadges } = useAuth();
 
   // Timer stuff
   const timeNow = new Date();
@@ -58,7 +58,9 @@ export const PlayBingo = ({ assignment }) => {
   useEffect(() => {
     const initialize = async () => {
       // Check if session exists for this particular assignment
-      const sessions = await bingoSessionsService.getUsersSessions(jwt);
+      const sessionResponse = await axiosPrivate.get("/bingoSessions");
+      const sessions = sessionResponse.data;
+
       const count = sessions.filter(
         (session) => session.assignment === assignment.id
       ).length;
@@ -66,10 +68,12 @@ export const PlayBingo = ({ assignment }) => {
       // if session doesn't exist, create a new session
       if (count === 0) {
         // Get all questions for this quiz
-        const questionData = await bingoQuestionsService.getAllByQuiz(
-          jwt,
-          assignment.quizId.id
+
+        const questionDataResponse = await axiosPrivate.get(
+          `/bingoQuestions/getAllByQuiz/${assignment.quizId.id}`
         );
+        const questionData = questionDataResponse.data;
+
         const questions = questionData.map((obj) => {
           return {
             question: obj.question,
@@ -85,10 +89,11 @@ export const PlayBingo = ({ assignment }) => {
         };
 
         // Create the sesssion
-        const savedSession = await bingoSessionsService.createSession(
-          jwt,
+        const savedSessionResponse = await axiosPrivate.post(
+          "/bingoSessions",
           newSession
         );
+        const savedSession = savedSessionResponse.data;
 
         setSession(savedSession);
         setQuestions(savedSession.questions);
@@ -186,12 +191,13 @@ export const PlayBingo = ({ assignment }) => {
   };
 
   const handleSave = async () => {
-    const response = await bingoSessionsService.updateQuestions(
-      jwt,
-      session.id,
-      questions,
-      mistakeMade,
-      hintUsed
+    const response = await axiosPrivate.post(
+      `/bingoSessions/updateIsCorrect/${session.id}`,
+      {
+        questionsArray: questions,
+        mistakeMade: mistakeMade,
+        hintUsed: hintUsed,
+      }
     );
     navigate(-1);
   };
@@ -206,21 +212,27 @@ export const PlayBingo = ({ assignment }) => {
       hintUsed: hintUsed,
     };
     try {
-      const response = await submissionsService.create(jwt, submission);
-      const updatedUser = { ...user };
-      updatedUser.awardedBadgeIds = [
-        ...updatedUser.awardedBadgeIds,
-        ...response.awardedBadges,
-      ];
-      updatedUser.experiencePoints += response.xpGain;
-      setUser(updatedUser);
-      setRecentBadges(response.awardedBadges);
-      //2840xp
+      const response = await axiosPrivate.post(
+        "/assignmentSubmissions",
+        submission
+      );
+      const responseData = response.data;
+      setRecentBadges(responseData.awardedBadges);
+      // Update user state with newly awarded badges
+      // const updatedUser = { ...user };
+      // updatedUser.awardedBadgeIds = [
+      //   ...updatedUser.awardedBadgeIds,
+      //   ...response.awardedBadges,
+      // ];
+      // updatedUser.experiencePoints += response.xpGain;
+      // setUser(updatedUser);
     } catch (err) {}
 
     // Delete session
-    const response = await bingoSessionsService.deleteSession(jwt, session.id);
-    navigate(-1, { state: { awardedBadges: response.awardedBadges } });
+    const response = await axiosPrivate.delete(`/bingoSessions/${session.id}`);
+    const responseData = response.data;
+
+    navigate(-1, { state: { awardedBadges: responseData.awardedBadges } });
   };
 
   const handleHintClick = () => {

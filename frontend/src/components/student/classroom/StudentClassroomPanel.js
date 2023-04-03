@@ -1,13 +1,10 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../../hooks/useAuth";
-import assignmentService from "../../../services/assignments";
 
 export const StudentClassroomPanel = ({ classroom }) => {
   const [dueAssignments, setDueAssignments] = useState();
   let navigate = useNavigate();
-  const { jwt } = useAuth();
 
   useEffect(() => {
     // For each assignment in this classroom, check if it is due

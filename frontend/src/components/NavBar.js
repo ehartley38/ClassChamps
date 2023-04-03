@@ -4,15 +4,13 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { SignOut } from "./SignOut";
 import useAuth from "../hooks/useAuth";
 
-const pages = ["Products", "Pricing", "Blog"];
-
 export const NavBar = () => {
-  const { user } = useAuth();
+  const { auth } = useAuth();
+  const isTeacher = auth.roles.includes(3000);
 
   return (
     <AppBar position="static">
@@ -37,13 +35,13 @@ export const NavBar = () => {
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Button
-              to={"/"}
+              to={isTeacher ? "/teacher" : "/"}
               component={Link}
               sx={{ my: 2, color: "white", display: "block" }}
             >
               Home
             </Button>
-            {user && user.role === "teacher" ? null : (
+            {isTeacher ? null : (
               <Button
                 to={"/profile"}
                 component={Link}

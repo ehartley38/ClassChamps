@@ -1,15 +1,23 @@
 import { NavLink } from "react-router-dom";
 import { SignOut } from "../SignOut";
 import { useState, useEffect, useContext } from "react";
-import usersService from "../../services/users";
 import { Typography } from "@mui/material";
-import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 export const TeacherDashboard = () => {
-  const { user } = useAuth();
+  const [userData, setUserData] = useState([]);
+  const axiosPrivate = useAxiosPrivate();
 
-  if (user && user.role === "teacher") {
-    return (
+  useEffect(() => {
+    const fetchData = async () => {
+      const userData = await axiosPrivate.get("/users/id");
+      setUserData(userData.data);
+    };
+    fetchData();
+  }, []);
+
+  return (
+    userData && (
       <div>
         <Typography
           variant="h1"
@@ -17,7 +25,7 @@ export const TeacherDashboard = () => {
         >
           Teacher Dashboard
         </Typography>
-        Welcome {user.name} <br></br>
+        Welcome {userData.name} <br></br>
         <button>
           <NavLink to="classrooms">Classrooms</NavLink>
         </button>
@@ -26,6 +34,6 @@ export const TeacherDashboard = () => {
         </button>
         <SignOut />
       </div>
-    );
-  }
+    )
+  );
 };

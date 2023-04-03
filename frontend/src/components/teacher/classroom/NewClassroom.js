@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import classroomService from "../../../services/classrooms";
-import useAuth from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export const NewClassroom = () => {
   const [roomName, setRoomName] = useState("");
-  const { jwt } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   let navigate = useNavigate();
 
@@ -14,7 +13,7 @@ export const NewClassroom = () => {
 
     try {
       // Add the classroom
-      const returnedClassroom = await classroomService.create(jwt, {
+      await axiosPrivate.post("/classrooms", {
         roomName: roomName,
       });
 

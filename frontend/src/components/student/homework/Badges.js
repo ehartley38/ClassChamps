@@ -1,27 +1,33 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import useAuth from "../../../hooks/useAuth";
 import { BadgeCard } from "./BadgeCard";
-import badgesService from "../../../services/badges";
 import { UnearnedBadgeCard } from "./UnearnedBadgeCard";
 import firstSteps from "../../../assets/images/firstSteps.png";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export const Badges = () => {
-  const { user } = useAuth();
   const [allBadges, setAllBadges] = useState([]); // This contains all badges available
   const [unearnedBadges, setUnearnedBadges] = useState([]); // This contains all badges yet to be earnt by a user
+  const [userData, setUserData] = useState([]);
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     async function fetchData() {
-      const allBadges = await badgesService.getAll();
-      setAllBadges(allBadges);
+      const allBadgesResponse = await axiosPrivate.get("/badges");
+      const allBadges = allBadgesResponse.data;
 
-      const userBadgeIds = user.awardedBadgeIds.map(
+      const userResponse = await axiosPrivate.get("/users/id");
+      const userData = userResponse.data;
+
+      const userBadgeIds = userData.awardedBadgeIds.map(
         (awardedBadge) => awardedBadge.badgeId.id
       );
       const unearnedBadges = allBadges.filter(
         (badge) => !userBadgeIds.includes(badge.id)
       );
+
+      setAllBadges(allBadges);
+      setUserData(userData);
       setUnearnedBadges(unearnedBadges);
     }
     fetchData();
@@ -44,8 +50,8 @@ export const Badges = () => {
             }}
           >
             {/* Display awarded badges first */}
-            {user.awardedBadgeIds &&
-              user.awardedBadgeIds.map((awardedBadge) => (
+            {userData.awardedBadgeIds &&
+              userData.awardedBadgeIds.map((awardedBadge) => (
                 <BadgeCard
                   key={awardedBadge.id}
                   awardedBadge={awardedBadge}

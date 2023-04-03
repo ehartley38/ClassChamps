@@ -1,14 +1,12 @@
-import useAuth from "../../../hooks/useAuth";
-import classroomService from "../../../services/classrooms";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export const Student = ({ student, classroom, setClassroom }) => {
-  const { jwt } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   const handleDelete = async () => {
-    await classroomService.removeStudentFromClassroom(
-      jwt,
-      classroom.id,
-      student.id
+    // Remove student from a classroom
+    await axiosPrivate.put(
+      `/classrooms/${classroom.id}/removeUser/${student.id}`
     );
 
     const updatedClassroom = { ...classroom };

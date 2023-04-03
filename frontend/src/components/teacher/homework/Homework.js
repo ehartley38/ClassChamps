@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import useAuth from "../../../hooks/useAuth";
-import quizzesService from "../../../services/quizzes";
 import { QuizPanelList } from "./QuizListPanel";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export const Homework = () => {
   const [quizzes, setQuizzes] = useState([]);
-  const { jwt } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    const fetchQuizzes = async () => {
-      const quizzesArray = await quizzesService.getAll(jwt);
-      setQuizzes(quizzesArray);
+    const fetchData = async () => {
+      const quizzesArray = await axiosPrivate.get("/quizzes");
+      setQuizzes(quizzesArray.data);
     };
-
-    fetchQuizzes();
+    fetchData();
   }, []);
 
   return (

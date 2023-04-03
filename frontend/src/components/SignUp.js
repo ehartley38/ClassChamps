@@ -12,8 +12,6 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import useAuth from "../hooks/useAuth";
-import usersService from "../services/users";
 import axios from "../services/axios";
 
 export const SignUp = () => {
@@ -21,7 +19,6 @@ export const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
-  const { signUp } = useAuth();
 
   let navigate = useNavigate();
 
@@ -44,13 +41,6 @@ export const SignUp = () => {
     }
 
     try {
-      //signUp(username, password, name);
-      // const response = await usersService.signUp({
-      //   username,
-      //   password,
-      //   name,
-      // });
-
       const response = axios.post(
         "/register",
         { username, password, name },

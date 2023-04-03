@@ -1,7 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import classroomService from "../../../services/classrooms";
-import assignmentService from "../../../services/assignments";
-import submissionService from "../../../services/assignmentSubmissions";
+
 import useAuth from "../../../hooks/useAuth";
 import { useState, useEffect } from "react";
 import { Assignment } from "./Assignment";
@@ -21,6 +19,7 @@ import {
 import { convertMilliseconds } from "../../../utils/tools";
 import { LeaderboardItem } from "./LeaderboardItem";
 import { FixedSizeList } from "react-window";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 const TabPanel = ({ value, index, children }) => {
   return (
@@ -43,26 +42,22 @@ export const StudentClassroomView = () => {
   const [openSuccessfulJoin, setOpenSuccessfulJoin] = useState(
     isJoinError === true || isJoinError === undefined ? false : true
   ); // :/ If no join error, then set successful join message to open
-  const { jwt, recentBadges, setRecentBadges } = useAuth();
+  const { recentBadges, setRecentBadges } = useAuth();
   let navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    const fetchClassroomData = async () => {
-      try {
-        const assignmentData = await assignmentService.getByClassroom(
-          jwt,
-          classroomObject.id
-        );
-        const submissionData = await submissionService.getAllByUser(jwt);
+    const fetchData = async () => {
+      const assignmentData = await axiosPrivate.get(
+        `/assignments/classroom/${classroomObject.id}`
+      );
+      const submissionData = await axiosPrivate.get("/assignmentSubmissions");
 
-        setAssignments(assignmentData);
-        setSubmissions(submissionData);
-      } catch (err) {
-        console.log(err);
-      }
+      setAssignments(assignmentData.data);
+      setSubmissions(submissionData.data);
     };
 
-    fetchClassroomData();
+    fetchData();
   }, []);
 
   // Update the completed assignments list
@@ -85,7 +80,7 @@ export const StudentClassroomView = () => {
     setTabValue(newValue);
   };
 
-  // Get assignment using assignmentId
+  // Get assignment object using assignmentId
   const getAssignment = (id) => {
     return assignments.find((assignment) => assignment.id === id);
   };

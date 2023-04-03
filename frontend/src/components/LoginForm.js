@@ -15,7 +15,6 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import loginService from "../services/login";
 import axios from "axios";
 
 // https://github.com/mui/material-ui/tree/v5.11.11/docs/data/material/getting-started/templates/sign-in
@@ -27,14 +26,11 @@ const LoginForm = () => {
 
   let navigate = useNavigate();
   const location = useLocation;
-  const from = location.state?.from?.pathname || "/";
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      //login(username, password);
-      //const response = await loginService.login({ username, password });
       const response = await axios.post(
         "/api/login",
         JSON.stringify({ username, password }),
@@ -51,6 +47,11 @@ const LoginForm = () => {
 
       setUsername("");
       setPassword("");
+
+      const from =
+        location.state?.from?.pathname || roles.includes(3000)
+          ? "/teacher"
+          : "/";
 
       navigate(from, { replace: true });
     } catch (err) {

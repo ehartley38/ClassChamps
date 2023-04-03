@@ -11,8 +11,7 @@ import {
 } from "@mui/material";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import classroomService from "../../services/classrooms";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const modalStyle = {
   position: "absolute",
@@ -30,30 +29,36 @@ export const JoinRoom = () => {
   const [joinCode, setJoinCode] = useState("");
   const [open, setOpen] = useState(false);
   const [isJoinError, setIsJoinError] = useState(undefined);
-  const { user, jwt, error } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   let navigate = useNavigate();
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setIsJoinError(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const classroom = await classroomService.joinClassByRoomCode(
-        jwt,
-        joinCode
-      );
-      if (classroom !== "Invalid room code") {
-        // Navigate to classroom
-        setIsJoinError(false);
-        navigate(`${classroom.roomName}`, {
-          state: { classroom, isJoinError: false },
-        });
-      } else {
+      const response = await axiosPrivate.put("/classrooms/join", {
+        roomCode: joinCode,
+      });
+
+      const classroom = response.data;
+
+      // Navigate to classroom
+      setIsJoinError(false);
+      navigate(`${classroom.roomName}`, {
+        state: { classroom, isJoinError: false },
+      });
+    } catch (err) {
+      // If room code not found
+      if (err.response.status === 404) {
         setIsJoinError(true);
       }
-    } catch (err) {}
+    }
 
     // If code is valid, then navigate to the classroom. Else, throw error
   };

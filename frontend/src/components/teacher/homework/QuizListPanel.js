@@ -1,12 +1,11 @@
 import { Button, Typography } from "@mui/material";
-import useAuth from "../../../hooks/useAuth";
-import quizzesService from "../../../services/quizzes";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export const QuizPanelList = ({ quiz, quizzes, setQuizzes }) => {
-  const { jwt } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   const handleDelete = async () => {
-    await quizzesService.deleteQuiz(jwt, quiz.id);
+    await axiosPrivate.delete(`/quizzes/${quiz.id}`);
 
     const updatedQuizzes = quizzes.filter((q) => q.id !== quiz.id);
     setQuizzes(updatedQuizzes);

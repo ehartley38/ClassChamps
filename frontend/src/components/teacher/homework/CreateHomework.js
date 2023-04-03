@@ -14,10 +14,8 @@ import { useState } from "react";
 import { AddQuestions } from "./AddQuestions";
 import { FinalConfigurations } from "./FinalConfigurations";
 import { SelectHomeworkType } from "./SelectHomeworkType";
-import quizzesService from "../../../services/quizzes";
-import bingoQuestionsService from "../../../services/bingoQuestions";
-import useAuth from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 const steps = ["Select Homework Type", "Create Questions", "Final tweaks"];
 
@@ -27,8 +25,7 @@ export const CreateHomework = () => {
   const [quizType, setQuizType] = useState("");
   const [quizName, setQuizName] = useState("");
   const [questionList, setQuestionList] = useState([]);
-
-  const { jwt } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   const navigate = useNavigate();
 
@@ -74,21 +71,22 @@ export const CreateHomework = () => {
 
     try {
       // Create quiz first
-      const returnedQuiz = await quizzesService.create(jwt, quizObject);
+      const returnedQuiz = await axiosPrivate.post("/quizzes", quizObject);
 
       // Then loop through questionList and create each question document
       const questionObjects = questionList.map((question) => ({
-        parentQuiz: returnedQuiz.id,
+        parentQuiz: returnedQuiz.data.id,
         question: question.question,
         answer: question.answer,
         hint: question.hint,
       }));
 
       try {
-        const response = await bingoQuestionsService.createAll(
-          jwt,
+        const response = await axiosPrivate.post(
+          "/bingoQuestions/addAllQuestions",
           questionObjects
         );
+
         navigate(`/teacher/homework`);
       } catch (err) {
         console.log(err);
@@ -140,7 +138,7 @@ export const CreateHomework = () => {
                   onClick={handleCreate}
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  Create Material
+                  Create Quiz
                 </Button>
               )}
             </Box>

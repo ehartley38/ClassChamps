@@ -107,7 +107,7 @@ classroomsRouter.put(
 );
 
 // Add the user to the classroom using the room code
-classroomsRouter.put("/join", userExtractor, async (request, response) => {
+classroomsRouter.put("/join", async (request, response) => {
   const user = request.user;
   const code = request.body.roomCode;
 
@@ -115,7 +115,7 @@ classroomsRouter.put("/join", userExtractor, async (request, response) => {
     const classroom = await Classroom.findOne({ roomCode: code });
     if (!classroom) {
       //throw new Error('Invalid classroom code')
-      return response.status(404).send("Invalid room code");
+      return response.sendStatus(404); //Not found
     } else {
       if (classroom.students.includes(user.id)) {
         return response
