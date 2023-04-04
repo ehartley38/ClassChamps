@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
+  Alert,
   Box,
   Button,
   Container,
@@ -15,8 +16,13 @@ export const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   let navigate = useNavigate();
+
+  useEffect(() => {
+    setErrorMessage("");
+  }, [name, username, password, confirmPassword]);
 
   const validatePassword = () => {
     let isValid = true;
@@ -32,7 +38,7 @@ export const SignUp = () => {
     e.preventDefault();
 
     if (!validatePassword()) {
-      console.log("Error - Username and password must match");
+      setErrorMessage("Passwords must match");
       return;
     }
 
@@ -53,13 +59,24 @@ export const SignUp = () => {
 
       navigate("/login");
     } catch (err) {
-      console.log("Error");
-      console.log(err.response.status);
+      if (err.response.status === 409) {
+        setErrorMessage("Username not unique");
+      } else {
+        setErrorMessage("User Registration Failed");
+      }
     }
   };
 
   return (
     <Container component="main" maxWidth="xs">
+      {errorMessage ? (
+        <Alert variant="outlined" severity="error" sx={{ mt: 2 }}>
+          {errorMessage}
+        </Alert>
+      ) : (
+        <></>
+      )}
+
       <Box
         sx={{
           marginTop: 8,

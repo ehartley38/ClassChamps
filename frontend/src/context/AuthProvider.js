@@ -7,7 +7,6 @@ export const AuthProvider = ({ children }) => {
   const [persist, setPersist] = useState(
     JSON.parse(localStorage.getItem("persist")) || false
   );
-
   const [recentBadges, setRecentBadges] = useState([]);
 
   return (
