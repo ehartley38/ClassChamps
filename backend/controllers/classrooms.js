@@ -5,6 +5,7 @@ const Classroom = require("../models/classroom");
 let toolFile = require("../utils/tools");
 const User = require("../models/user");
 
+// USED
 classroomsRouter.post("/", userExtractor, async (request, response) => {
   const body = request.body;
 
@@ -28,6 +29,7 @@ classroomsRouter.post("/", userExtractor, async (request, response) => {
   }
 });
 
+// USED
 classroomsRouter.get(
   "/teacherClassrooms",
   userExtractor,
@@ -39,6 +41,7 @@ classroomsRouter.get(
   }
 );
 
+// USED
 classroomsRouter.get(
   "/studentClassrooms",
   userExtractor,
@@ -52,6 +55,7 @@ classroomsRouter.get(
   }
 );
 
+// USED
 classroomsRouter.get("/:id", async (request, response) => {
   const id = request.params.id;
   const classroom = await Classroom.findById(id).populate("students").exec();
@@ -59,6 +63,7 @@ classroomsRouter.get("/:id", async (request, response) => {
   response.json(classroom);
 });
 
+// USED
 classroomsRouter.delete("/:id", userExtractor, async (request, response) => {
   const user = request.user;
 
@@ -76,6 +81,7 @@ classroomsRouter.delete("/:id", userExtractor, async (request, response) => {
   }
 });
 
+// USED
 // Generate a room code for a given classroom
 classroomsRouter.put(
   "/:id/generate-code",
@@ -106,6 +112,7 @@ classroomsRouter.put(
   }
 );
 
+// USED
 // Add the user to the classroom using the room code
 classroomsRouter.put("/join", async (request, response) => {
   const user = request.user;
@@ -136,6 +143,7 @@ classroomsRouter.put("/join", async (request, response) => {
   }
 });
 
+//USED
 // Remove a student from a class
 classroomsRouter.put(
   "/:classId/removeUser/:userId",

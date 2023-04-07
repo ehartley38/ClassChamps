@@ -17,7 +17,7 @@ export const Classrooms = () => {
   }, []);
 
   const deleteClassroom = async (room) => {
-    const response = await axiosPrivate.delete(`/${room.id}`);
+    const response = await axiosPrivate.delete(`/classrooms/${room.id}`);
 
     const updatedClassrooms = classrooms.filter((c) => c.id !== room.id);
     setClassrooms(updatedClassrooms);

@@ -19,7 +19,6 @@ const assignmentRouter = require("./controllers/assignments");
 const bingoSessionsRouter = require("./controllers/bingoSessions");
 const assignmentSubmissionsRouter = require("./controllers/assignmentSubmissions");
 const badgesRouter = require("./controllers/badges");
-const awardedBadgesRouter = require("./controllers/awardedBadges");
 const refreshTokensRouter = require("./controllers/refreshTokens");
 const registerRouter = require("./controllers/register");
 
@@ -61,7 +60,6 @@ app.use("/api/assignments", assignmentRouter);
 app.use("/api/bingoSessions", bingoSessionsRouter);
 app.use("/api/assignmentSubmissions", assignmentSubmissionsRouter);
 app.use("/api/badges", badgesRouter);
-app.use("/api/awardedBadges", awardedBadgesRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

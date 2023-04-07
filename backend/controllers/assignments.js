@@ -6,6 +6,7 @@ const AssignmentSubmission = require("../models/assignmentSubmission");
 const User = require("../models/user");
 const mongoose = require("mongoose");
 
+// USED
 // Create a new assignment
 assignmentRouter.post("/", userExtractor, async (request, response) => {
   const body = request.body;
@@ -35,6 +36,7 @@ assignmentRouter.post("/", userExtractor, async (request, response) => {
   }
 });
 
+// USED
 // Get all assignments for a given classroom
 assignmentRouter.get(
   "/classroom/:classroomId",
@@ -70,6 +72,7 @@ assignmentRouter.get(
   }
 );
 
+// USED
 // Get leaderboard data for a given assignment
 assignmentRouter.get(
   "/leaderboard/:assignmentId",

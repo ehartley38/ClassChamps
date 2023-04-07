@@ -3,6 +3,7 @@ const assignmentSubmissionsRouter = require("express").Router();
 const AssignmentSubmission = require("../models/assignmentSubmission");
 let toolFile = require("../utils/tools");
 
+// USED
 // Create a new submission and handle xp gains
 assignmentSubmissionsRouter.post(
   "/",
@@ -51,6 +52,7 @@ assignmentSubmissionsRouter.post(
   }
 );
 
+// USED
 // Get all sumbissions for a given user
 assignmentSubmissionsRouter.get(
   "/",

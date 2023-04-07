@@ -19,6 +19,7 @@ badgesRouter.post("/", async (request, response) => {
   }
 });
 
+// USED
 badgesRouter.get("/", async (request, response) => {
   const badges = await Badge.find({});
   response.json(badges);
