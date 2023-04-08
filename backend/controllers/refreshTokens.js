@@ -11,10 +11,10 @@ refreshTokensRouter.get("/", async (request, response) => {
 
   const user = await User.findOne({ refreshToken });
   if (!user) return response.sendStatus(403);
-
+  // console.log("helphelp");
   jwt.verify(refreshToken, config.REFRESH_TOKEN_SECRET, (err, decoded) => {
     if (err || user.username !== decoded.username)
-      return response.sendStatus(403);
+      return response.sendStatus(404);
     const roles = Object.values(user.roles);
     const userForToken = {
       username: decoded.username,
@@ -23,7 +23,7 @@ refreshTokensRouter.get("/", async (request, response) => {
     const accessToken = jwt.sign(userForToken, config.ACCESS_TOKEN_SECRET, {
       expiresIn: "1d",
     });
-    response.json({ roles, accessToken });
+    response.status(200).json({ roles, accessToken });
   });
 });
 
