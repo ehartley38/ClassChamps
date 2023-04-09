@@ -157,6 +157,31 @@ const countClassroomsWithTeacher = async (teacherId, classrooms) => {
   return count;
 };
 
+const generateBingoQuestions = (quizId) => {
+  const questions = [
+    {
+      parentQuiz: quizId,
+      question: "Test Question1",
+      answer: "Test Answer1",
+      hint: "Test Hint1",
+    },
+    {
+      parentQuiz: quizId,
+      question: "Test Question2",
+      answer: "Test Answer2",
+      hint: "Test Hint2",
+    },
+    {
+      parentQuiz: quizId,
+      question: "Test Question3",
+      answer: "Test Answer3",
+      hint: "Test Hint3",
+    },
+  ];
+
+  return questions;
+};
+
 module.exports = {
   usersInDb,
   classroomsInDb,
@@ -165,4 +190,5 @@ module.exports = {
   generateStudentsInitialClassrooms,
   initialUsers,
   initialTeachers,
+  generateBingoQuestions,
 };

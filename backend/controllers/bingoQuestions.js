@@ -48,6 +48,7 @@ bingoQuestionsRouter.post(
 
       if (!quiz) {
         console.log("No quiz");
+        response.status(400);
         return;
       }
 

@@ -44,13 +44,17 @@ assignmentRouter.get(
   async (request, response) => {
     const user = request.user;
     const classroomId = request.params.classroomId;
-    const assignments = await Assignment.find({
-      classroomId: classroomId,
-    })
-      .populate("quizId", "quizType")
-      .sort({ dueDate: 1 });
+    try {
+      const assignments = await Assignment.find({
+        classroomId: classroomId,
+      })
+        .populate("quizId", "quizType")
+        .sort({ dueDate: 1 });
 
-    response.json(assignments);
+      response.status(200).json(assignments);
+    } catch (err) {
+      response.status(400).json(err);
+    }
   }
 );
 
