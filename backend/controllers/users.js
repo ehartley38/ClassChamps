@@ -8,18 +8,21 @@ const { userExtractor } = require("../utils/middleware");
 usersRouter.get("/id", async (request, response) => {
   const user = request.user;
   const id = request.user._id;
-
-  const userObject = await User.findById(id)
-    .populate("classrooms")
-    .populate({
-      path: "awardedBadgeIds",
-      populate: {
-        path: "badgeId",
-        model: "Badge",
-      },
-    })
-    .exec();
-  response.json(userObject);
+  try {
+    const userObject = await User.findById(id)
+      .populate("classrooms")
+      .populate({
+        path: "awardedBadgeIds",
+        populate: {
+          path: "badgeId",
+          model: "Badge",
+        },
+      })
+      .exec();
+    response.status(200).json(userObject).end();
+  } catch (err) {
+    response.status(401).end();
+  }
 });
 
 module.exports = usersRouter;

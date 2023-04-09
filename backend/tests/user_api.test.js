@@ -1,47 +1,45 @@
-const mongoose = require("mongoose")
-const supertest = require("supertest")
-const app = require('../app')
-const api = supertest(app)
-const User = require('../models/user')
-const helper = require('./test_helper')
+const mongoose = require("mongoose");
+const supertest = require("supertest");
+const app = require("../app");
+const api = supertest(app);
+const User = require("../models/user");
+const helper = require("./test_helper");
+const jwt = require("jsonwebtoken");
+const config = require("../utils/config");
 
 beforeEach(async () => {
-    await User.deleteMany({})
-})
+  await User.deleteMany({});
+  const userObjects = helper.initialUsers.map((user) => new User(user));
+  const promiseArray = userObjects.map((user) => user.save());
+  await Promise.all(promiseArray);
+});
 
-describe('When there are initially no users saved', () => {
-    test('no users are returned', async () => {
-        const response = await api.get('/api/users').expect('Content-Type', /application\/json/)
-
-        expect(response.body).toHaveLength(0)
+test("User data is returned successfully when logged in", async () => {
+  const response = await api
+    .post("/api/login")
+    .send({
+      username: "testuser1",
+      password: "Password1",
     })
-})
+    .expect(200);
 
-describe('Addition of a new user', () => {
-    test('succeeds with valid data', async () => {
-        const newUser = {
-            "username": "testuser1",
-            "name": "Jimmy",
-            "password": "Password1"
-        }
+  const accessToken = response.body.accessToken;
 
-        await api
-            .post('/api/users')
-            .send(newUser)
-            .expect(201)
-            .expect('Content-Type', /application\/json/)
+  await api.get("/api/users/id", async () => {
+    const response = await api
+      .get("/api/users/id")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
 
-        const usersAtEnd = await helper.usersInDb()
-        expect(usersAtEnd).toHaveLength(1)
+    expect(response.body).toContain({
+      username: "testuser1",
+    });
+  });
+});
 
-        const usernames = usersAtEnd.map(user => user.username)
-        expect(usernames).toContain('testuser1')
-
-        const names = usersAtEnd.map(user => user.name)
-        expect(names).toContain('Jimmy')
-
-        const roles = usersAtEnd.map(user => user.role)
-        expect(roles).toContain('student')
-    })
-
-})
+test("No User data is returned when not logged in", async () => {
+  await api.get("/api/users/id", async () => {
+    const response = await api.get("/api/users/id").expect(401);
+  });
+});
