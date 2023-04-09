@@ -73,9 +73,9 @@ classroomsRouter.delete("/:id", userExtractor, async (request, response) => {
       await Classroom.findByIdAndRemove(request.params.id);
       user.classrooms.pull(request.params.id);
       await user.save();
+      response.status(204).end();
     }
-    // Need to properly sort out error handling here for invalid users
-    response.status(204).end();
+    response.status(401).end();
   } catch (err) {
     response.status(400).end();
   }
@@ -90,11 +90,13 @@ classroomsRouter.put(
     const user = request.user;
     const body = request.body;
     const ownersArray = Object.values(body.owners);
+    let isTest = body.isTest; // Used for testing
 
     if (ownersArray.includes(user.id)) {
       let unique = false;
       while (unique === false) {
-        let code = toolFile.generateCode(6);
+        let code = isTest ? "123456" : toolFile.generateCode(6);
+        isTest = false;
 
         try {
           const updatedClassroom = await Classroom.findOneAndUpdate(
@@ -103,11 +105,13 @@ classroomsRouter.put(
             { new: true }
           ).populate("students");
           unique = true;
-          response.json(updatedClassroom);
+          response.status(200).json(updatedClassroom).end();
         } catch (err) {
           console.log(err);
         }
       }
+    } else {
+      response.status(401).end();
     }
   }
 );
@@ -161,9 +165,11 @@ classroomsRouter.put(
 
       student.classrooms.pull(classId);
       await student.save();
-    }
 
-    response.status(200).end();
+      response.status(200).end();
+    } else {
+      response.status(401).end();
+    }
   }
 );
 

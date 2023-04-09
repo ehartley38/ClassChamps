@@ -35,6 +35,31 @@ const initialUsers = [
   },
 ];
 
+const initialTeachers = [
+  {
+    _id: "642aaeb1f8ef7be310dadec4",
+    username: "testteacher1",
+    name: "Billy",
+    passwordHash:
+      "$2b$10$MrHTLOWAbq/NRIIKIFSib.fv2VTy2btSIqE4OeD244sB3Z5l1Sn.6",
+    roles: {
+      Student: 2000,
+      Teacher: 3000,
+    },
+  },
+  {
+    _id: "642aaeb1f8ef7be310dadec5",
+    username: "testteacher2",
+    name: "Sue",
+    passwordHash:
+      "$2b$10$MrHTLOWAbq/NRIIKIFSib.fv2VTy2btSIqE4OeD244sB3Z5l1Sn.6",
+    roles: {
+      Student: 2000,
+      Teacher: 3000,
+    },
+  },
+];
+
 const generateTeachersInitialClassrooms = (teacherId) => {
   const studentId = "63fcf1bddfe6c42656baf4e2";
 
@@ -114,7 +139,7 @@ const generateStudentsInitialClassrooms = (studentId) => {
       quizzes: [],
       roomName: "Test Classroom 3",
       students: [],
-      roomCode: "",
+      roomCode: "123ABC",
     },
   ];
 
@@ -139,4 +164,5 @@ module.exports = {
   countClassroomsWithTeacher,
   generateStudentsInitialClassrooms,
   initialUsers,
+  initialTeachers,
 };

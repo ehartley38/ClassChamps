@@ -51,7 +51,7 @@ const verifyJWT = (request, response, next) => {
     request.headers.authorization || request.headers.Authorization;
   if (!authHeader?.startsWith("Bearer ")) return response.sendStatus(401);
   const token = authHeader.split(" ")[1];
-  console.log(token);
+  // console.log(token);
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
     if (err) return response.sendStatus(403); //invalid token
     const user = await User.findById(decoded.id).populate("awardedBadgeIds");
