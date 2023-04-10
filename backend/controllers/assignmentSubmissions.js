@@ -27,7 +27,7 @@ assignmentSubmissionsRouter.post(
     try {
       const savedSubmission = await submission.save();
     } catch (err) {
-      response.status(400).json(err);
+      response.status(400).json(err).end();
     }
 
     // Assign xp to student
@@ -47,7 +47,7 @@ assignmentSubmissionsRouter.post(
         .status(201)
         .json({ xpGain: totalXpGain, awardedBadges: response.awardedBadges });
     } catch (err) {
-      console.log(err);
+      response.status(400).end();
     }
   }
 );
@@ -64,9 +64,13 @@ assignmentSubmissionsRouter.get(
       const submissions = await AssignmentSubmission.find({ student: user.id })
         .sort({ submissionDate: -1 })
         .populate("assignment", "assignmentName");
-      response.status(200).json(submissions);
+      if (submissions.length > 0) {
+        response.status(200).json(submissions).end();
+      } else {
+        response.status(204).end();
+      }
     } catch (err) {
-      response.status(400).json(err);
+      response.status(400).end();
     }
   }
 );
