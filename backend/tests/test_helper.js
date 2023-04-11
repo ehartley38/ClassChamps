@@ -182,6 +182,34 @@ const generateBingoQuestions = (quizId) => {
   return questions;
 };
 
+const badges = [
+  {
+    _id: "641da25595a6c2ad1c5fd67c",
+    name: "First Steps",
+    description: "Complete your first assignment",
+  },
+  {
+    _id: "641da2af95a6c2ad1c5fd67e",
+    name: "Early Bird",
+    description: "Complete an assignment at least a week before the deadline",
+  },
+  {
+    _id: "641da2e095a6c2ad1c5fd680",
+    name: "Bingo Genius",
+    description: "Finish a bingo quiz without making a mistake",
+  },
+  {
+    _id: "641da30f95a6c2ad1c5fd684",
+    name: "Perseverance Pro",
+    description: "Re-try an assignment",
+  },
+  {
+    _id: "641da32b95a6c2ad1c5fd686",
+    name: "Mastermind",
+    description: "Answer all questions correctly without using any hints",
+  },
+];
+
 module.exports = {
   usersInDb,
   classroomsInDb,
@@ -191,4 +219,5 @@ module.exports = {
   initialUsers,
   initialTeachers,
   generateBingoQuestions,
+  badges,
 };
