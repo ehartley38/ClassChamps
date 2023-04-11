@@ -27,6 +27,7 @@ assignmentSubmissionsRouter.post(
     try {
       const savedSubmission = await submission.save();
     } catch (err) {
+      console.log(err);
       response.status(400).json(err).end();
     }
 

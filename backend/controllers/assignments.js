@@ -85,6 +85,12 @@ assignmentRouter.get(
     const user = request.user;
     const assignmentId = request.params.assignmentId;
 
+    // Check if assignment with given ID exists
+    const assignment = await Assignment.findById(assignmentId);
+    if (!assignment) {
+      return response.status(400).end();
+    }
+
     AssignmentSubmission.aggregate([
       // Find all submissions, sort by time, then group by student, and select
       // the first document in each group
@@ -124,9 +130,10 @@ assignmentRouter.get(
     ]).exec((err, submissions) => {
       if (err) {
         console.log(err);
+        response.status(400).end();
         return;
       }
-      response.json(submissions);
+      response.status(201).json(submissions).end();
     });
   }
 );
