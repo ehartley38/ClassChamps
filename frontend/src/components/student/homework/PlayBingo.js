@@ -45,10 +45,9 @@ export const PlayBingo = ({ assignment }) => {
   const [hintUsed, setHintUsed] = useState(false);
 
   const axiosPrivate = useAxiosPrivate();
-
   const { width, height } = useWindowSize();
-  let navigate = useNavigate();
   const { setRecentBadges } = useAuth();
+  let navigate = useNavigate();
 
   // Timer stuff
   const timeNow = new Date();
@@ -56,6 +55,7 @@ export const PlayBingo = ({ assignment }) => {
   const [endTime, setEndTime] = useState(undefined); // Completion time
 
   useEffect(() => {
+    // Should move duplicate session check to backend
     const initialize = async () => {
       // Check if session exists for this particular assignment
       const sessionResponse = await axiosPrivate.get("/bingoSessions");
@@ -65,10 +65,9 @@ export const PlayBingo = ({ assignment }) => {
         (session) => session.assignment === assignment.id
       ).length;
 
-      // if session doesn't exist, create a new session
+      // If session doesn't exist, create a new session
       if (count === 0) {
         // Get all questions for this quiz
-
         const questionDataResponse = await axiosPrivate.get(
           `/bingoQuestions/getAllByQuiz/${assignment.quizId.id}`
         );
@@ -106,7 +105,7 @@ export const PlayBingo = ({ assignment }) => {
           setTime(Math.abs(storedTime.getTime() - timeNow.getTime()));
         }
       } else if (count === 1) {
-        // Else load the session
+        // Else if a session exists, load the session
         const currentSession = sessions.filter(
           (session) => session.assignment === assignment.id
         )[0];
@@ -129,6 +128,7 @@ export const PlayBingo = ({ assignment }) => {
     initialize();
   }, []);
 
+  // Check if all questions are answered
   useEffect(() => {
     if (
       currentQuestionIndex !== 0 &&
@@ -139,6 +139,7 @@ export const PlayBingo = ({ assignment }) => {
     }
   }, [currentQuestionIndex]);
 
+  // Shuffle an array - Used to shuffle order of answer cards
   const shuffleArray = (array) => {
     const shuffledArray = [...array];
     for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -151,6 +152,7 @@ export const PlayBingo = ({ assignment }) => {
     return shuffledArray;
   };
 
+  // Handle the clicking of a answer card
   const handleAnswerClick = (questionId) => {
     // Handle correct
     if (questionId === questions[currentQuestionIndex]._id) {
@@ -190,6 +192,7 @@ export const PlayBingo = ({ assignment }) => {
     }
   };
 
+  // Handle the clicking of the save and quit button
   const handleSave = async () => {
     const response = await axiosPrivate.post(
       `/bingoSessions/updateIsCorrect/${session.id}`,
@@ -202,8 +205,9 @@ export const PlayBingo = ({ assignment }) => {
     navigate(-1);
   };
 
+  // Handle the clicking of the save and exit button when quiz complete
   const handleEndSave = async () => {
-    // Create new submission and return xpGained
+    // Create new submission and return xpGained and awardedBadges
     const submission = {
       assignment: assignment.id,
       timeToComplete: endTime,
@@ -218,14 +222,6 @@ export const PlayBingo = ({ assignment }) => {
       );
       const responseData = response.data;
       setRecentBadges(responseData.awardedBadges);
-      // Update user state with newly awarded badges
-      // const updatedUser = { ...user };
-      // updatedUser.awardedBadgeIds = [
-      //   ...updatedUser.awardedBadgeIds,
-      //   ...response.awardedBadges,
-      // ];
-      // updatedUser.experiencePoints += response.xpGain;
-      // setUser(updatedUser);
     } catch (err) {}
 
     // Delete session

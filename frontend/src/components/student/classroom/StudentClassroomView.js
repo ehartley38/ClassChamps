@@ -1,5 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import { useState, useEffect } from "react";
 import { Assignment } from "./Assignment";
@@ -18,7 +17,6 @@ import {
 } from "@mui/material";
 import { convertMilliseconds } from "../../../utils/tools";
 import { LeaderboardItem } from "./LeaderboardItem";
-import { FixedSizeList } from "react-window";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 const TabPanel = ({ value, index, children }) => {
@@ -37,15 +35,15 @@ export const StudentClassroomView = () => {
   const [submissions, setSubmissions] = useState();
   const [tabValue, setTabValue] = useState(0);
   const [currentAssignmentId, setCurrentAssignmentId] = useState(undefined);
-  const [allSubmissions, setAllSubmissions] = useState({}); // This contains all submissions from all users for a given assignment
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [openSnackBar, setOpenSnackbar] = useState(true);
   const [openSuccessfulJoin, setOpenSuccessfulJoin] = useState(
     isJoinError === true || isJoinError === undefined ? false : true
-  ); // :/ If no join error, then set successful join message to open
+  ); // :/ If no join error, then show successful join message
   const { recentBadges, setRecentBadges } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
+  // Fetch assignments and submissions
   useEffect(() => {
     const fetchData = async () => {
       const assignmentData = await axiosPrivate.get(
@@ -60,7 +58,7 @@ export const StudentClassroomView = () => {
     fetchData();
   }, []);
 
-  // Update the completed assignments list
+  // Update the completed assignments list when assignments or submissions change
   useEffect(() => {
     const completed = [];
     if (assignments && submissions) {
@@ -76,6 +74,7 @@ export const StudentClassroomView = () => {
     }
   }, [assignments, submissions]);
 
+  // Handle tab change
   const handleTabChange = (e, newValue) => {
     setTabValue(newValue);
   };
@@ -85,6 +84,7 @@ export const StudentClassroomView = () => {
     return assignments.find((assignment) => assignment.id === id);
   };
 
+  // Handle playing an assignment
   const handlePlay = () => {
     const assignment = getAssignment(currentAssignmentId);
     navigate(`homework/${assignment.id}`, {
@@ -92,11 +92,13 @@ export const StudentClassroomView = () => {
     });
   };
 
+  // Handle closing the snackbar
   const handleSnackClose = () => {
     setOpenSnackbar(false);
     setRecentBadges([]);
   };
 
+  // Handle closing the successful join message
   const handleSuccessfulJoinClose = () => {
     setOpenSuccessfulJoin(false);
   };
@@ -117,6 +119,7 @@ export const StudentClassroomView = () => {
       ) : (
         <></>
       )}
+
       {/* Display recently earned badges */}
       {recentBadges.length > 0 ? (
         <Snackbar
@@ -140,13 +143,16 @@ export const StudentClassroomView = () => {
       ) : (
         <></>
       )}
+
       {/* Main content */}
       <Typography variant="h2" sx={{ color: "primary.main", mt: 2 }}>
         {classroomObject.roomName}
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={8}>
+          {/* Display Due and Complete assignments */}
           {assignments ? (
+            // Render Due assignments
             assignments.map((assignment) => {
               // If the assignment has already been submitted, dont render here.
               if (
@@ -182,6 +188,7 @@ export const StudentClassroomView = () => {
             </>
           )}
           {assignments ? (
+            // Render Completed assignments
             <>
               <Typography variant="h3" sx={{ color: "secondary.main", mt: 2 }}>
                 Complete
@@ -206,7 +213,9 @@ export const StudentClassroomView = () => {
           )}
         </Grid>
         <Grid item xs={4}>
+          {/* Tabs for Leaderboard and Submissions */}
           {currentAssignmentId ? (
+            // Display play button if an assignment is selected
             <>
               <Typography variant="h3">
                 {getAssignment(currentAssignmentId).assignmentName}
@@ -229,6 +238,7 @@ export const StudentClassroomView = () => {
               <Tab label="Your Submissions" />
             </Tabs>
           </Box>
+
           {/* Leaderboard */}
           <TabPanel value={tabValue} index={0}>
             <List sx={{ width: "100%", bgcolor: "background.paper" }}>
@@ -260,6 +270,7 @@ export const StudentClassroomView = () => {
               )}
             </List>
           </TabPanel>
+
           {/* Submissions */}
           <TabPanel value={tabValue} index={1}>
             {submissions &&

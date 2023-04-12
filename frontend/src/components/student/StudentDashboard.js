@@ -34,7 +34,7 @@ export const StudentDashboard = () => {
 
   if (classrooms && userData) {
     return (
-      <div>
+      <>
         <Typography
           variant="h1"
           sx={{ my: 4, textAlign: "center", color: "primary.main" }}
@@ -46,43 +46,21 @@ export const StudentDashboard = () => {
           Your classrooms
         </Typography>
         <Grid container>
-          <Grid item xs={12} sx={{ my: 2 }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                gap: 4,
-              }}
-            >
-              {classrooms ? (
-                <>
-                  {classrooms.map((classroom) => (
-                    <StudentClassroomPanel
-                      key={classroom.id}
-                      classroom={classroom}
-                    />
-                  ))}
-                  <JoinRoom />
-                </>
-              ) : (
-                <>
-                  <Box sx={{ width: "31%" }}>
-                    <Skeleton variant="rounded" height={150} sx={{ m: 2 }} />
-                  </Box>
-
-                  <Box sx={{ width: "31%" }}>
-                    <Skeleton variant="rounded" height={150} sx={{ m: 2 }} />
-                  </Box>
-                  <Box sx={{ width: "31%" }}>
-                    <Skeleton variant="rounded" height={150} sx={{ m: 2 }} />
-                  </Box>
-                </>
-              )}
-            </Box>
+          <Grid
+            item
+            container
+            sx={{ py: 2 }}
+            spacing={4}
+            xs={12}
+            justifyContent="center"
+          >
+            {classrooms.map((classroom) => (
+              <StudentClassroomPanel key={classroom.id} classroom={classroom} />
+            ))}
+            <JoinRoom />
           </Grid>
         </Grid>
-      </div>
+      </>
     );
   }
 };

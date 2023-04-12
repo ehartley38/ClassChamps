@@ -7,6 +7,7 @@ import {
   Typography,
   Paper,
   TextField,
+  Grid,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -64,81 +65,78 @@ export const JoinRoom = () => {
 
   // https://mui.com/material-ui/react-modal/
   return (
-    <>
-      <Box sx={{ width: "31%" }}>
-        <Paper
-          elevation={3}
-          sx={{
-            height: 150,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
+    <Grid item xs={4}>
+      <Paper
+        elevation={3}
+        sx={{
+          height: 150,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Box textAlign="center" sx={{ pb: 2 }}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => handleOpen()}
+          >
+            Join Room
+          </Button>
+        </Box>
+      </Paper>
+      {/* Modal */}
+      <Box textAlign="center" alignItems="center">
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          slots={{ backdrop: Backdrop }}
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
           }}
         >
-          <Box></Box>
-          <Box textAlign="center">
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => handleOpen()}
-            >
-              Join Room
-            </Button>
-          </Box>
-        </Paper>
-        {/* Modal */}
-        <Box textAlign="center" alignItems="center">
-          <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
-            open={open}
-            onClose={handleClose}
-            closeAfterTransition
-            slots={{ backdrop: Backdrop }}
-            slotProps={{
-              backdrop: {
-                timeout: 500,
-              },
-            }}
-          >
-            <Fade in={open}>
-              <Box sx={modalStyle} textAlign="center">
-                <Typography
-                  variant="h3"
-                  sx={{ my: 4, textAlign: "center", color: "secondary.main" }}
-                >
-                  Enter classroom code{" "}
-                </Typography>
-                <form onSubmit={handleSubmit}>
-                  {isJoinError ? (
-                    <TextField
-                      id="joinCode"
-                      value={joinCode}
-                      variant="outlined"
-                      onChange={({ target }) => setJoinCode(target.value)}
-                      error
-                      helperText="Invalid room code"
-                    />
-                  ) : (
-                    <TextField
-                      id="joinCode"
-                      value={joinCode}
-                      variant="outlined"
-                      onChange={({ target }) => setJoinCode(target.value)}
-                    />
-                  )}
+          <Fade in={open}>
+            <Box sx={modalStyle} textAlign="center">
+              <Typography
+                variant="h3"
+                sx={{ my: 4, textAlign: "center", color: "secondary.main" }}
+              >
+                Enter classroom code{" "}
+              </Typography>
+              <form onSubmit={handleSubmit}>
+                {isJoinError ? (
+                  <TextField
+                    id="joinCode"
+                    value={joinCode}
+                    variant="outlined"
+                    onChange={({ target }) => setJoinCode(target.value)}
+                    error
+                    helperText="Invalid room code"
+                  />
+                ) : (
+                  <TextField
+                    id="joinCode"
+                    value={joinCode}
+                    variant="outlined"
+                    onChange={({ target }) => setJoinCode(target.value)}
+                  />
+                )}
 
-                  <Box textAlign="center" sx={{ m: 2 }}>
-                    <Button type="submit" variant="contained">
-                      Join
-                    </Button>
-                  </Box>
-                </form>
-              </Box>
-            </Fade>
-          </Modal>
-        </Box>
+                <Box textAlign="center" sx={{ m: 2 }}>
+                  <Button type="submit" variant="contained">
+                    Join
+                  </Button>
+                </Box>
+              </form>
+            </Box>
+          </Fade>
+        </Modal>
       </Box>
-    </>
+    </Grid>
   );
 };

@@ -26,6 +26,7 @@ export const Assignment = ({
   const handleClick = async () => {
     setCurrentAssignmentId(assignment.id);
     try {
+      // Fetch leaderboard data for this assignment
       // Need to optimise!
       const leaderboardResponse = await axiosPrivate.get(
         `/assignments/leaderboard/${assignment.id}`
