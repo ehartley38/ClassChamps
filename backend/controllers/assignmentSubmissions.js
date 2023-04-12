@@ -1,4 +1,4 @@
-const { userExtractor, checkBadges } = require("../utils/middleware");
+const { checkBadges } = require("../utils/middleware");
 const assignmentSubmissionsRouter = require("express").Router();
 const AssignmentSubmission = require("../models/assignmentSubmission");
 let toolFile = require("../utils/tools");
@@ -7,7 +7,7 @@ let toolFile = require("../utils/tools");
 // Create a new submission and handle xp gains
 assignmentSubmissionsRouter.post(
   "/",
-  [userExtractor, checkBadges],
+  checkBadges,
   async (request, response) => {
     const body = request.body;
     const user = request.user;
@@ -55,43 +55,35 @@ assignmentSubmissionsRouter.post(
 
 // USED
 // Get all sumbissions for a given user
-assignmentSubmissionsRouter.get(
-  "/",
-  userExtractor,
-  async (request, response) => {
-    const user = request.user;
+assignmentSubmissionsRouter.get("/", async (request, response) => {
+  const user = request.user;
 
-    try {
-      const submissions = await AssignmentSubmission.find({ student: user.id })
-        .sort({ submissionDate: -1 })
-        .populate("assignment", "assignmentName");
-      if (submissions.length > 0) {
-        response.status(200).json(submissions).end();
-      } else {
-        response.status(204).end();
-      }
-    } catch (err) {
-      response.status(400).end();
+  try {
+    const submissions = await AssignmentSubmission.find({ student: user.id })
+      .sort({ submissionDate: -1 })
+      .populate("assignment", "assignmentName");
+    if (submissions.length > 0) {
+      response.status(200).json(submissions).end();
+    } else {
+      response.status(204).end();
     }
+  } catch (err) {
+    response.status(400).end();
   }
-);
+});
 
 // Get all submissions for all users for a given assignment
-assignmentSubmissionsRouter.get(
-  "/:assignmentId",
-  userExtractor,
-  async (request, response) => {
-    const assignmentId = request.params.assignmentId;
+assignmentSubmissionsRouter.get("/:assignmentId", async (request, response) => {
+  const assignmentId = request.params.assignmentId;
 
-    try {
-      const submissions = await AssignmentSubmission.find({
-        assignment: assignmentId,
-      });
-      response.status(200).json(submissions);
-    } catch (err) {
-      response.status(400).json(err);
-    }
+  try {
+    const submissions = await AssignmentSubmission.find({
+      assignment: assignmentId,
+    });
+    response.status(200).json(submissions);
+  } catch (err) {
+    response.status(400).json(err);
   }
-);
+});
 
 module.exports = assignmentSubmissionsRouter;

@@ -6,13 +6,10 @@ import {
   Button,
   Checkbox,
   Container,
-  createTheme,
   FormControlLabel,
   Grid,
   Link,
-  Paper,
   TextField,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -24,7 +21,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const { setAuth, error, persist, setPersist } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
 
   let navigate = useNavigate();
   const location = useLocation;
@@ -43,8 +40,6 @@ const LoginForm = () => {
       );
       const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
-      // const accessToken = response?.accessToken;
-      // const roles = response?.roles;
       setAuth({ username, password, roles, accessToken });
 
       setUsername("");
@@ -175,7 +170,16 @@ const LoginForm = () => {
           </Grid>
         </Box>
       </Box>
-      {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        align="center"
+        sx={{ mt: 2 }}
+      >
+        <Link color="inherit" href="https://github.com/ehartley38">
+          GitHub
+        </Link>
+      </Typography>
     </Container>
   );
 };

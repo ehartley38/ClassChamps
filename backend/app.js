@@ -61,8 +61,4 @@ app.use("/api/bingoSessions", bingoSessionsRouter);
 app.use("/api/assignmentSubmissions", assignmentSubmissionsRouter);
 app.use("/api/badges", badgesRouter);
 
-app.use(middleware.unknownEndpoint);
-app.use(middleware.errorHandler);
-//app.use(middleware.userExtractor);
-
 module.exports = app;

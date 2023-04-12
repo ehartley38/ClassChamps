@@ -6,6 +6,7 @@ import {
   Button,
   Container,
   Grid,
+  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -169,7 +170,16 @@ export const SignUp = () => {
           </Grid>
         </Box>
       </Box>
-      {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        align="center"
+        sx={{ mt: 2 }}
+      >
+        <Link color="inherit" href="https://github.com/ehartley38">
+          GitHub
+        </Link>
+      </Typography>
     </Container>
   );
 };

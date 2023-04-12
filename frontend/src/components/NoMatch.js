@@ -1,7 +1,10 @@
+import { Box, Link, Typography } from "@mui/material";
+
 export const NoMatch = () => {
-    return (
-        <div>
-            404 not found
-        </div>
-    )
-}
+  return (
+    <Box align="center">
+      <Typography>Page not found</Typography>
+      <Link href="/">Return Home</Link>
+    </Box>
+  );
+};

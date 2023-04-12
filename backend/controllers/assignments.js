@@ -1,4 +1,3 @@
-const { userExtractor } = require("../utils/middleware");
 const assignmentRouter = require("express").Router();
 const Assignment = require("../models/assignment");
 const Classroom = require("../models/classroom");
@@ -8,7 +7,7 @@ const mongoose = require("mongoose");
 
 // USED
 // Create a new assignment
-assignmentRouter.post("/", userExtractor, async (request, response) => {
+assignmentRouter.post("/", async (request, response) => {
   const body = request.body;
   const user = request.user;
 
@@ -38,30 +37,25 @@ assignmentRouter.post("/", userExtractor, async (request, response) => {
 
 // USED
 // Get all assignments for a given classroom
-assignmentRouter.get(
-  "/classroom/:classroomId",
-  userExtractor,
-  async (request, response) => {
-    const user = request.user;
-    const classroomId = request.params.classroomId;
-    try {
-      const assignments = await Assignment.find({
-        classroomId: classroomId,
-      })
-        .populate("quizId", "quizType")
-        .sort({ dueDate: 1 });
+assignmentRouter.get("/classroom/:classroomId", async (request, response) => {
+  const user = request.user;
+  const classroomId = request.params.classroomId;
+  try {
+    const assignments = await Assignment.find({
+      classroomId: classroomId,
+    })
+      .populate("quizId", "quizType")
+      .sort({ dueDate: 1 });
 
-      response.status(200).json(assignments);
-    } catch (err) {
-      response.status(400).json(err);
-    }
+    response.status(200).json(assignments);
+  } catch (err) {
+    response.status(400).json(err);
   }
-);
+});
 
 // Get all due assignments for a provided classroom
 assignmentRouter.get(
   "/classroom/:classroomId/due",
-  userExtractor,
   async (request, response) => {
     const user = request.user;
     const classroomId = request.params.classroomId;
@@ -80,7 +74,6 @@ assignmentRouter.get(
 // Get leaderboard data for a given assignment
 assignmentRouter.get(
   "/leaderboard/:assignmentId",
-  userExtractor,
   async (request, response) => {
     const user = request.user;
     const assignmentId = request.params.assignmentId;

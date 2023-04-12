@@ -9,10 +9,6 @@ const userSchema = new mongoose.Schema({
   },
   name: String,
   passwordHash: String,
-  role: {
-    type: String,
-    default: "student",
-  },
   classrooms: [
     {
       type: mongoose.Schema.Types.ObjectId,

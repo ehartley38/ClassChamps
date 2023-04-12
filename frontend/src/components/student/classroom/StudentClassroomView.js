@@ -29,6 +29,7 @@ const TabPanel = ({ value, index, children }) => {
 
 export const StudentClassroomView = () => {
   const location = useLocation();
+  let navigate = useNavigate();
   const classroomObject = location.state.classroom;
   const isJoinError = location.state.isJoinError;
   const [assignments, setAssignments] = useState(); // This contains ALL assignments
@@ -43,7 +44,6 @@ export const StudentClassroomView = () => {
     isJoinError === true || isJoinError === undefined ? false : true
   ); // :/ If no join error, then set successful join message to open
   const { recentBadges, setRecentBadges } = useAuth();
-  let navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {

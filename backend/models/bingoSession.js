@@ -1,41 +1,41 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const bingoSessionSchema = new mongoose.Schema({
-    assignment: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Assignment'
+  assignment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Assignment",
+  },
+  student: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  questions: [
+    {
+      question: String,
+      answer: String,
+      hint: String,
+      isCorrect: Boolean,
     },
-    student: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    questions: [
-        {
-            question: String,
-            answer: String,
-            hint: String,
-            isCorrect: Boolean
-        }
-    ],
-    startTime: Date,
-    mistakeMade: {
-        type: Boolean,
-        default: false
-    },
-    hintUsed: {
-        type: Boolean,
-        default: false
-    }
-})
+  ],
+  startTime: Date,
+  mistakeMade: {
+    type: Boolean,
+    default: false,
+  },
+  hintUsed: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-bingoSessionSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id
-        delete returnedObject.__v
-    }
-})
+bingoSessionSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
+});
 
-const BingoSession = mongoose.model('BingoSession', bingoSessionSchema)
+const BingoSession = mongoose.model("BingoSession", bingoSessionSchema);
 
-module.exports = BingoSession
+module.exports = BingoSession;

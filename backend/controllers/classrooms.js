@@ -1,4 +1,3 @@
-const { userExtractor } = require("../utils/middleware");
 const classroomsRouter = require("express").Router();
 const Classroom = require("../models/classroom");
 
@@ -6,7 +5,7 @@ let toolFile = require("../utils/tools");
 const User = require("../models/user");
 
 // USED
-classroomsRouter.post("/", userExtractor, async (request, response) => {
+classroomsRouter.post("/", async (request, response) => {
   const body = request.body;
 
   const user = request.user;
@@ -30,30 +29,22 @@ classroomsRouter.post("/", userExtractor, async (request, response) => {
 });
 
 // USED
-classroomsRouter.get(
-  "/teacherClassrooms",
-  userExtractor,
-  async (request, response) => {
-    const user = request.user;
-    const classrooms = await Classroom.find({ owners: user._id });
+classroomsRouter.get("/teacherClassrooms", async (request, response) => {
+  const user = request.user;
+  const classrooms = await Classroom.find({ owners: user._id });
 
-    response.json(classrooms);
-  }
-);
+  response.json(classrooms);
+});
 
 // USED
-classroomsRouter.get(
-  "/studentClassrooms",
-  userExtractor,
-  async (request, response) => {
-    const user = request.user;
-    const classrooms = await Classroom.find({ students: user._id }).populate(
-      "assignmentIds"
-    );
+classroomsRouter.get("/studentClassrooms", async (request, response) => {
+  const user = request.user;
+  const classrooms = await Classroom.find({ students: user._id }).populate(
+    "assignmentIds"
+  );
 
-    response.json(classrooms);
-  }
-);
+  response.json(classrooms);
+});
 
 // USED
 classroomsRouter.get("/:id", async (request, response) => {
@@ -64,7 +55,7 @@ classroomsRouter.get("/:id", async (request, response) => {
 });
 
 // USED
-classroomsRouter.delete("/:id", userExtractor, async (request, response) => {
+classroomsRouter.delete("/:id", async (request, response) => {
   const user = request.user;
 
   try {
@@ -83,38 +74,34 @@ classroomsRouter.delete("/:id", userExtractor, async (request, response) => {
 
 // USED
 // Generate a room code for a given classroom
-classroomsRouter.put(
-  "/:id/generate-code",
-  userExtractor,
-  async (request, response) => {
-    const user = request.user;
-    const body = request.body;
-    const ownersArray = Object.values(body.owners);
-    let isTest = body.isTest; // Used for testing
+classroomsRouter.put("/:id/generate-code", async (request, response) => {
+  const user = request.user;
+  const body = request.body;
+  const ownersArray = Object.values(body.owners);
+  let isTest = body.isTest; // Used for testing
 
-    if (ownersArray.includes(user.id)) {
-      let unique = false;
-      while (unique === false) {
-        let code = isTest ? "123456" : toolFile.generateCode(6);
-        isTest = false;
+  if (ownersArray.includes(user.id)) {
+    let unique = false;
+    while (unique === false) {
+      let code = isTest ? "123456" : toolFile.generateCode(6);
+      isTest = false;
 
-        try {
-          const updatedClassroom = await Classroom.findOneAndUpdate(
-            { _id: body.id },
-            { roomCode: code },
-            { new: true }
-          ).populate("students");
-          unique = true;
-          response.status(200).json(updatedClassroom).end();
-        } catch (err) {
-          console.log(err);
-        }
+      try {
+        const updatedClassroom = await Classroom.findOneAndUpdate(
+          { _id: body.id },
+          { roomCode: code },
+          { new: true }
+        ).populate("students");
+        unique = true;
+        response.status(200).json(updatedClassroom).end();
+      } catch (err) {
+        console.log(err);
       }
-    } else {
-      response.status(401).end();
     }
+  } else {
+    response.status(401).end();
   }
-);
+});
 
 // USED
 // Add the user to the classroom using the room code
@@ -151,7 +138,6 @@ classroomsRouter.put("/join", async (request, response) => {
 // Remove a student from a class
 classroomsRouter.put(
   "/:classId/removeUser/:userId",
-  userExtractor,
   async (request, response) => {
     const user = request.user;
     const classId = request.params.classId;

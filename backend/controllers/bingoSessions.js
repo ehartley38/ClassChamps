@@ -1,10 +1,9 @@
-const { userExtractor } = require("../utils/middleware");
 const bingoSessionsRouter = require("express").Router();
 const BingoSession = require("../models/bingoSession");
 
 // USED
 // Create a bingo session
-bingoSessionsRouter.post("/", userExtractor, async (request, response) => {
+bingoSessionsRouter.post("/", async (request, response) => {
   const body = request.body;
   const user = request.user;
 
@@ -27,7 +26,7 @@ bingoSessionsRouter.post("/", userExtractor, async (request, response) => {
 
 // USED
 // Get a users bingo session
-bingoSessionsRouter.get("/", userExtractor, async (request, response) => {
+bingoSessionsRouter.get("/", async (request, response) => {
   const user = request.user;
 
   try {
@@ -42,7 +41,6 @@ bingoSessionsRouter.get("/", userExtractor, async (request, response) => {
 // Update questions array with new isCorrect value
 bingoSessionsRouter.post(
   "/updateIsCorrect/:sessionId",
-  userExtractor,
   async (request, response) => {
     const user = request.user;
     const body = request.body;
@@ -70,25 +68,21 @@ bingoSessionsRouter.post(
 );
 
 // USED
-bingoSessionsRouter.delete(
-  "/:sessionId",
-  userExtractor,
-  async (request, response) => {
-    const user = request.user;
-    const sessionId = request.params.sessionId;
+bingoSessionsRouter.delete("/:sessionId", async (request, response) => {
+  const user = request.user;
+  const sessionId = request.params.sessionId;
 
-    try {
-      const session = await BingoSession.findById(sessionId);
-      if (session.student.equals(user.id)) {
-        await BingoSession.deleteOne({ _id: sessionId });
-        response.status(204).end();
-      } else {
-        response.status(400).json({ message: "Student not part of session" });
-      }
-    } catch (err) {
-      response.status(400).end();
+  try {
+    const session = await BingoSession.findById(sessionId);
+    if (session.student.equals(user.id)) {
+      await BingoSession.deleteOne({ _id: sessionId });
+      response.status(204).end();
+    } else {
+      response.status(400).json({ message: "Student not part of session" });
     }
+  } catch (err) {
+    response.status(400).end();
   }
-);
+});
 
 module.exports = bingoSessionsRouter;

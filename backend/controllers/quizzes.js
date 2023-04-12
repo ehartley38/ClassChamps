@@ -1,11 +1,10 @@
-const { userExtractor } = require("../utils/middleware");
 const quizzesRouter = require("express").Router();
 const Quiz = require("../models/quiz");
 const BingoQuestion = require("../models/bingoQuestion");
 const Assignment = require("../models/assignment");
 
 // USED
-quizzesRouter.post("/", userExtractor, async (request, response) => {
+quizzesRouter.post("/", async (request, response) => {
   const body = request.body;
   const user = request.user;
 
@@ -31,7 +30,7 @@ quizzesRouter.post("/", userExtractor, async (request, response) => {
 });
 
 // USED
-quizzesRouter.get("/", userExtractor, async (request, response) => {
+quizzesRouter.get("/", async (request, response) => {
   const user = request.user;
   const quizzes = await Quiz.find({ creator: user._id });
 
@@ -39,7 +38,7 @@ quizzesRouter.get("/", userExtractor, async (request, response) => {
 });
 
 // USED
-quizzesRouter.delete("/:id", userExtractor, async (request, response) => {
+quizzesRouter.delete("/:id", async (request, response) => {
   // Eventually will need to delete from associated classroom + any set homework etc.
 
   const user = request.user;
