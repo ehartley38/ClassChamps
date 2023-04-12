@@ -54,8 +54,9 @@
 }
 
 .badge-icon {
-  width: 60%;
-  height: 60%;
+  width: 70%;
+  height: 0;
+  padding-bottom: 70%;
   border-radius: 50%;
   background-color: #fff;
   position: relative;

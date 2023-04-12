@@ -35,13 +35,13 @@ export const Badges = () => {
 
   return (
     <>
-      <Grid container>
+      <Grid container justifyContent="center" alignItems="center">
         <Grid item xs={12} sx={{ py: 2 }}>
           <Typography variant="h2" sx={{ color: "secondary.main", mt: 2 }}>
             My Badges
           </Typography>
         </Grid>
-        <Grid item container xs={12} spacing={4} justifyContent="center">
+        <Grid item container xs={9} spacing={4} justifyContent="center">
           {/* Display awarded badges first */}
           {userData.awardedBadgeIds &&
             userData.awardedBadgeIds.map((awardedBadge) => (
