@@ -13,9 +13,9 @@ export const Profile = () => {
   const [percentage, setPercentage] = useState(0);
 
   const axiosPrivate = useAxiosPrivate();
-
   let navigate = useNavigate();
 
+  // Fetch user data
   useEffect(() => {
     const fetchData = async () => {
       const userData = await axiosPrivate.get("/users/id");
@@ -25,6 +25,7 @@ export const Profile = () => {
     fetchData();
   }, []);
 
+  // Calculate level from user XP and percentage to next level
   useEffect(() => {
     if (userData) {
       const [level, previousLevelXp, nextLevelXp] = calculateLevel(
@@ -43,7 +44,7 @@ export const Profile = () => {
   if (userData)
     return (
       <>
-        <Grid container spacing={0} alignItems="center" justifyContent="center">
+        <Grid container alignItems="center" justifyContent="center">
           <Grid item xs={8}>
             <Typography variant="h3" textAlign={"center"} sx={{ mt: 1 }}>
               {`@${userData.username}`}

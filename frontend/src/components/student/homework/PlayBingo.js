@@ -254,94 +254,95 @@ export const PlayBingo = ({ assignment }) => {
   return (
     //https://stackoverflow.com/questions/55824260/same-height-cards-in-material-ui
     <>
-      <Container sx={{ py: 1 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={8} sx={{ my: 2 }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                gap: 3,
-              }}
-            >
-              {answerCards &&
-                answerCards.map((question, index) => (
-                  <BingoAnswer
-                    key={index}
-                    question={question}
-                    isCorrect={question.isCorrect}
-                    handleAnswerClick={handleAnswerClick}
-                    index={index}
-                  />
-                ))}
-            </Box>
-          </Grid>
-          <Grid item xs={4}>
-            {questions.length > 0 && (
-              <>
-                <Typography
-                  variant="h3"
-                  sx={{ my: 2, textAlign: "center", color: "secondary.main" }}
-                >
-                  {assignment.assignmentName}
-                </Typography>
-                {questions[currentQuestionIndex]?.isCorrect ? (
-                  setCurrentQuestionIndex(currentQuestionIndex + 1)
-                ) : (
-                  <>
-                    <Card sx={{ p: 1, mt: 2 }}>
-                      {questions[currentQuestionIndex]?.question}
-                    </Card>
-                    {showHint ? (
-                      <Card sx={{ p: 1, mt: 2 }}>
-                        {questions[currentQuestionIndex]?.hint}
-                      </Card>
-                    ) : (
-                      <Box textAlign="center">
-                        <Button onClick={handleHintClick}>Show Hint</Button>
-                      </Box>
-                    )}
-                  </>
-                )}
-                <Timer
-                  startTime={session.startTime}
-                  stopTimer={stopTimer}
-                  time={time}
-                  setTime={setTime}
-                />
-              </>
-            )}
-            <Box textAlign="right">
-              <Button onClick={handleSave}>Save and Quit</Button>
-            </Box>
-          </Grid>
+      <Grid container spacing={4}>
+        {/* Display answer cards */}
+        <Grid
+          item
+          container
+          xs={8}
+          sx={{ my: 3 }}
+          justifyContent="center"
+          spacing={3}
+        >
+          {answerCards &&
+            answerCards.map((question, index) => (
+              <BingoAnswer
+                key={index}
+                question={question}
+                isCorrect={question.isCorrect}
+                handleAnswerClick={handleAnswerClick}
+                index={index}
+              />
+            ))}
         </Grid>
-        {currentQuestionIndex < questions.length ? null : (
-          <>
-            <Modal open={true}>
-              <Box sx={modalStyle}>
-                <Typography variant="h3" align="center">
-                  Congratulations!
-                </Typography>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox onChange={handleCheckbox} />}
-                    label="Submit to class leaderboard?"
-                  />
-                </FormGroup>
-                <Box textAlign="center">
-                  <Button onClick={handleEndSave}>Save and Exit</Button>
-                </Box>
+
+        {/* Display Questions, hints, timer etc */}
+        <Grid item xs={4}>
+          {questions.length > 0 && (
+            <>
+              <Typography
+                variant="h3"
+                sx={{ my: 2, textAlign: "center", color: "secondary.main" }}
+              >
+                {assignment.assignmentName}
+              </Typography>
+              {questions[currentQuestionIndex]?.isCorrect ? (
+                setCurrentQuestionIndex(currentQuestionIndex + 1)
+              ) : (
+                <>
+                  <Card sx={{ p: 1, mt: 2 }}>
+                    {questions[currentQuestionIndex]?.question}
+                  </Card>
+                  {showHint ? (
+                    <Card sx={{ p: 1, mt: 2 }}>
+                      {questions[currentQuestionIndex]?.hint}
+                    </Card>
+                  ) : (
+                    <Box textAlign="center">
+                      <Button onClick={handleHintClick}>Show Hint</Button>
+                    </Box>
+                  )}
+                </>
+              )}
+              <Timer
+                startTime={session.startTime}
+                stopTimer={stopTimer}
+                time={time}
+                setTime={setTime}
+              />
+            </>
+          )}
+          <Box textAlign="right">
+            <Button onClick={handleSave}>Save and Quit</Button>
+          </Box>
+        </Grid>
+      </Grid>
+
+      {/* Quiz complete modal */}
+      {currentQuestionIndex < questions.length ? null : (
+        <>
+          <Modal open={true}>
+            <Box sx={modalStyle}>
+              <Typography variant="h3" align="center">
+                Congratulations!
+              </Typography>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Checkbox onChange={handleCheckbox} />}
+                  label="Submit to class leaderboard?"
+                />
+              </FormGroup>
+              <Box textAlign="center">
+                <Button onClick={handleEndSave}>Save and Exit</Button>
               </Box>
-            </Modal>
-            <Confetti width={width} height={height} />
-          </>
-        )}
-        <Box>
-          <SnackbarProvider />
-        </Box>
-      </Container>
+            </Box>
+          </Modal>
+          <Confetti width={width} height={height} />
+        </>
+      )}
+      <Box>
+        <SnackbarProvider />
+      </Box>
     </>
   );
 };

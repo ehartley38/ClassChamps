@@ -1,31 +1,36 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 
 export const BingoAnswer = ({ question, isCorrect, handleAnswerClick }) => {
   return (
-    <Box
-      sx={{
-        width: 150,
-        height: 150,
-        backgroundColor: isCorrect ? "#59E391" : "#ffb703",
-        borderRadius: 3,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-      }}
-      onClick={() => {
-        handleAnswerClick(question._id);
-      }}
-    >
-      <Typography
+    <Grid item xs={3}>
+      <Box
         sx={{
-          m: 1,
-          textAlign: "center",
-          color: "white",
+          borderRadius: 3,
+          cursor: "pointer",
+          aspectRatio: "1/1",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+          border: "1px solid #ccc",
+          backgroundImage: isCorrect
+            ? "linear-gradient(135deg, #59E391, #7ECEC1)"
+            : "linear-gradient(135deg, #ffb703, #ffc400)",
+        }}
+        onClick={() => {
+          handleAnswerClick(question._id);
         }}
       >
-        {question.answer}
-      </Typography>
-    </Box>
+        <Typography
+          sx={{
+            m: 1,
+            textAlign: "center",
+            color: "white",
+          }}
+        >
+          {question.answer}
+        </Typography>
+      </Box>
+    </Grid>
   );
 };
