@@ -3,7 +3,6 @@ const User = require("../models/user");
 const logoutRouter = require("express").Router();
 
 logoutRouter.get("/", async (request, response) => {
-  console.log("Logging out user");
   const cookies = request.cookies;
   if (!cookies?.jwt) return res.sendStatus(204);
   const refreshToken = cookies.jwt;
@@ -15,7 +14,7 @@ logoutRouter.get("/", async (request, response) => {
       sameSite: "None",
       secure: true,
     });
-    return response.sendStatus(204);
+    return response.sendStatus(204).end();
   }
 
   user.refreshToken = "";
