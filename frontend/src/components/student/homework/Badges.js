@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { BadgeCard } from "./BadgeCard";
 import { UnearnedBadgeCard } from "./UnearnedBadgeCard";
@@ -35,36 +35,28 @@ export const Badges = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+      <Grid container>
+        <Grid item xs={12} sx={{ py: 2 }}>
           <Typography variant="h2" sx={{ color: "secondary.main", mt: 2 }}>
             My Badges
           </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: 3,
-              mt: 2,
-            }}
-          >
-            {/* Display awarded badges first */}
-            {userData.awardedBadgeIds &&
-              userData.awardedBadgeIds.map((awardedBadge) => (
-                <BadgeCard
-                  key={awardedBadge.id}
-                  awardedBadge={awardedBadge}
-                  badge={awardedBadge.badgeId}
-                />
-              ))}
+        </Grid>
+        <Grid item container xs={12} spacing={4} justifyContent="center">
+          {/* Display awarded badges first */}
+          {userData.awardedBadgeIds &&
+            userData.awardedBadgeIds.map((awardedBadge) => (
+              <BadgeCard
+                key={awardedBadge.id}
+                awardedBadge={awardedBadge}
+                badge={awardedBadge.badgeId}
+              />
+            ))}
 
-            {/* Then display missing badges */}
-            {unearnedBadges &&
-              unearnedBadges.map((badge) => (
-                <UnearnedBadgeCard key={badge.id} badge={badge} />
-              ))}
-          </Box>
+          {/* Then display missing badges */}
+          {unearnedBadges &&
+            unearnedBadges.map((badge) => (
+              <UnearnedBadgeCard key={badge.id} badge={badge} />
+            ))}
         </Grid>
       </Grid>
     </>

@@ -44,6 +44,7 @@ export const Profile = () => {
   if (userData)
     return (
       <>
+        {/* Display username and level information */}
         <Grid container alignItems="center" justifyContent="center">
           <Grid item xs={8}>
             <Typography variant="h3" textAlign={"center"} sx={{ mt: 1 }}>
@@ -72,49 +73,42 @@ export const Profile = () => {
           </Grid>
         </Grid>
 
+        {/* Display user badge info */}
         {userData.awardedBadgeIds.length === 0 ? (
           <>
-            <Grid container>
-              <Grid item xs={12}>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <Typography sx={{}}>No recenty earned badges :(</Typography>
-                </Box>
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                  <Button variant="outlined" onClick={() => navigate("badges")}>
-                    View all badges
-                  </Button>
-                </Box>
+            <Grid container justifyContent="center" alignItems="center">
+              <Grid item xs={12} sx={{ textAlign: "center" }}>
+                <Typography>No recenty earned badges :(</Typography>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate("badges")}
+                  sx={{ justifyContent: "center" }}
+                >
+                  View all badges
+                </Button>
               </Grid>
             </Grid>
           </>
         ) : (
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h3" sx={{ color: "secondary.main" }}>
+          <Grid container justifyContent="center" alignItems="center">
+            <Grid item container xs={12}>
+              <Typography variant="h3" sx={{ color: "secondary.main", pb: 2 }}>
                 Latest Badges
               </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                  gap: 3,
-                  mt: 2,
-                }}
-              >
-                {/* Display up to three most recently awarded badges */}
-                {userData.awardedBadgeIds &&
-                  userData.awardedBadgeIds
-                    .reverse()
-                    .slice(0, 3)
-                    .map((awardedBadge) => (
-                      <BadgeCard
-                        key={awardedBadge.id}
-                        awardedBadge={awardedBadge}
-                        badge={awardedBadge.badgeId}
-                      />
-                    ))}
-              </Box>
+            </Grid>
+            <Grid item container spacing={4} xs={9}>
+              {/* Display up to three most recently awarded badges */}
+              {userData.awardedBadgeIds &&
+                userData.awardedBadgeIds
+                  .reverse()
+                  .slice(0, 3)
+                  .map((awardedBadge) => (
+                    <BadgeCard
+                      key={awardedBadge.id}
+                      awardedBadge={awardedBadge}
+                      badge={awardedBadge.badgeId}
+                    />
+                  ))}
             </Grid>
             <Grid item xs={12}>
               <Box display="flex" justifyContent="flex-end" sx={{ m: 1 }}>
