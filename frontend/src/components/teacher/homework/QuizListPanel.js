@@ -13,8 +13,9 @@ export const QuizPanelList = ({ quiz, quizzes, setQuizzes }) => {
 
   return (
     <>
-      <Typography>{quiz.quizName}</Typography>
+      {quiz.quizName}
       <Button onClick={handleDelete}>Delete</Button>
+      <br></br>
     </>
   );
 };

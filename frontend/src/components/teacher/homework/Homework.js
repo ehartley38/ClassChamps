@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { QuizPanelList } from "./QuizListPanel";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { Box, Button, Typography } from "@mui/material";
 
 export const Homework = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -16,12 +17,18 @@ export const Homework = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Homework</h1>
-      <button>
-        <NavLink to="create">Create</NavLink>
-      </button>
-      <h3>List of homework</h3>
+    <>
+      <Typography variant="h2" sx={{ color: "primary.main", my: 2 }}>
+        Quizzes
+      </Typography>
+      <Box sx={{ mb: 2 }}>
+        <Button variant="contained" color="success">
+          <NavLink style={{ textDecoration: "none" }} to="create">
+            <Typography color="white">Create New</Typography>
+          </NavLink>
+        </Button>
+      </Box>
+
       {quizzes &&
         quizzes.map((quiz) => (
           <QuizPanelList
@@ -31,6 +38,6 @@ export const Homework = () => {
             setQuizzes={setQuizzes}
           />
         ))}
-    </div>
+    </>
   );
 };

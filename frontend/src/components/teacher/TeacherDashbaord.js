@@ -1,7 +1,14 @@
 import { NavLink } from "react-router-dom";
 import { SignOut } from "../SignOut";
 import { useState, useEffect, useContext } from "react";
-import { Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActionArea,
+  Grid,
+  Link,
+  Typography,
+} from "@mui/material";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 export const TeacherDashboard = () => {
@@ -18,22 +25,31 @@ export const TeacherDashboard = () => {
 
   return (
     userData && (
-      <div>
+      <>
         <Typography
           variant="h1"
           sx={{ my: 4, textAlign: "center", color: "primary.main" }}
         >
           Teacher Dashboard
         </Typography>
-        Welcome {userData.name} <br></br>
-        <button>
-          <NavLink to="classrooms">Classrooms</NavLink>
-        </button>
-        <button>
-          <NavLink to="homework">Your Created Homework</NavLink>
-        </button>
-        <SignOut />
-      </div>
+        <Typography variant="h6">Welcome {userData.name}</Typography>
+        <Grid container spacing={2} justifyContent="center" alignItems="center">
+          <Grid item>
+            <Button variant="outlined">
+              <NavLink to="classrooms" style={{ textDecoration: "none" }}>
+                Your Classrooms
+              </NavLink>
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button variant="outlined">
+              <NavLink to="homework" style={{ textDecoration: "none" }}>
+                Your Quizzes
+              </NavLink>
+            </Button>
+          </Grid>
+        </Grid>
+      </>
     )
   );
 };

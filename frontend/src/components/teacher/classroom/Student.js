@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export const Student = ({ student, classroom, setClassroom }) => {
@@ -17,9 +18,9 @@ export const Student = ({ student, classroom, setClassroom }) => {
   };
 
   return (
-    <div>
+    <>
       {student.name}
-      <button onClick={handleDelete}>Remove</button>
-    </div>
+      <Button onClick={handleDelete}>Remove</Button>
+    </>
   );
 };

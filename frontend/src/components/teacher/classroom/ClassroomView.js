@@ -1,10 +1,12 @@
 import {
+  Box,
   Button,
   Grid,
   ListItem,
   ListItemButton,
   ListItemText,
   TextField,
+  Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
@@ -115,18 +117,25 @@ export const ClassroomView = () => {
   if (classroom)
     return (
       <>
-        <h1>{classroom.roomName}</h1>
-        {classroom.roomCode ? (
-          <> Your unique room code is {<b>{classroom.roomCode}</b>}</>
-        ) : (
-          <>Generate your unique room code</>
-        )}
-        <Button onClick={() => handleGenerate()}>
-          {classroom.roomCode ? "New code" : "Generate"}
-        </Button>
+        <Typography variant="h2" sx={{ color: "primary.main", my: 2 }}>
+          {classroom.roomName}
+        </Typography>
+        <Box sx={{ my: 2 }}>
+          {classroom.roomCode ? (
+            <> Your unique room code is {<b>{classroom.roomCode}</b>}</>
+          ) : (
+            <>Generate your unique room code</>
+          )}
+          <Button onClick={() => handleGenerate()}>
+            {classroom.roomCode ? "New code" : "Generate"}
+          </Button>
+        </Box>
+
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <h3>Assign Homework</h3>
+            <Typography variant="h3" textAlign="center" sx={{ mb: 2 }}>
+              Create New Assignment
+            </Typography>
             {assignHomework ? (
               <>
                 <h5>Name</h5>
@@ -161,22 +170,30 @@ export const ClassroomView = () => {
                   onChange={(date) => setDueDate(date)}
                 />
                 <br></br>
-                <button onClick={handleCancel}>Cancel</button>
-                <button onClick={handleAssign}>Assign</button>
+                <Box sx={{ py: 2 }}>
+                  <Button onClick={handleCancel}>Cancel</Button>
+                  <Button onClick={handleAssign}>Assign</Button>
+                </Box>
               </>
             ) : (
-              <button onClick={handleAssignToggle}>Assign Homework</button>
+              <Box textAlign="center">
+                <Button onClick={handleAssignToggle}>Create</Button>
+              </Box>
             )}
           </Grid>
           <Grid item xs={4}>
-            <h3>Active homework</h3>
+            <Typography variant="h3" textAlign="center" sx={{ mb: 2 }}>
+              Active Assignments
+            </Typography>
             {activeHomework &&
               activeHomework.map((assignment) => (
                 <HomeworkPanel key={assignment.id} assignment={assignment} />
               ))}
           </Grid>
           <Grid item xs={4}>
-            <h3>Students</h3>
+            <Typography variant="h3" textAlign="center" sx={{ mb: 2 }}>
+              Students
+            </Typography>
             {classroom.students &&
               classroom.students.map((student) => (
                 <Student

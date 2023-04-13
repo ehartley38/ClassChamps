@@ -1,13 +1,11 @@
 import {
   FormControl,
   InputLabel,
-  Typography,
   MenuItem,
   Box,
   Select,
   Button,
 } from "@mui/material";
-import { useState } from "react";
 
 // https://mui.com/material-ui/react-select/
 export const SelectHomeworkType = ({ setQuizType, quizType }) => {
@@ -15,7 +13,7 @@ export const SelectHomeworkType = ({ setQuizType, quizType }) => {
     <>
       <Box sx={{ minWidth: 120, pt: 5 }}>
         <FormControl fullWidth>
-          <InputLabel id="quiz-type-label">Select Homework Type</InputLabel>
+          <InputLabel id="quiz-type-label">Select Quiz Type</InputLabel>
           <Select
             labelId="quiz-type"
             id="quiz-type"

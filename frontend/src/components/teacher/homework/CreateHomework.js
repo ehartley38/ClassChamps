@@ -17,7 +17,7 @@ import { SelectHomeworkType } from "./SelectHomeworkType";
 import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
-const steps = ["Select Homework Type", "Create Questions", "Final tweaks"];
+const steps = ["Select Quiz Type", "Create Questions", "Final Configurations"];
 
 // https://github.com/mui/material-ui/tree/v5.11.10/docs/data/material/getting-started/templates/checkout
 export const CreateHomework = () => {
@@ -99,8 +99,12 @@ export const CreateHomework = () => {
   return (
     <>
       <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
-        <Typography component="h1" variant="h4" align="center">
-          Create Homework
+        <Typography
+          variant="h2"
+          textAlign="center"
+          sx={{ color: "primary.main", my: 2 }}
+        >
+          Create Quiz
         </Typography>
         <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
           {steps.map((label) => (
