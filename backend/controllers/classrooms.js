@@ -3,6 +3,8 @@ const Classroom = require("../models/classroom");
 
 let toolFile = require("../utils/tools");
 const User = require("../models/user");
+const Assignment = require("../models/assignment");
+const AssignmentSubmission = require("../models/assignmentSubmission");
 
 // USED
 classroomsRouter.post("/", async (request, response) => {
@@ -64,6 +66,25 @@ classroomsRouter.delete("/:id", async (request, response) => {
       await Classroom.findByIdAndRemove(request.params.id);
       user.classrooms.pull(request.params.id);
       await user.save();
+
+      const assignmentsToDelete = await Assignment.find({
+        classroomId: request.params.id,
+      });
+
+      const assignmentIdsToDelete = assignmentsToDelete.map((assignment) => {
+        assignment._id;
+      });
+
+      //Delete the assignments
+      const deletedAssignments = await Assignment.deleteMany({
+        classroomId: request.params.id,
+      });
+
+      //Delete the assignment submissions
+      await AssignmentSubmission.deleteMany({
+        assignmentId: { $in: assignmentIdsToDelete },
+      });
+
       response.status(204).end();
     }
     response.status(401).end();

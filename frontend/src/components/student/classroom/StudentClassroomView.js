@@ -32,7 +32,7 @@ export const StudentClassroomView = () => {
   const isJoinError = location.state.isJoinError;
   const [assignments, setAssignments] = useState(); // This contains ALL assignments
   const [completedAssignments, setCompletedAssignments] = useState([]); // This contains ONLY completed assignments
-  const [submissions, setSubmissions] = useState();
+  const [submissions, setSubmissions] = useState(null);
   const [tabValue, setTabValue] = useState(0);
   const [currentAssignmentId, setCurrentAssignmentId] = useState(undefined);
   const [leaderboardData, setLeaderboardData] = useState([]);
@@ -151,6 +151,9 @@ export const StudentClassroomView = () => {
       <Grid container spacing={2}>
         <Grid item xs={8}>
           {/* Display Due and Complete assignments */}
+          <Typography variant="h3" sx={{ color: "secondary.main", mt: 2 }}>
+            Due
+          </Typography>
           {assignments ? (
             // Render Due assignments
             assignments.map((assignment) => {
@@ -165,12 +168,6 @@ export const StudentClassroomView = () => {
               }
               return (
                 <>
-                  <Typography
-                    variant="h3"
-                    sx={{ color: "secondary.main", mt: 2 }}
-                  >
-                    Due
-                  </Typography>
                   <Assignment
                     key={assignment.id}
                     assignment={assignment}
@@ -275,6 +272,7 @@ export const StudentClassroomView = () => {
           <TabPanel value={tabValue} index={1}>
             {submissions &&
               submissions.map((submission) => {
+                console.log(submission);
                 if (submission.assignment.id === currentAssignmentId) {
                   return (
                     <Card key={submission.id} elevation={1} sx={{ my: 1 }}>

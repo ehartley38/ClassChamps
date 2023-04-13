@@ -1,13 +1,10 @@
 import {
-  AppBar,
   Box,
   Button,
   Container,
-  Paper,
   Step,
   StepLabel,
   Stepper,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
