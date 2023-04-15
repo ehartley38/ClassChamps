@@ -12,7 +12,7 @@ export const BingoAnswer = ({ question, isCorrect, handleAnswerClick }) => {
           justifyContent: "center",
           alignItems: "center",
           boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
-          border: "1px solid #ccc",
+          border: "2px solid #000000",
           backgroundImage: isCorrect
             ? "linear-gradient(135deg, #59E391, #7ECEC1)"
             : "linear-gradient(135deg, #ffb703, #ffc400)",

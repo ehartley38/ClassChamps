@@ -14,9 +14,15 @@ export const BadgeCard = ({ awardedBadge, badge, badgeImages }) => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
+              mb: 2,
             }}
           >
-            <Box className="badge-icon" sx={{ mt: 2 }}></Box>
+            <Box className="badge-icon" sx={{ mt: 2 }}>
+              <img
+                src={`${process.env.PUBLIC_URL + badge.url}`}
+                alt="badge icon"
+              />
+            </Box>
             <Box
               sx={{
                 alignItems: "flex-start",

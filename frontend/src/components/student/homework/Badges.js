@@ -2,7 +2,6 @@ import { Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { BadgeCard } from "./BadgeCard";
 import { UnearnedBadgeCard } from "./UnearnedBadgeCard";
-import firstSteps from "../../../assets/images/firstSteps.png";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export const Badges = () => {

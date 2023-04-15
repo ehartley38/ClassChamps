@@ -96,7 +96,7 @@ export const Profile = () => {
                 Latest Badges
               </Typography>
             </Grid>
-            <Grid item container spacing={4} xs={9}>
+            <Grid item container spacing={4} xs={9} justifyContent="center">
               {/* Display up to three most recently awarded badges */}
               {userData.awardedBadgeIds &&
                 userData.awardedBadgeIds
