@@ -1,6 +1,6 @@
 const bingoQuestionsRouter = require("express").Router();
 const BingoQuestion = require("../models/bingoQuestion");
-const Quiz = require("../models/quiz");
+const Quiz = require("../models/Quiz");
 
 // Add a single question
 bingoQuestionsRouter.post("/", async (request, response) => {

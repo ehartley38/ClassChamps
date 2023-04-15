@@ -1,5 +1,5 @@
 const quizzesRouter = require("express").Router();
-const Quiz = require("../models/quiz");
+const Quiz = require("../models/Quiz");
 const BingoQuestion = require("../models/bingoQuestion");
 const Assignment = require("../models/assignment");
 
