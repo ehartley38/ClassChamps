@@ -42,6 +42,7 @@ app.use(middleware.credentials);
 app.use(cors(corsOptions));
 
 app.use(express.json());
+app.use(express.static("build"));
 app.use(morgan("tiny"));
 app.use(middleware.requestLogger);
 app.use(cookieParser());
