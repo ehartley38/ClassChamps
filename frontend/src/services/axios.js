@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "/api";
+const BASE_URL = "classchamps-api.onrender.com/api";
 
 export default axios.create({
   baseURL: BASE_URL,

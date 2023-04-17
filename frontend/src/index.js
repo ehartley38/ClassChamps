@@ -6,6 +6,7 @@ import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { AuthProvider } from "./context/AuthProvider";
+import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 
 const theme = createTheme({
   palette: {
@@ -35,6 +36,8 @@ const theme = createTheme({
     },
   },
 });
+
+if (process.env.NODE_ENV === "production") disableReactDevTools();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
