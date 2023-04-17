@@ -31,7 +31,7 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(
-        "/api/login",
+        "/login",
         JSON.stringify({ username, password }),
         {
           headers: { "Content-Type": "application/json" },
