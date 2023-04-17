@@ -12,7 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
+import axios from "../services/axios";
 
 // https://github.com/mui/material-ui/tree/v5.11.11/docs/data/material/getting-started/templates/sign-in
 
