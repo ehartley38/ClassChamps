@@ -9,13 +9,13 @@ const AwardedBadge = require("../models/awardedBadge");
 const WEEKMS = 604800000;
 
 const credentials = (request, response, next) => {
-  // const origin = request.headers.origin || request.headers.referer;
+  const origin = request.headers.origin || request.headers.referer;
 
-  // if (config.allowedOrigins.includes(origin)) {
-  //   console.log("Origin allowed");
-  //   response.header("Access-Control-Allow-Credentials", true);
-  // }
-  response.header("Access-Control-Allow-Credentials", true);
+  if (config.allowedOrigins.includes(origin)) {
+    console.log("Origin allowed");
+    response.header("Access-Control-Allow-Credentials", true);
+  }
+  // response.header("Access-Control-Allow-Credentials", true);
 
   next();
 };

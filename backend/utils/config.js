@@ -11,8 +11,8 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 const allowedOrigins = [
-  "http://localhost:3000",
-  "http://127.0.0.1:3003",
+  // "http://localhost:3000",
+  // "http://127.0.0.1:3003",
   "https://classchamps.onrender.com",
 ];
 
