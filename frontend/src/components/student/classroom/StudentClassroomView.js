@@ -56,6 +56,7 @@ export const StudentClassroomView = () => {
     };
 
     fetchData();
+    console.log("Join error is", isJoinError);
   }, []);
 
   // Update the completed assignments list when assignments or submissions change
@@ -73,6 +74,10 @@ export const StudentClassroomView = () => {
       setCompletedAssignments(completed);
     }
   }, [assignments, submissions]);
+
+  useEffect(() => {
+    if (recentBadges.length > 0) setOpenSuccessfulJoin(false);
+  }, [recentBadges]);
 
   // Handle tab change
   const handleTabChange = (e, newValue) => {
@@ -272,7 +277,6 @@ export const StudentClassroomView = () => {
           <TabPanel value={tabValue} index={1}>
             {submissions &&
               submissions.map((submission) => {
-                console.log(submission);
                 if (submission.assignment.id === currentAssignmentId) {
                   return (
                     <Card key={submission.id} elevation={1} sx={{ my: 1 }}>

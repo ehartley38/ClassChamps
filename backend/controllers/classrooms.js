@@ -128,7 +128,7 @@ classroomsRouter.put("/:id/generate-code", async (request, response) => {
 // Add the user to the classroom using the room code
 classroomsRouter.put("/join", async (request, response) => {
   const user = request.user;
-  const code = request.body.roomCode;
+  const code = request.body.roomCode.toUpperCase();
 
   try {
     const classroom = await Classroom.findOne({ roomCode: code });

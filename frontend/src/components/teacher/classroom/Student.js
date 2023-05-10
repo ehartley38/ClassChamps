@@ -21,6 +21,7 @@ export const Student = ({ student, classroom, setClassroom }) => {
     <>
       {student.name}
       <Button onClick={handleDelete}>Remove</Button>
+      <br></br>
     </>
   );
 };
