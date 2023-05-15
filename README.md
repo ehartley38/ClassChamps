@@ -9,3 +9,6 @@ My dissertation project which focuses on investigating the methods used to impro
 **MongoDB** database
 
 ## Screenshots
+**Profile Page**
+![Student profile page](screenshots/profile.png)
+
