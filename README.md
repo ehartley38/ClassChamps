@@ -1,4 +1,4 @@
-# ClassChamps
+# Class-Champs
 ### A gamified online homework application
 
 My dissertation project that focuses on investigating the methods used to improve intrinsic student motivation, and to explore the potential of gamification elements to enhance these methods. Gamification elements include: Achievement badges, class leaderboards, and an experience level system. 
@@ -6,7 +6,8 @@ My dissertation project that focuses on investigating the methods used to improv
 ## Architecture
 **React.js** front-end  
 **Node.js** and **Express** back-end  
-**MongoDB** database  
+**MongoDB** database
+
 ![architecture diagram](screenshots/architecture_diagram.png)
 
 ## Testing
