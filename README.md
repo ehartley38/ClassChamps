@@ -6,10 +6,11 @@ My dissertation project that focuses on investigating the methods used to improv
 ## Architecture
 **React.js** front-end  
 **Node.js** and **Express** back-end  
-**MongoDB** database
+**MongoDB** database  
+![architecture diagram](screenshots/architecture_diagram.png)
 
 ## Testing
-I created a separate MongoDB database for running unit and integration tests in the back-end. The Jest testing framework was used, as well as the `supertest` npm package to wrap the express application in so HTTP requests could be made during testing.
+I created a separate MongoDB database for running unit and integration tests in the back-end. The `jest` testing framework was used, as well as the `supertest` npm package to wrap the express application in so HTTP requests could be made during testing.
 
 ## Screenshots
 **Classroom Page**  
